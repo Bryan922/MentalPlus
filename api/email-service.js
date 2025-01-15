@@ -4,16 +4,16 @@ sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 // Templates d'emails
 const EMAIL_TEMPLATES = {
     CONFIRMATION: {
-        subject: 'Confirmation de votre rendez-vous - MentalPlus',
-        templateId: 'd-votre_template_id_confirmation'
+        subject: 'Confirmation de votre rendez-vous - MentalSerenity',
+        templateId: 'd-f7e2337f3bc04d058f1f1638e6a81cae'
     },
     REMINDER: {
-        subject: 'Rappel de votre rendez-vous demain - MentalPlus',
-        templateId: 'd-votre_template_id_rappel'
+        subject: 'Rappel de votre rendez-vous demain - MentalSerenity',
+        templateId: 'd-f7e2337f3bc04d058f1f1638e6a81cae'
     },
     EMPLOYEE_NOTIFICATION: {
-        subject: 'Nouveau rendez-vous programmé - MentalPlus',
-        templateId: 'd-votre_template_id_notification'
+        subject: 'Nouveau rendez-vous programmé - MentalSerenity',
+        templateId: 'd-f7e2337f3bc04d058f1f1638e6a81cae'
     }
 };
 

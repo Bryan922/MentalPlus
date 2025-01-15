@@ -1,6 +1,6 @@
 {
-    "name": "mentalplus-web",
     "version": 2,
+    "name": "mentalserenity-web",
     "builds": [
         { "src": "*.html", "use": "@vercel/static" },
         { "src": "css/**", "use": "@vercel/static" },

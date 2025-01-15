@@ -1,7 +1,7 @@
 {
-  "name": "mentalplus-web",
+  "name": "mentalserenity-web",
   "version": "1.0.0",
-  "description": "MentalPlus - Votre plateforme de bien-être mental",
+  "description": "MentalSerenity - Votre plateforme de bien-être mental",
   "main": "index.js",
   "scripts": {
     "dev": "vercel dev",
