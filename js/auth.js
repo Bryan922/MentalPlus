@@ -122,7 +122,7 @@ function updateAuthButtons() {
     if (btnConnexion) {
         if (isAuthenticated) {
             btnConnexion.textContent = 'Mon Profil';
-            btnConnexion.href = '#profile';
+            btnConnexion.href = 'profile.html';
         } else {
             btnConnexion.textContent = 'Connexion';
             btnConnexion.href = 'auth.html';
