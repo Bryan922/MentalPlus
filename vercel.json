@@ -1,15 +1,6 @@
 {
     "version": 2,
     "name": "mentalserenity-web",
-    "routes": [
-        { "src": "/api/(.*)", "dest": "/api/$1" },
-        { "src": "/(.*)", "dest": "/$1" }
-    ],
-    "git": {
-        "deploymentEnabled": {
-            "master": true
-        }
-    },
     "env": {
         "STRIPE_SECRET_KEY": "@stripe_secret_key",
         "STRIPE_WEBHOOK_SECRET": "@stripe_webhook_secret",
