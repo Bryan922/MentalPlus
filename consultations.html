@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Consultations - PsychoAide</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/dashboard.css">
+    <link rel="stylesheet" href="css/employee.css">
+    <link rel="stylesheet" href="css/consultations.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="user-info">
+                    <i class="fas fa-user-md"></i>
+                    <div class="user-details">
+                        <h3 id="employeeName">Dr. Martin</h3>
+                        <p id="employeeRole">Psychologue</p>
+                    </div>
+                </div>
+            </div>
+            
+            <nav class="sidebar-nav">
+                <a href="espace-employe.html">
+                    <i class="fas fa-calendar-alt"></i>
+                    Planning
+                </a>
+                <a href="patients.html">
+                    <i class="fas fa-users"></i>
+                    Mes patients
+                </a>
+                <a href="#consultations" class="active">
+                    <i class="fas fa-clipboard"></i>
+                    Consultations
+                </a>
+                <a href="#messages">
+                    <i class="fas fa-envelope"></i>
+                    Messages
+                    <span class="badge">5</span>
+                </a>
+                <a href="#settings">
+                    <i class="fas fa-cog"></i>
+                    Paramètres
+                </a>
+            </nav>
+
+            <div class="sidebar-footer">
+                <a href="#help">
+                    <i class="fas fa-question-circle"></i>
+                    Aide
+                </a>
+                <a href="index.html" class="logout">
+                    <i class="fas fa-sign-out-alt"></i>
+                    Déconnexion
+                </a>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="content-header">
+                <div class="header-left">
+                    <h1>Consultations</h1>
+                </div>
+                <div class="header-actions">
+                    <div class="search-bar">
+                        <input type="text" placeholder="Rechercher une consultation...">
+                        <i class="fas fa-search"></i>
+                    </div>
+                    <div class="filter-group">
+                        <select class="period-filter">
+                            <option value="today">Aujourd'hui</option>
+                            <option value="week">Cette semaine</option>
+                            <option value="month">Ce mois</option>
+                            <option value="all">Toutes</option>
+                        </select>
+                        <select class="type-filter">
+                            <option value="all">Tous types</option>
+                            <option value="day">Jour</option>
+                            <option value="night">Nuit</option>
+                        </select>
+                    </div>
+                </div>
+            </header>
+
+            <div class="consultations-grid">
+                <!-- Liste des consultations -->
+                <section class="consultations-list">
+                    <div class="consultation-card">
+                        <div class="consultation-header">
+                            <div class="consultation-info">
+                                <span class="consultation-date">15 Mai 2024 - 14:00</span>
+                                <span class="consultation-type day">Consultation Jour</span>
+                                <span class="consultation-price">60€</span>
+                            </div>
+                            <div class="consultation-status completed">
+                                <i class="fas fa-check-circle"></i>
+                                Terminée
+                            </div>
+                        </div>
+                        <div class="consultation-patient">
+                            <img src="https://via.placeholder.com/40" alt="Photo patient" class="patient-avatar">
+                            <div class="patient-info">
+                                <h3>Jean Dupont</h3>
+                                <p>Suivi régulier - 3ème séance</p>
+                            </div>
+                        </div>
+                        <div class="consultation-actions">
+                            <button class="btn-secondary" onclick="openReport('1')">
+                                <i class="fas fa-file-alt"></i>
+                                Compte-rendu
+                            </button>
+                            <button class="btn-primary" onclick="generateInvoice('1')">
+                                <i class="fas fa-file-invoice"></i>
+                                Facture
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="consultation-card">
+                        <div class="consultation-header">
+                            <div class="consultation-info">
+                                <span class="consultation-date">15 Mai 2024 - 22:00</span>
+                                <span class="consultation-type night">Consultation Nuit</span>
+                                <span class="consultation-price">80€</span>
+                            </div>
+                            <div class="consultation-status pending">
+                                <i class="fas fa-clock"></i>
+                                En attente
+                            </div>
+                        </div>
+                        <div class="consultation-patient">
+                            <img src="https://via.placeholder.com/40" alt="Photo patient" class="patient-avatar">
+                            <div class="patient-info">
+                                <h3>Sarah Martin</h3>
+                                <p>Première consultation - Insomnie</p>
+                            </div>
+                        </div>
+                        <div class="consultation-actions">
+                            <button class="btn-secondary" onclick="openReport('2')">
+                                <i class="fas fa-file-alt"></i>
+                                Compte-rendu
+                            </button>
+                            <button class="btn-primary" onclick="generateInvoice('2')">
+                                <i class="fas fa-file-invoice"></i>
+                                Facture
+                            </button>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Détails de la consultation -->
+                <section class="consultation-details">
+                    <div class="details-header">
+                        <h2>Détails de la consultation</h2>
+                        <div class="details-actions">
+                            <button class="btn-secondary">
+                                <i class="fas fa-print"></i>
+                                Imprimer
+                            </button>
+                            <button class="btn-primary">
+                                <i class="fas fa-save"></i>
+                                Enregistrer
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="details-content">
+                        <div class="report-section">
+                            <h3>Compte-rendu de séance</h3>
+                            <div class="report-form">
+                                <div class="form-group">
+                                    <label>Motif de consultation</label>
+                                    <input type="text" value="Suivi régulier - Gestion du stress">
+                                </div>
+                                <div class="form-group">
+                                    <label>Observations</label>
+                                    <textarea rows="4">Le patient montre des signes d'amélioration dans la gestion de son stress quotidien. Les exercices de respiration semblent porter leurs fruits.</textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label>Recommandations</label>
+                                    <textarea rows="4">- Continuer les exercices de respiration
+- Tenir un journal des situations stressantes
+- Pratiquer la méditation 10 minutes par jour</textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label>Prochains objectifs</label>
+                                    <textarea rows="3">- Travailler sur les situations professionnelles stressantes
+- Améliorer la qualité du sommeil</textarea>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="billing-section">
+                            <h3>Facturation</h3>
+                            <div class="billing-details">
+                                <div class="billing-info">
+                                    <div class="info-group">
+                                        <label>Type de consultation</label>
+                                        <span>Consultation Jour</span>
+                                    </div>
+                                    <div class="info-group">
+                                        <label>Durée</label>
+                                        <span>1 heure</span>
+                                    </div>
+                                    <div class="info-group">
+                                        <label>Tarif horaire</label>
+                                        <span>60€</span>
+                                    </div>
+                                    <div class="info-group total">
+                                        <label>Total</label>
+                                        <span>60€</span>
+                                    </div>
+                                </div>
+                                <div class="payment-status paid">
+                                    <i class="fas fa-check-circle"></i>
+                                    Payé
+                                </div>
+                            </div>
+                            <div class="billing-actions">
+                                <button class="btn-secondary">
+                                    <i class="fas fa-download"></i>
+                                    Télécharger la facture
+                                </button>
+                                <button class="btn-primary">
+                                    <i class="fas fa-paper-plane"></i>
+                                    Envoyer par email
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <script src="js/consultations.js"></script>
+</body>
+</html> 

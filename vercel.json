@@ -1,0 +1,18 @@
+{
+    "name": "mentalplus",
+    "version": 2,
+    "builds": [
+        { "src": "*.html", "use": "@vercel/static" },
+        { "src": "api/*.js", "use": "@vercel/node" }
+    ],
+    "routes": [
+        { "src": "/api/(.*)", "dest": "/api/$1" },
+        { "src": "/(.*)", "dest": "/$1" }
+    ],
+    "env": {
+        "SITE_NAME": "MentalPlus",
+        "STRIPE_SECRET_KEY": "@stripe_secret_key",
+        "SENDGRID_API_KEY": "@sendgrid_api_key",
+        "DATABASE_URL": "@database_url"
+    }
+} 

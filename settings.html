@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Paramètres - PsychoAide</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/dashboard.css">
+    <link rel="stylesheet" href="css/employee.css">
+    <link rel="stylesheet" href="css/settings.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="user-info">
+                    <i class="fas fa-user-md"></i>
+                    <div class="user-details">
+                        <h3 id="employeeName">Dr. Martin</h3>
+                        <p id="employeeRole">Psychologue</p>
+                    </div>
+                </div>
+            </div>
+            
+            <nav class="sidebar-nav">
+                <a href="espace-employe.html">
+                    <i class="fas fa-calendar-alt"></i>
+                    Planning
+                </a>
+                <a href="patients.html">
+                    <i class="fas fa-users"></i>
+                    Mes patients
+                </a>
+                <a href="consultations.html">
+                    <i class="fas fa-clipboard"></i>
+                    Consultations
+                </a>
+                <a href="messages.html">
+                    <i class="fas fa-envelope"></i>
+                    Messages
+                    <span class="badge">5</span>
+                </a>
+                <a href="#settings" class="active">
+                    <i class="fas fa-cog"></i>
+                    Paramètres
+                </a>
+            </nav>
+
+            <div class="sidebar-footer">
+                <a href="#help">
+                    <i class="fas fa-question-circle"></i>
+                    Aide
+                </a>
+                <a href="index.html" class="logout">
+                    <i class="fas fa-sign-out-alt"></i>
+                    Déconnexion
+                </a>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="settings-container">
+                <header class="settings-header">
+                    <h1>Paramètres</h1>
+                    <button class="btn-primary" id="saveSettings">
+                        <i class="fas fa-save"></i>
+                        Enregistrer les modifications
+                    </button>
+                </header>
+
+                <div class="settings-grid">
+                    <!-- Navigation des paramètres -->
+                    <nav class="settings-nav">
+                        <a href="#profile" class="active">
+                            <i class="fas fa-user"></i>
+                            Profil
+                        </a>
+                        <a href="#notifications">
+                            <i class="fas fa-bell"></i>
+                            Notifications
+                        </a>
+                        <a href="#security">
+                            <i class="fas fa-lock"></i>
+                            Sécurité
+                        </a>
+                        <a href="#preferences">
+                            <i class="fas fa-sliders-h"></i>
+                            Préférences
+                        </a>
+                    </nav>
+
+                    <!-- Contenu des paramètres -->
+                    <div class="settings-content">
+                        <!-- Section Profil -->
+                        <section id="profile" class="settings-section active">
+                            <h2>Profil</h2>
+                            
+                            <div class="profile-header">
+                                <div class="profile-avatar">
+                                    <img src="https://via.placeholder.com/150" alt="Photo de profil">
+                                    <button class="change-avatar">
+                                        <i class="fas fa-camera"></i>
+                                    </button>
+                                </div>
+                                <div class="profile-info">
+                                    <h3>Dr. Martin</h3>
+                                    <p>Psychologue - ID: PSY123456</p>
+                                </div>
+                            </div>
+
+                            <form class="settings-form">
+                                <div class="form-group">
+                                    <label>Nom complet</label>
+                                    <input type="text" value="Dr. Jean Martin">
+                                </div>
+                                <div class="form-group">
+                                    <label>Email professionnel</label>
+                                    <input type="email" value="dr.martin@psychoaide.fr">
+                                </div>
+                                <div class="form-group">
+                                    <label>Téléphone</label>
+                                    <input type="tel" value="+33 6 12 34 56 78">
+                                </div>
+                                <div class="form-group">
+                                    <label>Spécialité</label>
+                                    <input type="text" value="Psychologie clinique">
+                                </div>
+                                <div class="form-group">
+                                    <label>À propos</label>
+                                    <textarea rows="4">Psychologue clinicien spécialisé dans la thérapie cognitive comportementale avec plus de 10 ans d'expérience.</textarea>
+                                </div>
+                            </form>
+                        </section>
+
+                        <!-- Section Notifications -->
+                        <section id="notifications" class="settings-section">
+                            <h2>Notifications</h2>
+                            
+                            <div class="settings-group">
+                                <h3>Email</h3>
+                                <div class="setting-item">
+                                    <div class="setting-info">
+                                        <h4>Nouveaux rendez-vous</h4>
+                                        <p>Recevoir un email lors d'une nouvelle réservation</p>
+                                    </div>
+                                    <label class="switch">
+                                        <input type="checkbox" checked>
+                                        <span class="slider"></span>
+                                    </label>
+                                </div>
+                                <div class="setting-item">
+                                    <div class="setting-info">
+                                        <h4>Rappels</h4>
+                                        <p>Recevoir un email de rappel la veille des rendez-vous</p>
+                                    </div>
+                                    <label class="switch">
+                                        <input type="checkbox" checked>
+                                        <span class="slider"></span>
+                                    </label>
+                                </div>
+                                <div class="setting-item">
+                                    <div class="setting-info">
+                                        <h4>Newsletter</h4>
+                                        <p>Recevoir les actualités et mises à jour de PsychoAide</p>
+                                    </div>
+                                    <label class="switch">
+                                        <input type="checkbox">
+                                        <span class="slider"></span>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div class="settings-group">
+                                <h3>Application</h3>
+                                <div class="setting-item">
+                                    <div class="setting-info">
+                                        <h4>Messages</h4>
+                                        <p>Notifications pour les nouveaux messages</p>
+                                    </div>
+                                    <label class="switch">
+                                        <input type="checkbox" checked>
+                                        <span class="slider"></span>
+                                    </label>
+                                </div>
+                                <div class="setting-item">
+                                    <div class="setting-info">
+                                        <h4>Sons</h4>
+                                        <p>Activer les sons de notification</p>
+                                    </div>
+                                    <label class="switch">
+                                        <input type="checkbox">
+                                        <span class="slider"></span>
+                                    </label>
+                                </div>
+                            </div>
+                        </section>
+
+                        <!-- Section Sécurité -->
+                        <section id="security" class="settings-section">
+                            <h2>Sécurité</h2>
+                            
+                            <div class="settings-group">
+                                <h3>Mot de passe</h3>
+                                <form class="settings-form">
+                                    <div class="form-group">
+                                        <label>Mot de passe actuel</label>
+                                        <input type="password">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Nouveau mot de passe</label>
+                                        <input type="password">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Confirmer le nouveau mot de passe</label>
+                                        <input type="password">
+                                    </div>
+                                    <button type="submit" class="btn-secondary">
+                                        Changer le mot de passe
+                                    </button>
+                                </form>
+                            </div>
+
+                            <div class="settings-group">
+                                <h3>Double authentification</h3>
+                                <div class="setting-item">
+                                    <div class="setting-info">
+                                        <h4>Activer la double authentification</h4>
+                                        <p>Ajouter une couche de sécurité supplémentaire à votre compte</p>
+                                    </div>
+                                    <label class="switch">
+                                        <input type="checkbox">
+                                        <span class="slider"></span>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div class="settings-group">
+                                <h3>Sessions</h3>
+                                <div class="sessions-list">
+                                    <div class="session-item active">
+                                        <div class="session-info">
+                                            <i class="fas fa-laptop"></i>
+                                            <div>
+                                                <h4>Windows 10 - Chrome</h4>
+                                                <p>Paris, France - Actif maintenant</p>
+                                            </div>
+                                        </div>
+                                        <button class="btn-text" disabled>Session actuelle</button>
+                                    </div>
+                                    <div class="session-item">
+                                        <div class="session-info">
+                                            <i class="fas fa-mobile-alt"></i>
+                                            <div>
+                                                <h4>iPhone 12 - Application mobile</h4>
+                                                <p>Paris, France - Dernière activité il y a 2 heures</p>
+                                            </div>
+                                        </div>
+                                        <button class="btn-danger">Déconnecter</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+
+                        <!-- Section Préférences -->
+                        <section id="preferences" class="settings-section">
+                            <h2>Préférences</h2>
+                            
+                            <div class="settings-group">
+                                <h3>Apparence</h3>
+                                <div class="setting-item">
+                                    <div class="setting-info">
+                                        <h4>Thème sombre</h4>
+                                        <p>Utiliser le thème sombre pour l'interface</p>
+                                    </div>
+                                    <label class="switch">
+                                        <input type="checkbox">
+                                        <span class="slider"></span>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div class="settings-group">
+                                <h3>Langue et région</h3>
+                                <div class="form-group">
+                                    <label>Langue</label>
+                                    <select>
+                                        <option value="fr" selected>Français</option>
+                                        <option value="en">English</option>
+                                        <option value="es">Español</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label>Fuseau horaire</label>
+                                    <select>
+                                        <option value="europe_paris" selected>Europe/Paris (UTC+1)</option>
+                                        <option value="europe_london">Europe/London (UTC+0)</option>
+                                        <option value="america_new_york">America/New York (UTC-5)</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="settings-group">
+                                <h3>Calendrier</h3>
+                                <div class="form-group">
+                                    <label>Premier jour de la semaine</label>
+                                    <select>
+                                        <option value="1" selected>Lundi</option>
+                                        <option value="0">Dimanche</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label>Format de l'heure</label>
+                                    <select>
+                                        <option value="24" selected>24 heures</option>
+                                        <option value="12">12 heures</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="js/settings.js"></script>
+</body>
+</html> 

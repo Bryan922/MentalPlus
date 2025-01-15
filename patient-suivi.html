@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Suivi Patient - PsychoAide</title>
+    <link rel="stylesheet" href="css/dashboard.css">
+    <link rel="stylesheet" href="css/patient-suivi.css">
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <h2>PsychoAide</h2>
+            <nav>
+                <a href="espace-employe.html">Tableau de bord</a>
+                <a href="patients.html">Patients</a>
+                <a href="consultations.html">Consultations</a>
+                <a href="messages.html">Messages</a>
+                <a href="statistics.html">Statistiques</a>
+                <a href="settings.html">Paramètres</a>
+            </nav>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <div class="patient-header">
+                <div class="patient-info">
+                    <h1>Dossier Patient</h1>
+                    <div class="patient-details">
+                        <span id="patientName">Nom du patient</span>
+                        <span id="patientId">ID: #12345</span>
+                        <span id="patientStatus" class="status active">Actif</span>
+                    </div>
+                </div>
+                <div class="action-buttons">
+                    <button class="btn-primary" onclick="addNote()">Ajouter une note</button>
+                    <button class="btn-secondary" onclick="exportPatientFile()">Exporter le dossier</button>
+                </div>
+            </div>
+
+            <!-- Informations générales -->
+            <div class="section-card">
+                <h2>Informations générales</h2>
+                <div class="info-grid">
+                    <div class="info-item">
+                        <label>Date de naissance</label>
+                        <span id="birthDate">01/01/1990</span>
+                    </div>
+                    <div class="info-item">
+                        <label>Téléphone</label>
+                        <span id="phone">06 12 34 56 78</span>
+                    </div>
+                    <div class="info-item">
+                        <label>Email</label>
+                        <span id="email">patient@email.com</span>
+                    </div>
+                    <div class="info-item">
+                        <label>Adresse</label>
+                        <span id="address">123 Rue Example, 75000 Paris</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Historique des consultations -->
+            <div class="section-card">
+                <h2>Historique des consultations</h2>
+                <div class="consultation-timeline">
+                    <!-- Les consultations seront ajoutées dynamiquement ici -->
+                </div>
+            </div>
+
+            <!-- Notes de suivi -->
+            <div class="section-card">
+                <h2>Notes de suivi</h2>
+                <div class="notes-container">
+                    <!-- Les notes seront ajoutées dynamiquement ici -->
+                </div>
+            </div>
+
+            <!-- Documents -->
+            <div class="section-card">
+                <h2>Documents</h2>
+                <div class="documents-grid">
+                    <!-- Les documents seront ajoutés dynamiquement ici -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal pour ajouter une note -->
+    <div id="noteModal" class="modal">
+        <div class="modal-content">
+            <h2>Nouvelle note de suivi</h2>
+            <form id="noteForm">
+                <div class="form-group">
+                    <label>Type de note</label>
+                    <select name="noteType" required>
+                        <option value="consultation">Note de consultation</option>
+                        <option value="evolution">Évolution</option>
+                        <option value="traitement">Traitement</option>
+                        <option value="autre">Autre</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Contenu de la note</label>
+                    <textarea name="noteContent" rows="6" required></textarea>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn-secondary" onclick="closeNoteModal()">Annuler</button>
+                    <button type="submit" class="btn-primary">Enregistrer</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="js/patient-suivi.js"></script>
+</body>
+</html> 

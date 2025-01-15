@@ -1,0 +1,444 @@
+/* Layout */
+.messaging-container {
+    display: grid;
+    grid-template-columns: 300px 1fr 300px;
+    gap: 1rem;
+    max-width: 1600px;
+    margin: 2rem auto;
+    padding: 0 1rem;
+    height: calc(100vh - 120px);
+}
+
+/* Liste des conversations */
+.conversations-list {
+    background: white;
+    border-radius: 15px;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.conversations-header {
+    padding: 1.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #eee;
+}
+
+.conversations-header h2 {
+    color: var(--accent-color);
+    margin: 0;
+}
+
+.new-message-btn {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: var(--primary-color);
+    border: none;
+    color: white;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.new-message-btn:hover {
+    background: var(--secondary-color);
+    transform: scale(1.1);
+}
+
+.search-bar {
+    padding: 1rem;
+    position: relative;
+}
+
+.search-bar input {
+    width: 100%;
+    padding: 0.8rem 1rem 0.8rem 2.5rem;
+    border: 1px solid #eee;
+    border-radius: 8px;
+    font-size: 0.9rem;
+}
+
+.search-bar i {
+    position: absolute;
+    left: 2rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #666;
+}
+
+.conversations {
+    flex: 1;
+    overflow-y: auto;
+    padding: 0.5rem;
+}
+
+/* Zone de chat */
+.chat-area {
+    background: white;
+    border-radius: 15px;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.chat-header {
+    padding: 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #eee;
+}
+
+.chat-contact {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.contact-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.contact-info h3 {
+    margin: 0;
+    color: var(--accent-color);
+}
+
+.status {
+    font-size: 0.9rem;
+    color: #666;
+}
+
+.status.online::before {
+    content: '';
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    background: #4CAF50;
+    border-radius: 50%;
+    margin-right: 0.5rem;
+}
+
+.chat-actions {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.chat-actions button {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: none;
+    background: #f8f9fa;
+    color: var(--accent-color);
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.chat-actions button:hover {
+    background: var(--primary-color);
+    color: white;
+}
+
+.chat-messages {
+    flex: 1;
+    overflow-y: auto;
+    padding: 1rem;
+}
+
+.chat-input {
+    padding: 1rem;
+    border-top: 1px solid #eee;
+    display: flex;
+    gap: 1rem;
+    align-items: flex-end;
+}
+
+.attach-btn {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: none;
+    background: #f8f9fa;
+    color: var(--accent-color);
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.attach-btn:hover {
+    background: var(--primary-color);
+    color: white;
+}
+
+.message-input {
+    flex: 1;
+    display: flex;
+    gap: 1rem;
+    background: #f8f9fa;
+    border-radius: 10px;
+    padding: 0.5rem;
+}
+
+.message-input textarea {
+    flex: 1;
+    border: none;
+    background: none;
+    resize: none;
+    padding: 0.5rem;
+    font-family: inherit;
+    font-size: 1rem;
+    max-height: 100px;
+}
+
+.message-input textarea:focus {
+    outline: none;
+}
+
+.input-actions {
+    display: flex;
+    gap: 0.5rem;
+    align-items: flex-end;
+}
+
+.input-actions button {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border: none;
+    background: none;
+    color: var(--accent-color);
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.input-actions button:hover {
+    color: var(--primary-color);
+}
+
+/* Détails du contact */
+.contact-details {
+    background: white;
+    border-radius: 15px;
+    padding: 1.5rem;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.contact-profile {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.large-avatar {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: 1rem;
+}
+
+.contact-profile h3 {
+    margin: 0;
+    color: var(--accent-color);
+}
+
+.contact-profile p {
+    color: #666;
+    margin: 0.5rem 0;
+}
+
+.contact-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.contact-actions button {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.8rem;
+    border: none;
+    background: #f8f9fa;
+    color: var(--accent-color);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.contact-actions button:hover {
+    background: var(--primary-color);
+    color: white;
+}
+
+.shared-media h4 {
+    color: var(--accent-color);
+    margin-bottom: 1rem;
+}
+
+.media-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.5rem;
+}
+
+/* Responsive */
+@media (max-width: 1200px) {
+    .messaging-container {
+        grid-template-columns: 280px 1fr;
+    }
+    .contact-details {
+        display: none;
+    }
+}
+
+@media (max-width: 768px) {
+    .messaging-container {
+        grid-template-columns: 1fr;
+        margin: 0;
+        height: calc(100vh - 60px);
+    }
+    .conversations-list {
+        display: none;
+    }
+    .chat-area {
+        border-radius: 0;
+    }
+}
+
+/* Styles pour les appels */
+.call-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    animation: fadeIn 0.3s ease;
+}
+
+.call-content {
+    background: white;
+    padding: 2rem;
+    border-radius: 15px;
+    text-align: center;
+    max-width: 400px;
+    width: 90%;
+}
+
+.call-content img {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    margin-bottom: 1rem;
+}
+
+.call-content h3 {
+    color: var(--accent-color);
+    margin-bottom: 0.5rem;
+}
+
+.call-status {
+    color: #666;
+    margin: 1rem 0;
+}
+
+.call-actions {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-top: 2rem;
+}
+
+.end-call {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    border: none;
+    background: #dc3545;
+    color: white;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.end-call:hover {
+    transform: scale(1.1);
+    background: #c82333;
+}
+
+/* Badges de notification */
+.unread-badge {
+    background: var(--primary-color);
+    color: white;
+    border-radius: 50%;
+    padding: 0.2rem 0.6rem;
+    font-size: 0.8rem;
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+}
+
+/* Animation pour les appels */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+/* Styles pour les notifications système */
+.notification {
+    position: fixed;
+    top: 1rem;
+    right: 1rem;
+    background: white;
+    padding: 1rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    z-index: 1000;
+    animation: slideIn 0.3s ease;
+}
+
+.notification img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+}
+
+.notification-content {
+    flex: 1;
+}
+
+.notification h4 {
+    margin: 0;
+    color: var(--accent-color);
+}
+
+.notification p {
+    margin: 0.2rem 0 0;
+    color: #666;
+    font-size: 0.9rem;
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateX(100%);
+    }
+    to {
+        transform: translateX(0);
+    }
+} 

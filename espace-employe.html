@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Espace Employé - PsychoAide</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/dashboard.css">
+    <link rel="stylesheet" href="css/employee.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="user-info">
+                    <i class="fas fa-user-md"></i>
+                    <div class="user-details">
+                        <h3 id="employeeName">Dr. Martin</h3>
+                        <p id="employeeRole">Psychologue</p>
+                    </div>
+                </div>
+            </div>
+            
+            <nav class="sidebar-nav">
+                <a href="#planning" class="active">
+                    <i class="fas fa-calendar-alt"></i>
+                    Planning
+                </a>
+                <a href="#patients">
+                    <i class="fas fa-users"></i>
+                    Mes patients
+                </a>
+                <a href="#consultations">
+                    <i class="fas fa-clipboard"></i>
+                    Consultations
+                </a>
+                <a href="#messages">
+                    <i class="fas fa-envelope"></i>
+                    Messages
+                    <span class="badge">5</span>
+                </a>
+                <a href="#settings">
+                    <i class="fas fa-cog"></i>
+                    Paramètres
+                </a>
+            </nav>
+
+            <div class="sidebar-footer">
+                <a href="#help">
+                    <i class="fas fa-question-circle"></i>
+                    Aide
+                </a>
+                <a href="index.html" class="logout">
+                    <i class="fas fa-sign-out-alt"></i>
+                    Déconnexion
+                </a>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="content-header">
+                <div class="header-left">
+                    <h1>Planning</h1>
+                    <div class="date-navigation">
+                        <button id="prevDay"><i class="fas fa-chevron-left"></i></button>
+                        <h2 id="currentDate">15 Mai 2024</h2>
+                        <button id="nextDay"><i class="fas fa-chevron-right"></i></button>
+                    </div>
+                </div>
+                <div class="header-actions">
+                    <button class="btn-secondary">
+                        <i class="fas fa-filter"></i>
+                        Filtres
+                    </button>
+                    <button class="btn-primary">
+                        <i class="fas fa-plus"></i>
+                        Nouveau RDV
+                    </button>
+                    <button class="notification-btn">
+                        <i class="fas fa-bell"></i>
+                        <span class="notification-badge">3</span>
+                    </button>
+                </div>
+            </header>
+
+            <div class="schedule-container">
+                <div class="schedule-sidebar">
+                    <div class="time-slots">
+                        <div class="time-slot">09:00</div>
+                        <div class="time-slot">10:00</div>
+                        <div class="time-slot">11:00</div>
+                        <div class="time-slot">12:00</div>
+                        <div class="time-slot">14:00</div>
+                        <div class="time-slot">15:00</div>
+                        <div class="time-slot">16:00</div>
+                        <div class="time-slot">17:00</div>
+                    </div>
+                </div>
+
+                <div class="schedule-content">
+                    <div class="appointment booked" style="top: 0; height: 120px;">
+                        <div class="appointment-header">
+                            <span class="time">09:00 - 10:00</span>
+                            <div class="appointment-actions">
+                                <button class="btn-icon"><i class="fas fa-edit"></i></button>
+                                <button class="btn-icon"><i class="fas fa-times"></i></button>
+                            </div>
+                        </div>
+                        <h3 class="patient-name">Jean Dupont</h3>
+                        <p class="appointment-type">Consultation standard</p>
+                        <div class="appointment-status confirmed">Confirmé</div>
+                    </div>
+
+                    <div class="appointment urgent" style="top: 240px; height: 120px;">
+                        <div class="appointment-header">
+                            <span class="time">13:00 - 14:00</span>
+                            <div class="appointment-actions">
+                                <button class="btn-icon"><i class="fas fa-edit"></i></button>
+                                <button class="btn-icon"><i class="fas fa-times"></i></button>
+                            </div>
+                        </div>
+                        <h3 class="patient-name">Marie Martin</h3>
+                        <p class="appointment-type">Consultation urgente</p>
+                        <div class="appointment-status pending">En attente</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="dashboard-grid">
+                <!-- Statistiques journalières -->
+                <section class="dashboard-card stats">
+                    <h2>Statistiques du jour</h2>
+                    <div class="stats-grid">
+                        <div class="stat-item">
+                            <i class="fas fa-users"></i>
+                            <div class="stat-content">
+                                <span class="stat-value">8</span>
+                                <span class="stat-label">Patients</span>
+                            </div>
+                        </div>
+                        <div class="stat-item">
+                            <i class="fas fa-clock"></i>
+                            <div class="stat-content">
+                                <span class="stat-value">7h</span>
+                                <span class="stat-label">Consultations</span>
+                            </div>
+                        </div>
+                        <div class="stat-item">
+                            <i class="fas fa-exclamation-circle"></i>
+                            <div class="stat-content">
+                                <span class="stat-value">2</span>
+                                <span class="stat-label">Urgences</span>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Prochains rendez-vous -->
+                <section class="dashboard-card upcoming">
+                    <h2>Prochains rendez-vous</h2>
+                    <div class="upcoming-list">
+                        <div class="upcoming-item">
+                            <div class="time-badge">14:00</div>
+                            <div class="upcoming-details">
+                                <h3>Sophie Bernard</h3>
+                                <p>Première consultation</p>
+                            </div>
+                            <button class="btn-icon"><i class="fas fa-chevron-right"></i></button>
+                        </div>
+                        <div class="upcoming-item">
+                            <div class="time-badge">15:00</div>
+                            <div class="upcoming-details">
+                                <h3>Pierre Dubois</h3>
+                                <p>Suivi mensuel</p>
+                            </div>
+                            <button class="btn-icon"><i class="fas fa-chevron-right"></i></button>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Notes rapides -->
+                <section class="dashboard-card quick-notes">
+                    <h2>Notes rapides</h2>
+                    <div class="notes-container">
+                        <textarea placeholder="Ajouter une note..."></textarea>
+                        <div class="notes-list">
+                            <div class="note-item">
+                                <p>Rappeler Mme Martin pour son prochain RDV</p>
+                                <span class="note-time">Il y a 1h</span>
+                            </div>
+                            <div class="note-item">
+                                <p>Préparer le dossier de M. Dupont</p>
+                                <span class="note-time">Il y a 3h</span>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <script src="js/employee.js"></script>
+</body>
+</html> 

@@ -1,0 +1,265 @@
+// Vérification de l'authentification
+function checkAuth() {
+    const isAuthenticated = localStorage.getItem('isAuthenticated') === 'true';
+    if (!isAuthenticated) {
+        window.location.href = 'auth.html';
+        return false;
+    }
+    return true;
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    if (!checkAuth()) return;
+    
+    // Récupération des informations de l'utilisateur
+    const user = JSON.parse(localStorage.getItem('user'));
+    
+    // Pré-remplissage du formulaire avec les informations de l'utilisateur
+    if (user) {
+        const nomInput = document.getElementById('nom');
+        const prenomInput = document.getElementById('prenom');
+        const emailInput = document.getElementById('email');
+        
+        if (user.name) {
+            const [prenom, nom] = user.name.split(' ');
+            if (nomInput) nomInput.value = nom || '';
+            if (prenomInput) prenomInput.value = prenom || '';
+        }
+        if (emailInput && user.email) emailInput.value = user.email;
+    }
+
+    initializeDomaines();
+    initializeCalendar();
+    initializeForm();
+    updateSummary();
+});
+
+// Gestion des étapes du formulaire
+let currentStep = 1;
+let selectedDomaine = null;
+let selectedDate = null;
+let selectedTime = null;
+
+function nextStep() {
+    if (validateCurrentStep()) {
+        document.querySelector(`.step[data-step="${currentStep}"]`).classList.remove('active');
+        document.querySelector(`#step${currentStep}`).classList.remove('active');
+        currentStep++;
+        document.querySelector(`.step[data-step="${currentStep}"]`).classList.add('active');
+        document.querySelector(`#step${currentStep}`).classList.add('active');
+        updateSummary();
+    }
+}
+
+function prevStep() {
+    document.querySelector(`.step[data-step="${currentStep}"]`).classList.remove('active');
+    document.querySelector(`#step${currentStep}`).classList.remove('active');
+    currentStep--;
+    document.querySelector(`.step[data-step="${currentStep}"]`).classList.add('active');
+    document.querySelector(`#step${currentStep}`).classList.add('active');
+}
+
+function validateCurrentStep() {
+    switch(currentStep) {
+        case 1:
+            return selectedDomaine !== null;
+        case 2:
+            return selectedDate !== null && selectedTime !== null;
+        default:
+            return true;
+    }
+}
+
+// Gestion des domaines d'intervention
+function initializeDomaines() {
+    const domaines = document.querySelectorAll('.domaine-card');
+    domaines.forEach(domaine => {
+        domaine.addEventListener('click', () => {
+            domaines.forEach(d => d.classList.remove('selected'));
+            domaine.classList.add('selected');
+            selectedDomaine = {
+                id: domaine.dataset.domaine,
+                name: domaine.querySelector('h3').textContent
+            };
+            updateSummary();
+        });
+    });
+}
+
+// Gestion du calendrier
+function initializeCalendar() {
+    const calendar = document.getElementById('calendar');
+    const today = new Date();
+    const currentMonth = today.getMonth();
+    const currentYear = today.getFullYear();
+
+    renderCalendar(currentMonth, currentYear);
+    renderTimeSlots(today);
+}
+
+function renderCalendar(month, year) {
+    const calendar = document.getElementById('calendar');
+    const firstDay = new Date(year, month, 1);
+    const lastDay = new Date(year, month + 1, 0);
+    const startingDay = firstDay.getDay();
+    const monthLength = lastDay.getDate();
+
+    const monthNames = ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'];
+
+    let calendarHTML = `
+        <div class="calendar-header">
+            <button onclick="prevMonth()"><i class="fas fa-chevron-left"></i></button>
+            <h3>${monthNames[month]} ${year}</h3>
+            <button onclick="nextMonth()"><i class="fas fa-chevron-right"></i></button>
+        </div>
+        <div class="calendar-grid">
+            <div class="calendar-day-header">Lun</div>
+            <div class="calendar-day-header">Mar</div>
+            <div class="calendar-day-header">Mer</div>
+            <div class="calendar-day-header">Jeu</div>
+            <div class="calendar-day-header">Ven</div>
+            <div class="calendar-day-header">Sam</div>
+            <div class="calendar-day-header">Dim</div>
+    `;
+
+    // Remplir les jours
+    let day = 1;
+    for (let i = 0; i < 6; i++) {
+        for (let j = 0; j < 7; j++) {
+            if (i === 0 && j < startingDay) {
+                calendarHTML += '<div class="calendar-day empty"></div>';
+            } else if (day > monthLength) {
+                calendarHTML += '<div class="calendar-day empty"></div>';
+            } else {
+                const date = new Date(year, month, day);
+                const isDisabled = isDateDisabled(date);
+                const isSelected = selectedDate && date.toDateString() === selectedDate.toDateString();
+                calendarHTML += `
+                    <div class="calendar-day ${isDisabled ? 'disabled' : ''} ${isSelected ? 'selected' : ''}"
+                         onclick="${isDisabled ? '' : `selectDate(${year}, ${month}, ${day})`}">
+                        ${day}
+                    </div>`;
+                day++;
+            }
+        }
+    }
+
+    calendarHTML += '</div>';
+    calendar.innerHTML = calendarHTML;
+}
+
+function isDateDisabled(date) {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const day = date.getDay();
+    return date < today || day === 0 || day === 1; // Dimanche = 0, Lundi = 1
+}
+
+function selectDate(year, month, day) {
+    selectedDate = new Date(year, month, day);
+    renderCalendar(month, year);
+    renderTimeSlots(selectedDate);
+    updateSummary();
+}
+
+let currentMonth = new Date().getMonth();
+let currentYear = new Date().getFullYear();
+
+function prevMonth() {
+    if (currentMonth === 0) {
+        currentMonth = 11;
+        currentYear--;
+    } else {
+        currentMonth--;
+    }
+    renderCalendar(currentMonth, currentYear);
+}
+
+function nextMonth() {
+    if (currentMonth === 11) {
+        currentMonth = 0;
+        currentYear++;
+    } else {
+        currentMonth++;
+    }
+    renderCalendar(currentMonth, currentYear);
+}
+
+function generateTimeSlots() {
+    const slots = [];
+    // Matin
+    for (let hour = 10; hour < 13; hour++) {
+        slots.push(`${hour}:00`);
+    }
+    // Pause déjeuner 13:00-14:00
+    // Après-midi
+    for (let hour = 14; hour < 18; hour++) {
+        slots.push(`${hour}:00`);
+    }
+    return slots;
+}
+
+function renderTimeSlots(date) {
+    if (!date) return;
+
+    const slotsGrid = document.querySelector('.slots-grid');
+    const timeSlots = generateTimeSlots();
+    const now = new Date();
+    const isToday = date.toDateString() === now.toDateString();
+    
+    slotsGrid.innerHTML = timeSlots.map(slot => {
+        const [hours] = slot.split(':').map(Number);
+        const slotDate = new Date(date);
+        slotDate.setHours(hours, 0);
+
+        const isDisabled = isToday && slotDate < now;
+        
+        return `
+            <div class="time-slot ${selectedTime === slot ? 'selected' : ''} ${isDisabled ? 'disabled' : ''}"
+                 onclick="${isDisabled ? '' : `selectTime('${slot}')`}">
+                ${slot}
+            </div>
+        `;
+    }).join('');
+}
+
+function selectTime(time) {
+    selectedTime = time;
+    document.querySelectorAll('.time-slot').forEach(slot => {
+        slot.classList.toggle('selected', slot.textContent === time);
+    });
+    updateSummary();
+}
+
+// Gestion du formulaire
+function initializeForm() {
+    const form = document.getElementById('rdv-form');
+    form.addEventListener('submit', handleSubmit);
+}
+
+function handleSubmit(e) {
+    e.preventDefault();
+    const formData = new FormData(e.target);
+    const data = {
+        domaine: selectedDomaine,
+        date: selectedDate,
+        time: selectedTime,
+        nom: formData.get('nom'),
+        prenom: formData.get('prenom'),
+        email: formData.get('email'),
+        telephone: formData.get('telephone'),
+        notes: formData.get('notes')
+    };
+    
+    console.log('Données du rendez-vous:', data);
+    // Ici, vous ajouteriez la logique pour envoyer les données au serveur
+    alert('Rendez-vous confirmé ! Vous allez recevoir un email de confirmation.');
+    window.location.href = 'confirmation.html';
+}
+
+// Mise à jour du résumé
+function updateSummary() {
+    document.getElementById('summary-domaine').textContent = selectedDomaine ? selectedDomaine.name : '-';
+    document.getElementById('summary-date').textContent = selectedDate ? selectedDate.toLocaleDateString('fr-FR') : '-';
+    document.getElementById('summary-time').textContent = selectedTime || '-';
+} 
