@@ -1,3 +1,5 @@
+import { stripe, initializePayment } from './stripe-config.js';
+
 // Vérification de l'authentification
 function checkAuth() {
     const isAuthenticated = localStorage.getItem('isAuthenticated') === 'true';
@@ -262,4 +264,85 @@ function updateSummary() {
     document.getElementById('summary-domaine').textContent = selectedDomaine ? selectedDomaine.name : '-';
     document.getElementById('summary-date').textContent = selectedDate ? selectedDate.toLocaleDateString('fr-FR') : '-';
     document.getElementById('summary-time').textContent = selectedTime || '-';
-} 
+}
+
+// Initialisation des éléments Stripe
+const elements = stripe.elements();
+const card = elements.create('card', {
+    style: {
+        base: {
+            fontSize: '16px',
+            color: '#32325d',
+            fontFamily: '"Helvetica Neue", Helvetica, sans-serif',
+            '::placeholder': {
+                color: '#aab7c4'
+            }
+        },
+        invalid: {
+            color: '#fa755a',
+            iconColor: '#fa755a'
+        }
+    }
+});
+
+// Monter l'élément carte dans le DOM
+card.mount('#card-element');
+
+// Gérer les erreurs de validation en temps réel
+card.on('change', function(event) {
+    const displayError = document.getElementById('card-errors');
+    if (event.error) {
+        displayError.textContent = event.error.message;
+    } else {
+        displayError.textContent = '';
+    }
+});
+
+// Gérer la soumission du formulaire
+document.getElementById('rdv-form').addEventListener('submit', async function(event) {
+    event.preventDefault();
+    
+    const submitButton = document.querySelector('.btn-submit');
+    submitButton.disabled = true;
+    submitButton.textContent = 'Traitement en cours...';
+
+    try {
+        // Récupérer les informations du rendez-vous
+        const domaine = document.getElementById('summary-domaine').textContent;
+        const date = document.getElementById('summary-date').textContent;
+        const time = document.getElementById('summary-time').textContent;
+        const amount = 5000; // 50€ en centimes
+
+        // Initialiser le paiement
+        const clientSecret = await initializePayment(amount, `Consultation ${domaine} - ${date} ${time}`);
+
+        // Confirmer le paiement
+        const result = await stripe.confirmCardPayment(clientSecret, {
+            payment_method: {
+                card: card,
+                billing_details: {
+                    name: document.getElementById('nom').value + ' ' + document.getElementById('prenom').value,
+                    email: document.getElementById('email').value,
+                    phone: document.getElementById('telephone').value
+                }
+            }
+        });
+
+        if (result.error) {
+            // Gérer les erreurs
+            const errorElement = document.getElementById('card-errors');
+            errorElement.textContent = result.error.message;
+            submitButton.disabled = false;
+            submitButton.textContent = 'Confirmer et payer';
+        } else {
+            // Paiement réussi
+            window.location.href = '/confirmation.html';
+        }
+    } catch (error) {
+        console.error('Erreur:', error);
+        const errorElement = document.getElementById('card-errors');
+        errorElement.textContent = 'Une erreur est survenue. Veuillez réessayer.';
+        submitButton.disabled = false;
+        submitButton.textContent = 'Confirmer et payer';
+    }
+}); 

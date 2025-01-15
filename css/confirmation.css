@@ -1,49 +1,28 @@
 .confirmation-container {
-    min-height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
-    padding: 2rem;
-}
-
-.confirmation-box {
-    background: white;
-    padding: 2rem;
-    border-radius: 10px;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-    width: 100%;
     max-width: 800px;
+    margin: 80px auto;
+    padding: 2rem;
+}
+
+.confirmation-card {
+    background: white;
+    border-radius: 15px;
+    padding: 3rem;
     text-align: center;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
 }
 
-.success-animation {
-    margin-bottom: 2rem;
+.success-icon {
+    font-size: 4rem;
+    color: #4CAF50;
+    margin-bottom: 1.5rem;
+    animation: scaleIn 0.5s ease-out;
 }
 
-.success-animation i {
-    font-size: 5rem;
-    color: #28a745;
-    animation: scaleIn 0.5s ease-in-out;
-}
-
-@keyframes scaleIn {
-    0% {
-        transform: scale(0);
-        opacity: 0;
-    }
-    50% {
-        transform: scale(1.2);
-    }
-    100% {
-        transform: scale(1);
-        opacity: 1;
-    }
-}
-
-.confirmation-box h1 {
-    color: var(--primary-color);
+.confirmation-card h1 {
+    color: var(--accent-color);
     margin-bottom: 1rem;
+    font-size: 2rem;
 }
 
 .confirmation-message {
@@ -52,145 +31,89 @@
     margin-bottom: 2rem;
 }
 
-.appointment-details {
-    background-color: #f8f9fa;
+.confirmation-details {
+    background: #f8f9fa;
     padding: 2rem;
     border-radius: 10px;
     margin-bottom: 2rem;
 }
 
-.appointment-details h2 {
-    color: var(--text-color);
-    margin-bottom: 1.5rem;
-    font-size: 1.5rem;
-}
-
-.details-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 1.5rem;
-}
-
-.detail-item {
+.confirmation-details p {
     display: flex;
     align-items: center;
     gap: 1rem;
-    padding: 1rem;
-    background: white;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    margin-bottom: 1rem;
+    color: #555;
 }
 
-.detail-item i {
-    font-size: 1.5rem;
+.confirmation-details p:last-child {
+    margin-bottom: 0;
+}
+
+.confirmation-details i {
     color: var(--primary-color);
+    font-size: 1.2rem;
 }
 
-.detail-content {
-    text-align: left;
-}
-
-.detail-content label {
-    display: block;
-    color: #666;
-    font-size: 0.9rem;
-    margin-bottom: 0.25rem;
-}
-
-.detail-content p {
-    color: var(--text-color);
-    font-weight: 600;
-    margin: 0;
-}
-
-.next-steps {
-    margin-bottom: 2rem;
-}
-
-.next-steps h2 {
-    color: var(--text-color);
-    margin-bottom: 1.5rem;
-    font-size: 1.5rem;
-}
-
-.next-steps ul {
-    list-style: none;
-    padding: 0;
-    display: grid;
-    gap: 1rem;
-}
-
-.next-steps li {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    color: #666;
-}
-
-.next-steps li i {
-    color: var(--primary-color);
-}
-
-.emergency-reminder {
-    background-color: #fff3cd;
-    border: 1px solid #ffeeba;
-    color: #856404;
-    padding: 1rem;
-    border-radius: 5px;
-    margin-bottom: 2rem;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    justify-content: center;
-}
-
-.action-buttons {
+.confirmation-actions {
     display: flex;
     gap: 1rem;
     justify-content: center;
 }
 
-.btn-primary, .btn-secondary {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
+.btn-primary,
+.btn-secondary {
     padding: 1rem 2rem;
-    border-radius: 5px;
+    border-radius: 25px;
     text-decoration: none;
     font-weight: 500;
-    transition: all 0.3s;
+    transition: all 0.3s ease;
 }
 
 .btn-primary {
-    background-color: var(--primary-color);
+    background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
     color: white;
 }
 
-.btn-primary:hover {
-    background-color: var(--secondary-color);
-}
-
 .btn-secondary {
-    background-color: #f8f9fa;
-    color: var(--text-color);
-    border: 1px solid #ddd;
+    background: #f8f9fa;
+    color: var(--accent-color);
 }
 
+.btn-primary:hover,
 .btn-secondary:hover {
-    background-color: #e9ecef;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+@keyframes scaleIn {
+    from {
+        transform: scale(0);
+        opacity: 0;
+    }
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
 }
 
 @media (max-width: 768px) {
-    .details-grid {
-        grid-template-columns: 1fr;
+    .confirmation-container {
+        padding: 1rem;
+        margin-top: 60px;
     }
-    
-    .action-buttons {
+
+    .confirmation-card {
+        padding: 2rem;
+    }
+
+    .confirmation-actions {
         flex-direction: column;
     }
-    
-    .btn-primary, .btn-secondary {
+
+    .btn-primary,
+    .btn-secondary {
         width: 100%;
-        justify-content: center;
+        text-align: center;
     }
 } 

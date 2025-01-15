@@ -1,12 +1,11 @@
 {
-  "name": "mentalplus",
+  "name": "mentalplus-web",
   "version": "1.0.0",
   "description": "MentalPlus - Votre plateforme de bien-être mental",
   "main": "index.js",
   "scripts": {
     "dev": "vercel dev",
-    "deploy": "vercel deploy --prod",
-    "sync": "node sync.js"
+    "deploy": "vercel deploy --prod"
   },
   "dependencies": {
     "@vercel/node": "^2.15.3",

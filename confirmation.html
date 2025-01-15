@@ -3,90 +3,45 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Confirmation - PsychoAide</title>
+    <title>Confirmation - MentalPlus</title>
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/confirmation.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
-    <div class="confirmation-container">
-        <div class="confirmation-box">
-            <div class="success-animation">
-                <i class="fas fa-check-circle"></i>
-            </div>
-            
-            <h1>Réservation confirmée !</h1>
-            <p class="confirmation-message">Votre rendez-vous a été réservé avec succès.</p>
-            
-            <div class="appointment-details">
-                <h2>Détails du rendez-vous</h2>
-                <div class="details-grid">
-                    <div class="detail-item">
-                        <i class="fas fa-calendar"></i>
-                        <div class="detail-content">
-                            <label>Date</label>
-                            <p id="appointmentDate">Chargement...</p>
-                        </div>
-                    </div>
-                    <div class="detail-item">
-                        <i class="fas fa-clock"></i>
-                        <div class="detail-content">
-                            <label>Heure</label>
-                            <p id="appointmentTime">Chargement...</p>
-                        </div>
-                    </div>
-                    <div class="detail-item">
-                        <i class="fas fa-euro-sign"></i>
-                        <div class="detail-content">
-                            <label>Montant payé</label>
-                            <p>50€</p>
-                        </div>
-                    </div>
-                    <div class="detail-item">
-                        <i class="fas fa-receipt"></i>
-                        <div class="detail-content">
-                            <label>Numéro de réservation</label>
-                            <p id="bookingNumber">Chargement...</p>
-                        </div>
-                    </div>
+    <header>
+        <nav>
+            <div class="logo">MentalPlus</div>
+            <ul>
+                <li><a href="index.html">Accueil</a></li>
+                <li><a href="index.html#services">Nos Services</a></li>
+                <li><a href="rendez-vous.html">Prendre RDV</a></li>
+                <li><a href="#tarifs">Tarifs</a></li>
+                <li><a href="#connexion" class="btn-connexion">Connexion</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <div class="confirmation-container">
+            <div class="confirmation-card">
+                <div class="success-icon">
+                    <i class="fas fa-check-circle"></i>
+                </div>
+                <h1>Paiement confirmé !</h1>
+                <p class="confirmation-message">Votre rendez-vous a été réservé avec succès.</p>
+                <div class="confirmation-details">
+                    <p><i class="fas fa-envelope"></i> Un email de confirmation vous a été envoyé</p>
+                    <p><i class="fas fa-calendar-check"></i> Le rendez-vous a été ajouté à votre agenda</p>
+                    <p><i class="fas fa-clock"></i> Vous recevrez un rappel 24h avant</p>
+                </div>
+                <div class="confirmation-actions">
+                    <a href="index.html" class="btn-primary">Retour à l'accueil</a>
+                    <a href="rendez-vous.html" class="btn-secondary">Prendre un autre rendez-vous</a>
                 </div>
             </div>
-
-            <div class="next-steps">
-                <h2>Prochaines étapes</h2>
-                <ul>
-                    <li>
-                        <i class="fas fa-envelope"></i>
-                        Un email de confirmation vous a été envoyé
-                    </li>
-                    <li>
-                        <i class="fas fa-bell"></i>
-                        Vous recevrez un rappel 24h avant votre rendez-vous
-                    </li>
-                    <li>
-                        <i class="fas fa-map-marker-alt"></i>
-                        L'adresse exacte vous sera communiquée par email
-                    </li>
-                </ul>
-            </div>
-
-            <div class="emergency-reminder">
-                <i class="fas fa-exclamation-circle"></i>
-                <p>En cas d'urgence ou d'empêchement, contactez-nous au plus tôt</p>
-            </div>
-
-            <div class="action-buttons">
-                <a href="espace-client.html" class="btn-primary">
-                    <i class="fas fa-user"></i>
-                    Accéder à mon espace client
-                </a>
-                <a href="index.html" class="btn-secondary">
-                    <i class="fas fa-home"></i>
-                    Retour à l'accueil
-                </a>
-            </div>
         </div>
-    </div>
+    </main>
 
     <script src="js/confirmation.js"></script>
 </body>
