@@ -25,7 +25,7 @@ async function sendEmail(type, data) {
 
         const msg = {
             to: data.email,
-            from: 'contact@mentalplus.fr',
+            from: 'contact@mentalserenity.fr',
             subject: template.subject,
             templateId: template.templateId,
             dynamic_template_data: {

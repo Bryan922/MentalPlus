@@ -413,7 +413,7 @@ function scheduleNotification(reminder) {
         const delay = reminderDate - now;
         setTimeout(() => {
             if (Notification.permission === "granted") {
-                new Notification("Rappel MentalPlus", {
+                new Notification("Rappel MentalSerenity", {
                     body: reminder.description,
                     icon: "/images/logo.png"
                 });

@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Administration - MentalSerenity</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/admin.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">MentalSerenity</div>
+            <ul>
+                <li><a href="index.html">Accueil</a></li>
+                <li><a href="#" class="active">Administration</a></li>
+                <li><a href="#" id="logout-btn">Déconnexion</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="admin-container">
+        <aside class="admin-sidebar">
+            <nav class="admin-nav">
+                <a href="#dashboard" class="active"><i class="fas fa-chart-line"></i> Tableau de bord</a>
+                <a href="#employees"><i class="fas fa-users"></i> Gestion des employés</a>
+                <a href="#settings"><i class="fas fa-cog"></i> Paramètres</a>
+            </nav>
+        </aside>
+
+        <div class="admin-content">
+            <section id="employees" class="admin-section">
+                <div class="section-header">
+                    <h2>Gestion des employés</h2>
+                    <button class="add-employee-btn">
+                        <i class="fas fa-plus"></i> Ajouter un employé
+                    </button>
+                </div>
+
+                <div class="employees-list">
+                    <div class="employee-filters">
+                        <input type="text" placeholder="Rechercher un employé..." class="search-input">
+                        <select class="filter-select">
+                            <option value="all">Tous les rôles</option>
+                            <option value="psychologue">Psychologue</option>
+                            <option value="admin">Administrateur</option>
+                        </select>
+                    </div>
+
+                    <table class="employees-table">
+                        <thead>
+                            <tr>
+                                <th>Nom</th>
+                                <th>Email</th>
+                                <th>Rôle</th>
+                                <th>Statut</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="employeesList">
+                            <!-- Les employés seront ajoutés dynamiquement ici -->
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Modal pour ajouter/modifier un employé -->
+    <div id="employeeModal" class="modal">
+        <div class="modal-content">
+            <h3>Gérer un employé</h3>
+            <form id="employeeForm">
+                <div class="form-group">
+                    <label>Nom</label>
+                    <input type="text" name="name" required>
+                </div>
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" name="email" required>
+                </div>
+                <div class="form-group">
+                    <label>Rôle</label>
+                    <select name="role" required>
+                        <option value="psychologue">Psychologue</option>
+                        <option value="admin">Administrateur</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Statut</label>
+                    <select name="status">
+                        <option value="active">Actif</option>
+                        <option value="inactive">Inactif</option>
+                    </select>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="cancel-btn">Annuler</button>
+                    <button type="submit" class="save-btn">Enregistrer</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="js/admin.js"></script>
+</body>
+</html> 
