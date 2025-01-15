@@ -2,6 +2,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initializeTabs();
     initializePasswordToggles();
     initializeForms();
+    updateAuthButtons();
 });
 
 // Gestion des onglets
@@ -55,30 +56,24 @@ function initializeForms() {
     const loginForm = document.getElementById('login-form');
     const registerForm = document.getElementById('register-form');
 
-    loginForm.addEventListener('submit', handleLogin);
-    registerForm.addEventListener('submit', handleRegister);
+    if (loginForm) loginForm.addEventListener('submit', handleLogin);
+    if (registerForm) registerForm.addEventListener('submit', handleRegister);
 }
 
 async function handleLogin(e) {
     e.preventDefault();
-    const formData = new FormData(e.target);
-    const data = {
-        email: formData.get('email'),
-        password: formData.get('password'),
-        remember: formData.get('remember') === 'on'
-    };
+    const email = document.getElementById('login-email').value;
+    const password = document.getElementById('login-password').value;
 
     try {
-        // Simulation d'une requête API
-        console.log('Tentative de connexion:', data);
-        
-        // En cas de succès, redirection vers la page de rendez-vous
+        // Simulation d'une connexion réussie
         localStorage.setItem('isAuthenticated', 'true');
         localStorage.setItem('user', JSON.stringify({
-            email: data.email,
-            name: 'John Doe' // À remplacer par les données réelles de l'utilisateur
+            email: email,
+            name: 'Utilisateur Test'
         }));
         
+        updateAuthButtons();
         window.location.href = 'rendez-vous.html';
     } catch (error) {
         console.error('Erreur de connexion:', error);
@@ -98,23 +93,20 @@ async function handleRegister(e) {
         passwordConfirm: formData.get('password-confirm')
     };
 
-    // Validation du mot de passe
     if (data.password !== data.passwordConfirm) {
         alert('Les mots de passe ne correspondent pas.');
         return;
     }
 
     try {
-        // Simulation d'une requête API
-        console.log('Tentative d\'inscription:', data);
-        
-        // En cas de succès, connexion automatique et redirection
+        // Simulation d'une inscription réussie
         localStorage.setItem('isAuthenticated', 'true');
         localStorage.setItem('user', JSON.stringify({
             email: data.email,
             name: `${data.firstname} ${data.name}`
         }));
         
+        updateAuthButtons();
         window.location.href = 'rendez-vous.html';
     } catch (error) {
         console.error('Erreur d\'inscription:', error);
@@ -122,34 +114,19 @@ async function handleRegister(e) {
     }
 }
 
-// Gestion de l'authentification
-function handleLogin(event) {
-    event.preventDefault();
-    const email = document.getElementById('email').value;
-    const password = document.getElementById('password').value;
-
-    // Simuler une connexion réussie
-    localStorage.setItem('isAuthenticated', 'true');
-    localStorage.setItem('user', JSON.stringify({
-        email: email,
-        name: 'Utilisateur Test' // À remplacer par le vrai nom une fois la base de données configurée
-    }));
-
-    // Rediriger vers la page d'accueil
-    window.location.href = 'index.html';
-}
-
-// Vérifier si l'utilisateur est connecté
-function checkAuthStatus() {
-    const isAuthenticated = localStorage.getItem('isAuthenticated') === 'true';
+// Mise à jour des boutons d'authentification
+function updateAuthButtons() {
     const btnConnexion = document.querySelector('.btn-connexion');
+    const isAuthenticated = localStorage.getItem('isAuthenticated') === 'true';
     
-    if (isAuthenticated) {
-        btnConnexion.textContent = 'Mon Profil';
-        btnConnexion.href = 'profile.html';
-    } else {
-        btnConnexion.textContent = 'Connexion';
-        btnConnexion.href = 'login.html';
+    if (btnConnexion) {
+        if (isAuthenticated) {
+            btnConnexion.textContent = 'Mon Profil';
+            btnConnexion.href = '#profile';
+        } else {
+            btnConnexion.textContent = 'Connexion';
+            btnConnexion.href = 'auth.html';
+        }
     }
 }
 
@@ -157,13 +134,6 @@ function checkAuthStatus() {
 function logout() {
     localStorage.removeItem('isAuthenticated');
     localStorage.removeItem('user');
+    updateAuthButtons();
     window.location.href = 'index.html';
-}
-
-// Initialiser la vérification du statut d'authentification
-document.addEventListener('DOMContentLoaded', checkAuthStatus);
-
-// Ajouter les écouteurs d'événements si on est sur la page de connexion
-if (document.getElementById('loginForm')) {
-    document.getElementById('loginForm').addEventListener('submit', handleLogin);
 } 
