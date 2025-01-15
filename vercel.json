@@ -1,6 +1,6 @@
 {
     "version": 2,
-    "name": "mentalserenity-web",
+    "name": "mentalplus-web",
     "git": {
         "deploymentEnabled": {
             "master": true
