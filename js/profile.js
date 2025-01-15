@@ -126,55 +126,57 @@ function initializeForms() {
 }
 
 // Chargement des rendez-vous
-function loadAppointments() {
+function loadAppointments(filter = 'upcoming') {
     const appointmentsList = document.querySelector('.appointments-list');
-    const filterButtons = document.querySelectorAll('.appointments-filter button');
-    
-    // Exemple de données de rendez-vous
+    // Simuler des rendez-vous pour l'exemple
     const appointments = [
         {
-            date: '2024-01-20',
-            time: '14:00',
-            type: 'Consultation standard',
+            type: 'Consultation Standard',
+            date: '2024-02-15',
+            time: '14:30',
             status: 'upcoming'
         },
         {
-            date: '2024-01-15',
+            type: 'Suivi Psychologique',
+            date: '2024-02-20',
             time: '10:00',
-            type: 'Suivi',
-            status: 'past'
+            status: 'upcoming'
         }
     ];
 
-    function renderAppointments(status = 'upcoming') {
-        const filteredAppointments = appointments.filter(apt => apt.status === status);
-        appointmentsList.innerHTML = filteredAppointments.map(apt => `
-            <div class="appointment-card">
-                <div class="appointment-info">
-                    <h3>${apt.type}</h3>
-                    <p>Date: ${formatDate(apt.date)}</p>
-                    <p>Heure: ${apt.time}</p>
+    appointmentsList.innerHTML = '';
+    
+    appointments
+        .filter(apt => apt.status === filter)
+        .forEach(appointment => {
+            const card = document.createElement('div');
+            card.className = 'appointment-card';
+            
+            const date = new Date(appointment.date);
+            const formattedDate = date.toLocaleDateString('fr-FR', {
+                weekday: 'long',
+                day: 'numeric',
+                month: 'long',
+                year: 'numeric'
+            });
+
+            card.innerHTML = `
+                <div class="appointment-header">
+                    <span class="appointment-type">${appointment.type}</span>
+                    <span class="appointment-date">${formattedDate} à ${appointment.time}</span>
                 </div>
-                ${status === 'upcoming' ? `
-                    <div class="appointment-actions">
-                        <button class="btn-secondary" onclick="rescheduleAppointment('${apt.date}')">Reprogrammer</button>
-                        <button class="btn-danger" onclick="cancelAppointment('${apt.date}')">Annuler</button>
-                    </div>
-                ` : ''}
-            </div>
-        `).join('');
-    }
-
-    filterButtons.forEach(button => {
-        button.addEventListener('click', () => {
-            filterButtons.forEach(btn => btn.classList.remove('active'));
-            button.classList.add('active');
-            renderAppointments(button.dataset.filter);
+                <div class="appointment-actions">
+                    <button class="btn-reschedule">
+                        <i class="fas fa-calendar-alt"></i> Reprogrammer
+                    </button>
+                    <button class="btn-cancel">
+                        <i class="fas fa-times"></i> Annuler
+                    </button>
+                </div>
+            `;
+            
+            appointmentsList.appendChild(card);
         });
-    });
-
-    // Affichage initial des rendez-vous à venir
-    renderAppointments('upcoming');
 }
 
 // Chargement des documents

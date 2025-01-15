@@ -4,7 +4,7 @@
     grid-template-columns: 300px 1fr;
     gap: 2rem;
     max-width: 1200px;
-    margin: 2rem auto;
+    margin: 6rem auto 2rem;
     padding: 0 1rem;
 }
 
@@ -170,7 +170,75 @@
 
 .appointments-list {
     display: grid;
+    gap: 1.5rem;
+}
+
+.appointment-card {
+    background: #f8f9fa;
+    border-radius: 12px;
+    padding: 1.5rem;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    border: 1px solid #eee;
+    transition: all 0.3s ease;
+}
+
+.appointment-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.appointment-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid #eee;
+}
+
+.appointment-type {
+    font-weight: 600;
+    color: var(--primary-color);
+}
+
+.appointment-date {
+    color: var(--accent-color);
+    font-size: 0.9rem;
+}
+
+.appointment-actions {
+    display: flex;
     gap: 1rem;
+    margin-top: 1rem;
+}
+
+.btn-reschedule, .btn-cancel {
+    padding: 0.8rem 1.5rem;
+    border-radius: 6px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: none;
+}
+
+.btn-reschedule {
+    background: var(--primary-color);
+    color: white;
+}
+
+.btn-reschedule:hover {
+    background: var(--secondary-color);
+}
+
+.btn-cancel {
+    background: #fff;
+    color: #dc3545;
+    border: 1px solid #dc3545;
+}
+
+.btn-cancel:hover {
+    background: #dc3545;
+    color: white;
 }
 
 /* Documents */
