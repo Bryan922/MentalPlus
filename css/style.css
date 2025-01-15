@@ -468,50 +468,81 @@ nav a:hover {
 @media (max-width: 768px) {
     .services-grid {
         grid-template-columns: 1fr;
-        padding: 1rem;
+        padding: 2rem 1rem;
     }
 
-    .features-grid {
-        grid-template-columns: 1fr;
-        padding: 1rem;
+    .service-card {
+        padding: 1.5rem;
     }
 
     .pricing-grid {
         grid-template-columns: 1fr;
+        gap: 1.5rem;
         padding: 1rem;
     }
 
-    .service-card, .feature-card, .pricing-card {
-        padding: 1.5rem;
+    .pricing-card {
+        max-width: 100%;
     }
 
-    .pricing-card .btn-primary {
-        width: 90%;
-        padding: 0.9rem 1.8rem;
-        font-size: 1rem;
+    .contact-section {
+        padding: 3rem 1rem;
+    }
+
+    .contact-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+
+    .footer-content {
+        grid-template-columns: 1fr;
+        text-align: center;
+        gap: 2rem;
+    }
+
+    .footer-section {
+        padding: 0 1rem;
     }
 }
 
 @media (max-width: 480px) {
-    .section-title {
-        font-size: 1.8rem;
+    body {
+        font-size: 14px;
     }
 
-    .service-card,
-    .feature-card,
-    .pricing-card,
-    .contact-item {
-        padding: 1.2rem;
+    .section-title {
+        font-size: 1.8rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .service-card i {
+        font-size: 2rem;
+    }
+
+    .service-card h3 {
+        font-size: 1.2rem;
+    }
+
+    .pricing-card {
+        padding: 1.5rem;
+    }
+
+    .pricing-card .price {
+        font-size: 2rem;
     }
 
     .btn-primary {
         padding: 0.8rem 1.5rem;
+        font-size: 0.9rem;
     }
+}
 
-    .pricing-card .btn-primary {
-        width: 100%;
-        padding: 0.8rem 1.5rem;
-        font-size: 0.95rem;
+/* Animations plus fluides sur mobile */
+@media (prefers-reduced-motion: no-preference) {
+    .service-card,
+    .pricing-card,
+    .contact-item {
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
     }
 }
 
@@ -662,5 +693,94 @@ footer {
 
     .contact-info p, .contact-hours p {
         font-size: 1rem;
+    }
+}
+
+/* Menu burger pour mobile */
+.burger-menu {
+    display: none;
+    flex-direction: column;
+    gap: 4px;
+    cursor: pointer;
+    padding: 5px;
+}
+
+.burger-menu span {
+    display: block;
+    width: 25px;
+    height: 3px;
+    background-color: var(--primary-color);
+    transition: all 0.3s ease;
+}
+
+@media (max-width: 768px) {
+    .burger-menu {
+        display: flex;
+    }
+
+    nav ul {
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        flex-direction: column;
+        background: white;
+        padding: 1rem;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        gap: 1rem;
+    }
+
+    nav ul.active {
+        display: flex;
+    }
+
+    nav {
+        padding: 0.8rem 5%;
+    }
+
+    .btn-connexion {
+        width: 100%;
+        text-align: center;
+    }
+
+    .hero {
+        padding: 6rem 5% 3rem;
+    }
+
+    .hero h1 {
+        font-size: 2rem;
+        line-height: 1.3;
+    }
+
+    .hero p {
+        font-size: 1.1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .services-grid,
+    .features-grid,
+    .pricing-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+        padding: 1rem;
+    }
+
+    .service-card,
+    .feature-card,
+    .pricing-card {
+        padding: 1.2rem;
+    }
+
+    .section-title {
+        font-size: 1.8rem;
+        margin-bottom: 2rem;
+    }
+
+    .footer-content {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+        text-align: center;
     }
 } 

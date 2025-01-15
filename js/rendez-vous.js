@@ -64,9 +64,17 @@ function prevStep() {
 function validateCurrentStep() {
     switch(currentStep) {
         case 1:
-            return selectedDomaine !== null;
+            if (!selectedDomaine) {
+                alert('Veuillez sélectionner un domaine d\'intervention');
+                return false;
+            }
+            return true;
         case 2:
-            return selectedDate !== null && selectedTime !== null;
+            if (!selectedDate || !selectedTime) {
+                alert('Veuillez sélectionner une date et une heure');
+                return false;
+            }
+            return true;
         default:
             return true;
     }
@@ -77,7 +85,9 @@ function initializeDomaines() {
     const domaines = document.querySelectorAll('.domaine-card');
     domaines.forEach(domaine => {
         domaine.addEventListener('click', () => {
+            // Retirer la sélection précédente
             domaines.forEach(d => d.classList.remove('selected'));
+            // Ajouter la sélection au domaine cliqué
             domaine.classList.add('selected');
             selectedDomaine = {
                 id: domaine.dataset.domaine,

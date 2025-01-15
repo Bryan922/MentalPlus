@@ -120,4 +120,50 @@ async function handleRegister(e) {
         console.error('Erreur d\'inscription:', error);
         alert('Erreur lors de l\'inscription. Veuillez réessayer.');
     }
+}
+
+// Gestion de l'authentification
+function handleLogin(event) {
+    event.preventDefault();
+    const email = document.getElementById('email').value;
+    const password = document.getElementById('password').value;
+
+    // Simuler une connexion réussie
+    localStorage.setItem('isAuthenticated', 'true');
+    localStorage.setItem('user', JSON.stringify({
+        email: email,
+        name: 'Utilisateur Test' // À remplacer par le vrai nom une fois la base de données configurée
+    }));
+
+    // Rediriger vers la page d'accueil
+    window.location.href = 'index.html';
+}
+
+// Vérifier si l'utilisateur est connecté
+function checkAuthStatus() {
+    const isAuthenticated = localStorage.getItem('isAuthenticated') === 'true';
+    const btnConnexion = document.querySelector('.btn-connexion');
+    
+    if (isAuthenticated) {
+        btnConnexion.textContent = 'Mon Profil';
+        btnConnexion.href = 'profile.html';
+    } else {
+        btnConnexion.textContent = 'Connexion';
+        btnConnexion.href = 'login.html';
+    }
+}
+
+// Déconnexion
+function logout() {
+    localStorage.removeItem('isAuthenticated');
+    localStorage.removeItem('user');
+    window.location.href = 'index.html';
+}
+
+// Initialiser la vérification du statut d'authentification
+document.addEventListener('DOMContentLoaded', checkAuthStatus);
+
+// Ajouter les écouteurs d'événements si on est sur la page de connexion
+if (document.getElementById('loginForm')) {
+    document.getElementById('loginForm').addEventListener('submit', handleLogin);
 } 
