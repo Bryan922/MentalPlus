@@ -80,11 +80,20 @@ function validateCurrentStep() {
     }
 }
 
+// Rendre les fonctions disponibles globalement
+window.nextStep = nextStep;
+window.prevStep = prevStep;
+window.prevMonth = prevMonth;
+window.nextMonth = nextMonth;
+window.selectDate = selectDate;
+window.selectTime = selectTime;
+
 // Gestion des domaines d'intervention
 function initializeDomaines() {
     const domaines = document.querySelectorAll('.domaine-card');
     domaines.forEach(domaine => {
         domaine.addEventListener('click', () => {
+            console.log('Domaine cliqué:', domaine.dataset.domaine);
             // Retirer la sélection précédente
             domaines.forEach(d => d.classList.remove('selected'));
             // Ajouter la sélection au domaine cliqué
@@ -93,6 +102,7 @@ function initializeDomaines() {
                 id: domaine.dataset.domaine,
                 name: domaine.querySelector('h3').textContent
             };
+            console.log('Domaine sélectionné:', selectedDomaine);
             updateSummary();
         });
     });
@@ -271,9 +281,19 @@ function handleSubmit(e) {
 
 // Mise à jour du résumé
 function updateSummary() {
-    document.getElementById('summary-domaine').textContent = selectedDomaine ? selectedDomaine.name : '-';
-    document.getElementById('summary-date').textContent = selectedDate ? selectedDate.toLocaleDateString('fr-FR') : '-';
-    document.getElementById('summary-time').textContent = selectedTime || '-';
+    console.log('Mise à jour du résumé:', {
+        domaine: selectedDomaine,
+        date: selectedDate,
+        time: selectedTime
+    });
+    
+    const domaineElement = document.getElementById('summary-domaine');
+    const dateElement = document.getElementById('summary-date');
+    const timeElement = document.getElementById('summary-time');
+    
+    if (domaineElement) domaineElement.textContent = selectedDomaine ? selectedDomaine.name : '-';
+    if (dateElement) dateElement.textContent = selectedDate ? selectedDate.toLocaleDateString('fr-FR') : '-';
+    if (timeElement) timeElement.textContent = selectedTime || '-';
 }
 
 // Initialisation des éléments Stripe
