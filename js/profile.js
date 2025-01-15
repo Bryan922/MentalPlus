@@ -7,6 +7,19 @@ document.addEventListener('DOMContentLoaded', () => {
     initializeForms();
     loadAppointments();
     loadDocuments();
+
+    // Initialisation des filtres de rendez-vous
+    const filterButtons = document.querySelectorAll('.appointments-filter button');
+    filterButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            filterButtons.forEach(btn => btn.classList.remove('active'));
+            button.classList.add('active');
+            loadAppointments(button.dataset.filter);
+        });
+    });
+
+    // Chargement initial des rendez-vous
+    loadAppointments('upcoming');
 });
 
 // Vérification de l'authentification
@@ -131,16 +144,25 @@ function loadAppointments(filter = 'upcoming') {
     // Simuler des rendez-vous pour l'exemple
     const appointments = [
         {
+            id: 1,
             type: 'Consultation Standard',
             date: '2024-02-15',
             time: '14:30',
             status: 'upcoming'
         },
         {
+            id: 2,
             type: 'Suivi Psychologique',
             date: '2024-02-20',
             time: '10:00',
             status: 'upcoming'
+        },
+        {
+            id: 3,
+            type: 'Consultation Standard',
+            date: '2024-01-10',
+            time: '11:00',
+            status: 'past'
         }
     ];
 
@@ -165,18 +187,35 @@ function loadAppointments(filter = 'upcoming') {
                     <span class="appointment-type">${appointment.type}</span>
                     <span class="appointment-date">${formattedDate} à ${appointment.time}</span>
                 </div>
-                <div class="appointment-actions">
-                    <button class="btn-reschedule">
-                        <i class="fas fa-calendar-alt"></i> Reprogrammer
-                    </button>
-                    <button class="btn-cancel">
-                        <i class="fas fa-times"></i> Annuler
-                    </button>
-                </div>
+                ${appointment.status === 'upcoming' ? `
+                    <div class="appointment-actions">
+                        <button class="btn-reschedule" onclick="rescheduleAppointment(${appointment.id})">
+                            <i class="fas fa-calendar-alt"></i> Reprogrammer
+                        </button>
+                        <button class="btn-cancel" onclick="cancelAppointment(${appointment.id})">
+                            <i class="fas fa-times"></i> Annuler
+                        </button>
+                    </div>
+                ` : ''}
             `;
             
             appointmentsList.appendChild(card);
         });
+}
+
+// Fonctions pour gérer les actions sur les rendez-vous
+function rescheduleAppointment(appointmentId) {
+    // Pour l'instant, on simule juste une action
+    alert('Fonctionnalité de reprogrammation à venir. ID du rendez-vous : ' + appointmentId);
+}
+
+function cancelAppointment(appointmentId) {
+    if (confirm('Êtes-vous sûr de vouloir annuler ce rendez-vous ?')) {
+        // Pour l'instant, on simule juste une action
+        alert('Rendez-vous annulé avec succès. ID du rendez-vous : ' + appointmentId);
+        // Recharger la liste des rendez-vous
+        loadAppointments('upcoming');
+    }
 }
 
 // Chargement des documents
