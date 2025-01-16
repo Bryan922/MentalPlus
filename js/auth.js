@@ -55,9 +55,11 @@ function initializePasswordToggles() {
 function initializeForms() {
     const loginForm = document.getElementById('login-form');
     const registerForm = document.getElementById('register-form');
+    const adminForm = document.getElementById('admin-form');
 
     if (loginForm) loginForm.addEventListener('submit', handleLogin);
     if (registerForm) registerForm.addEventListener('submit', handleRegister);
+    if (adminForm) adminForm.addEventListener('submit', handleAdminLogin);
 }
 
 async function handleLogin(e) {
@@ -139,7 +141,7 @@ function logout() {
 }
 
 // Gestion de la connexion admin
-document.getElementById('admin-form').addEventListener('submit', (e) => {
+function handleAdminLogin(e) {
     e.preventDefault();
     const email = document.getElementById('admin-email').value;
     const password = document.getElementById('admin-password').value;
@@ -148,8 +150,13 @@ document.getElementById('admin-form').addEventListener('submit', (e) => {
     if (email === 'admin@mentalserenity.fr' && password === 'Admin123!') {
         localStorage.setItem('isAdmin', 'true');
         localStorage.setItem('isAuthenticated', 'true');
+        localStorage.setItem('user', JSON.stringify({
+            email: email,
+            name: 'Administrateur',
+            role: 'admin'
+        }));
         window.location.href = 'admin.html';
     } else {
         alert('Identifiants administrateur incorrects');
     }
-}); 
+} 
