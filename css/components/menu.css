@@ -1,0 +1,88 @@
+/* ======================================
+   Menu burger - NE PAS MODIFIER
+   Dernière mise à jour : 2024-03
+   ====================================== */
+
+/* Structure du burger */
+.burger-menu {
+    display: none;
+    flex-direction: column;
+    gap: 4px;
+    cursor: pointer;
+    padding: 5px;
+    z-index: 1000;
+    position: relative;
+}
+
+/* Barres du burger */
+.burger-menu span {
+    display: block;
+    width: 25px;
+    height: 3px;
+    background-color: var(--primary-color);
+    transition: all 0.3s ease;
+}
+
+/* Animation du burger - NE PAS MODIFIER */
+.burger-menu span.active:nth-child(1) {
+    transform: rotate(45deg) translate(5px, 5px);
+}
+
+.burger-menu span.active:nth-child(2) {
+    opacity: 0;
+}
+
+.burger-menu span.active:nth-child(3) {
+    transform: rotate(-45deg) translate(5px, -5px);
+}
+
+/* Media queries pour mobile - NE PAS MODIFIER */
+@media (max-width: 768px) {
+    /* Affichage du burger */
+    .burger-menu {
+        display: flex;
+    }
+
+    /* Menu de navigation */
+    nav ul {
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        flex-direction: column;
+        background: white;
+        padding: 1rem;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        gap: 1rem;
+        z-index: 999;
+    }
+
+    /* Animation du menu */
+    nav ul.active {
+        display: flex;
+        animation: slideDown 0.3s ease;
+    }
+
+    @keyframes slideDown {
+        from {
+            opacity: 0;
+            transform: translateY(-10px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    /* Ajustements de la navigation */
+    nav {
+        padding: 0.8rem 5%;
+        position: relative;
+    }
+
+    .btn-connexion {
+        width: 100%;
+        text-align: center;
+    }
+} 
