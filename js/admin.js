@@ -9,6 +9,7 @@ document.addEventListener('DOMContentLoaded', function() {
     loadAllClients();
     initializeEmployeeActions();
     initializeChat();
+    loadTodayAppointments(); // Afficher les rendez-vous du jour directement
 });
 
 // Gestion de la navigation
@@ -99,44 +100,7 @@ function showDayAppointments(year, month, day) {
     const dayAppointments = appointments.filter(apt => apt.date === formattedDate);
     console.log('Rendez-vous du jour:', dayAppointments);
     
-    const appointmentsList = document.querySelector('.appointments-list');
-    appointmentsList.innerHTML = `<h3>Rendez-vous du ${date.toLocaleDateString('fr-FR', {
-        weekday: 'long',
-        day: 'numeric',
-        month: 'long',
-        year: 'numeric'
-    })}</h3>`;
-    
-    if (dayAppointments.length === 0) {
-        appointmentsList.innerHTML += '<p class="no-appointments">Aucun rendez-vous pour cette date</p>';
-        return;
-    }
-    
-    dayAppointments.sort((a, b) => a.time.localeCompare(b.time));
-    
-    dayAppointments.forEach(apt => {
-        appointmentsList.innerHTML += `
-            <div class="appointment-card">
-                <div class="appointment-header">
-                    <h4>${apt.prenom} ${apt.nom}</h4>
-                    <span class="appointment-time">${apt.time}</span>
-                </div>
-                <div class="appointment-details">
-                    <p><i class="fas fa-envelope"></i> ${apt.clientEmail}</p>
-                    <p><i class="fas fa-tag"></i> ${apt.domaine.name}</p>
-                    ${apt.notes ? `<p><i class="fas fa-comment"></i> ${apt.notes}</p>` : ''}
-                </div>
-                <div class="appointment-actions">
-                    <button class="btn-action" onclick="editAppointment('${apt.id}')">
-                        <i class="fas fa-edit"></i> Modifier
-                    </button>
-                    <button class="btn-action" onclick="cancelAppointment('${apt.id}')">
-                        <i class="fas fa-times"></i> Annuler
-                    </button>
-                </div>
-            </div>
-        `;
-    });
+    displayAppointments(dayAppointments, date);
 }
 
 // Fonctions de navigation du calendrier
@@ -181,21 +145,29 @@ function nextMonth() {
 // Fonction de chargement des clients
 function loadAllClients() {
     const users = JSON.parse(localStorage.getItem('users') || '[]');
-    const clients = users.filter(user => !user.isAdmin);
+    const clients = users.filter(user => user.role === 'client'); // Filtrer uniquement les clients
     
     const clientsList = document.querySelector('.clients-list');
     if (!clientsList) return;
     
     clientsList.innerHTML = '';
     clients.forEach(client => {
+        // Récupérer les rendez-vous du client
+        const appointments = JSON.parse(localStorage.getItem('appointments') || '[]')
+            .filter(apt => apt.clientEmail === client.email);
+        
         clientsList.innerHTML += `
             <div class="client-card">
                 <div class="client-info">
                     <h4>${client.name || 'Client'}</h4>
                     <p><i class="fas fa-envelope"></i> ${client.email}</p>
                     ${client.phone ? `<p><i class="fas fa-phone"></i> ${client.phone}</p>` : ''}
+                    <p><i class="fas fa-calendar"></i> ${appointments.length} rendez-vous</p>
                 </div>
                 <div class="client-actions">
+                    <button class="btn-action" onclick="viewClientAppointments('${client.email}')">
+                        <i class="fas fa-calendar-alt"></i> Rendez-vous
+                    </button>
                     <button class="btn-action" onclick="startChat('${client.email}')">
                         <i class="fas fa-comments"></i> Message
                     </button>
@@ -212,6 +184,40 @@ function loadAllClients() {
             recipientSelect.innerHTML += `<option value="${client.email}">${client.name || client.email}</option>`;
         });
     }
+}
+
+function viewClientAppointments(clientEmail) {
+    const appointments = JSON.parse(localStorage.getItem('appointments') || '[]')
+        .filter(apt => apt.clientEmail === clientEmail);
+    
+    const modal = document.createElement('div');
+    modal.className = 'modal';
+    modal.innerHTML = `
+        <div class="modal-content">
+            <h3>Rendez-vous du client</h3>
+            <div class="client-appointments">
+                ${appointments.length === 0 ? '<p>Aucun rendez-vous</p>' : 
+                    appointments.map(apt => `
+                        <div class="appointment-card">
+                            <div class="appointment-header">
+                                <span class="appointment-date">${new Date(apt.date).toLocaleDateString('fr-FR')}</span>
+                                <span class="appointment-time">${apt.time}</span>
+                            </div>
+                            <div class="appointment-details">
+                                <p><i class="fas fa-tag"></i> ${apt.domaine.name}</p>
+                                ${apt.notes ? `<p><i class="fas fa-comment"></i> ${apt.notes}</p>` : ''}
+                            </div>
+                        </div>
+                    `).join('')
+                }
+            </div>
+            <div class="modal-actions">
+                <button class="btn-action" onclick="closeModal()">Fermer</button>
+            </div>
+        </div>
+    `;
+    
+    document.body.appendChild(modal);
 }
 
 // Fonction d'initialisation des actions employés
@@ -440,4 +446,58 @@ function sendMessage(message, recipient) {
     `;
     chatMessages.appendChild(messageElement);
     chatMessages.scrollTop = chatMessages.scrollHeight;
+}
+
+// Fonction pour charger les rendez-vous du jour
+function loadTodayAppointments() {
+    const today = new Date();
+    const formattedDate = today.toISOString().split('T')[0];
+    const appointments = JSON.parse(localStorage.getItem('appointments') || '[]');
+    const todayAppointments = appointments.filter(apt => apt.date === formattedDate);
+    
+    displayAppointments(todayAppointments, today);
+}
+
+// Fonction pour afficher les rendez-vous
+function displayAppointments(appointments, date) {
+    const appointmentsList = document.querySelector('.appointments-list');
+    appointmentsList.innerHTML = `<h3>Rendez-vous du ${date.toLocaleDateString('fr-FR', {
+        weekday: 'long',
+        day: 'numeric',
+        month: 'long',
+        year: 'numeric'
+    })}</h3>`;
+    
+    if (appointments.length === 0) {
+        appointmentsList.innerHTML += '<p class="no-appointments">Aucun rendez-vous pour cette date</p>';
+        return;
+    }
+    
+    // Trier les rendez-vous par heure
+    appointments.sort((a, b) => a.time.localeCompare(b.time));
+    
+    appointments.forEach(apt => {
+        appointmentsList.innerHTML += `
+            <div class="appointment-card">
+                <div class="appointment-header">
+                    <h4>${apt.prenom} ${apt.nom}</h4>
+                    <span class="appointment-time">${apt.time}</span>
+                </div>
+                <div class="appointment-details">
+                    <p><i class="fas fa-envelope"></i> ${apt.clientEmail}</p>
+                    <p><i class="fas fa-phone"></i> ${apt.telephone || 'Non renseigné'}</p>
+                    <p><i class="fas fa-tag"></i> ${apt.domaine.name}</p>
+                    ${apt.notes ? `<p><i class="fas fa-comment"></i> ${apt.notes}</p>` : ''}
+                </div>
+                <div class="appointment-actions">
+                    <button class="btn-action" onclick="editAppointment('${apt.id}')">
+                        <i class="fas fa-edit"></i> Modifier
+                    </button>
+                    <button class="btn-action" onclick="cancelAppointment('${apt.id}')">
+                        <i class="fas fa-times"></i> Annuler
+                    </button>
+                </div>
+            </div>
+        `;
+    });
 } 
