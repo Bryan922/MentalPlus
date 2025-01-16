@@ -1,6 +1,8 @@
 // Gestion de l'authentification
 class AuthManager {
     constructor() {
+        // Temporairement, on simule l'API
+        this.simulateAPI = true;
         this.baseUrl = '/api/auth.php';
         this.errorMessage = document.querySelector('.error-message');
         this.successMessage = document.querySelector('.success-message');
@@ -24,11 +26,20 @@ class AuthManager {
         const rememberMe = document.getElementById('rememberMe').checked;
 
         try {
-            const response = await this.sendRequest('login', {
-                email,
-                password,
-                remember_me: rememberMe
-            });
+            let response;
+            if (this.simulateAPI) {
+                // Simulation de réponse pour les tests
+                response = {
+                    success: true,
+                    token: 'fake_token_123'
+                };
+            } else {
+                response = await this.sendRequest('login', {
+                    email,
+                    password,
+                    remember_me: rememberMe
+                });
+            }
 
             if (response.success) {
                 this.showSuccess('Connexion réussie ! Redirection...');
@@ -55,11 +66,19 @@ class AuthManager {
         }
 
         try {
-            const response = await this.sendRequest('register', {
-                name,
-                email,
-                password
-            });
+            let response;
+            if (this.simulateAPI) {
+                // Simulation de réponse pour les tests
+                response = {
+                    success: true
+                };
+            } else {
+                response = await this.sendRequest('register', {
+                    name,
+                    email,
+                    password
+                });
+            }
 
             if (response.success) {
                 this.showSuccess('Compte créé avec succès ! Redirection vers la connexion...');
@@ -78,10 +97,19 @@ class AuthManager {
         const password = document.getElementById('adminPassword').value;
 
         try {
-            const response = await this.sendRequest('admin-login', {
-                email,
-                password
-            });
+            let response;
+            if (this.simulateAPI) {
+                // Simulation de réponse pour les tests
+                response = {
+                    success: true,
+                    token: 'fake_admin_token_123'
+                };
+            } else {
+                response = await this.sendRequest('admin-login', {
+                    email,
+                    password
+                });
+            }
 
             if (response.success) {
                 this.showSuccess('Connexion administrateur réussie ! Redirection...');
@@ -106,7 +134,16 @@ class AuthManager {
         }
 
         try {
-            const response = await this.sendRequest('forgot-password', { email });
+            let response;
+            if (this.simulateAPI) {
+                // Simulation de réponse pour les tests
+                response = {
+                    success: true
+                };
+            } else {
+                response = await this.sendRequest('forgot-password', { email });
+            }
+
             if (response.success) {
                 this.showSuccess('Un email de réinitialisation a été envoyé à votre adresse');
             }
@@ -150,4 +187,6 @@ class AuthManager {
 }
 
 // Initialisation
-new AuthManager(); 
+document.addEventListener('DOMContentLoaded', () => {
+    new AuthManager();
+}); 
