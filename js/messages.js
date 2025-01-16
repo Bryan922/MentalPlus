@@ -1,178 +1,105 @@
-document.addEventListener('DOMContentLoaded', function() {
-    initializeSearch();
-    initializeConversations();
-    initializeChat();
-    initializeResponsive();
-});
-
-// Gérer la recherche
-function initializeSearch() {
-    const searchInput = document.querySelector('.search-bar input');
-    const conversations = document.querySelectorAll('.conversation-item');
-
-    searchInput.addEventListener('input', (e) => {
-        const searchTerm = e.target.value.toLowerCase();
-
-        conversations.forEach(conversation => {
-            const name = conversation.querySelector('h3').textContent.toLowerCase();
-            const preview = conversation.querySelector('.conversation-preview').textContent.toLowerCase();
-            const shouldShow = name.includes(searchTerm) || preview.includes(searchTerm);
-            conversation.style.display = shouldShow ? 'flex' : 'none';
-        });
-    });
-}
-
-// Gérer les conversations
-function initializeConversations() {
-    const conversations = document.querySelectorAll('.conversation-item');
-
-    conversations.forEach(conversation => {
-        conversation.addEventListener('click', () => {
-            // Retirer la classe active des autres conversations
-            conversations.forEach(c => c.classList.remove('active'));
-            // Ajouter la classe active à la conversation cliquée
-            conversation.classList.add('active');
-            // Retirer la classe unread
-            conversation.classList.remove('unread');
-            // Charger la conversation
-            loadConversation(conversation);
-            // En mobile, masquer la liste des conversations
-            if (window.innerWidth <= 768) {
-                document.querySelector('.conversations-list').classList.remove('active');
-            }
-        });
-    });
-}
-
-// Charger une conversation
-function loadConversation(conversationElement) {
-    const name = conversationElement.querySelector('h3').textContent;
-    const avatar = conversationElement.querySelector('img').src;
-
-    // Mettre à jour l'en-tête du chat
-    document.querySelector('.chat-contact h3').textContent = name;
-    document.querySelector('.contact-avatar').src = avatar;
-
-    // Simuler le chargement des messages
-    // En production, cela ferait une requête API
-    console.log(`Chargement de la conversation avec ${name}`);
-}
-
-// Gérer le chat
-function initializeChat() {
-    const textarea = document.querySelector('.chat-input textarea');
-    const sendButton = document.querySelector('.send-message');
-
-    // Ajuster automatiquement la hauteur du textarea
-    textarea.addEventListener('input', () => {
-        textarea.style.height = 'auto';
-        textarea.style.height = Math.min(textarea.scrollHeight, 120) + 'px';
-    });
-
-    // Envoyer avec Entrée (sauf si Shift est pressé)
-    textarea.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter' && !e.shiftKey) {
-            e.preventDefault();
-            sendMessage();
-        }
-    });
-
-    // Envoyer avec le bouton
-    sendButton.addEventListener('click', sendMessage);
-
-    // Gérer le bouton de fichier
-    document.querySelector('.chat-input .fa-paperclip').parentElement.addEventListener('click', () => {
-        // Simuler l'ouverture d'un sélecteur de fichier
-        const input = document.createElement('input');
-        input.type = 'file';
-        input.accept = 'image/*,.pdf,.doc,.docx';
-        input.click();
-
-        input.addEventListener('change', () => {
-            if (input.files.length > 0) {
-                // Simuler l'envoi du fichier
-                // En production, cela ferait une requête API
-                alert(`Fichier "${input.files[0].name}" joint avec succès`);
-            }
-        });
-    });
-}
+import { auth, db } from './firebase-config.js';
+import { ref, set, get, push, query, orderByChild, equalTo } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
 
 // Envoyer un message
-function sendMessage() {
-    const textarea = document.querySelector('.chat-input textarea');
-    const message = textarea.value.trim();
+export async function sendMessage(recipientId, content) {
+    try {
+        const user = auth.currentUser;
+        if (!user) throw new Error('Vous devez être connecté pour envoyer un message');
 
-    if (message) {
-        // Créer l'élément de message
-        const messageElement = document.createElement('div');
-        messageElement.className = 'message sent';
-        messageElement.innerHTML = `
-            <div class="message-content">
-                <p>${message}</p>
-                <span class="message-time">${getCurrentTime()}</span>
-            </div>
-        `;
+        const messageRef = push(ref(db, 'messages'));
+        const message = {
+            id: messageRef.key,
+            senderId: user.uid,
+            recipientId: recipientId,
+            content: content,
+            timestamp: new Date().toISOString(),
+            read: false
+        };
 
-        // Ajouter le message à la conversation
-        const chatMessages = document.querySelector('.chat-messages');
-        chatMessages.appendChild(messageElement);
-        
-        // Scroller en bas
-        chatMessages.scrollTop = chatMessages.scrollHeight;
-
-        // Réinitialiser le textarea
-        textarea.value = '';
-        textarea.style.height = '40px';
-
-        // Simuler une réponse après 1-3 secondes
-        simulateResponse();
+        await set(messageRef, message);
+        return message;
+    } catch (error) {
+        console.error('Erreur lors de l\'envoi du message:', error);
+        throw error;
     }
 }
 
-// Simuler une réponse
-function simulateResponse() {
-    const responses = [
-        "D'accord, je note.",
-        "Merci pour votre message.",
-        "Je reviens vers vous rapidement.",
-        "C'est bien noté.",
-        "Parfait, merci."
-    ];
+// Récupérer les messages d'une conversation
+export async function getConversation(otherUserId) {
+    try {
+        const user = auth.currentUser;
+        if (!user) throw new Error('Utilisateur non connecté');
 
-    setTimeout(() => {
-        const response = responses[Math.floor(Math.random() * responses.length)];
-        const messageElement = document.createElement('div');
-        messageElement.className = 'message received';
-        messageElement.innerHTML = `
-            <div class="message-content">
-                <p>${response}</p>
-                <span class="message-time">${getCurrentTime()}</span>
-            </div>
-        `;
-
-        const chatMessages = document.querySelector('.chat-messages');
-        chatMessages.appendChild(messageElement);
-        chatMessages.scrollTop = chatMessages.scrollHeight;
-    }, 1000 + Math.random() * 2000);
-}
-
-// Obtenir l'heure actuelle
-function getCurrentTime() {
-    const now = new Date();
-    return `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
-}
-
-// Gérer le responsive
-function initializeResponsive() {
-    if (window.innerWidth <= 768) {
-        const backButton = document.createElement('button');
-        backButton.className = 'btn-icon';
-        backButton.innerHTML = '<i class="fas fa-arrow-left"></i>';
-        backButton.addEventListener('click', () => {
-            document.querySelector('.conversations-list').classList.add('active');
+        const messagesRef = ref(db, 'messages');
+        const snapshot = await get(messagesRef);
+        
+        const messages = [];
+        snapshot.forEach((child) => {
+            const message = child.val();
+            if ((message.senderId === user.uid && message.recipientId === otherUserId) ||
+                (message.senderId === otherUserId && message.recipientId === user.uid)) {
+                messages.push({ id: child.key, ...message });
+            }
         });
+        
+        return messages.sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
+    } catch (error) {
+        console.error('Erreur lors de la récupération des messages:', error);
+        throw error;
+    }
+}
 
-        document.querySelector('.chat-header').prepend(backButton);
+// Marquer un message comme lu
+export async function markMessageAsRead(messageId) {
+    try {
+        const user = auth.currentUser;
+        if (!user) throw new Error('Utilisateur non connecté');
+
+        const messageRef = ref(db, `messages/${messageId}`);
+        const snapshot = await get(messageRef);
+        const message = snapshot.val();
+
+        if (!message) throw new Error('Message non trouvé');
+        if (message.recipientId !== user.uid) throw new Error('Non autorisé');
+
+        await set(messageRef, {
+            ...message,
+            read: true,
+            readAt: new Date().toISOString()
+        });
+    } catch (error) {
+        console.error('Erreur lors du marquage du message:', error);
+        throw error;
+    }
+}
+
+// Récupérer les messages non lus
+export async function getUnreadMessages() {
+    try {
+        const user = auth.currentUser;
+        if (!user) throw new Error('Utilisateur non connecté');
+
+        const messagesRef = ref(db, 'messages');
+        const messagesQuery = query(
+            messagesRef, 
+            orderByChild('recipientId'), 
+            equalTo(user.uid)
+        );
+        
+        const snapshot = await get(messagesQuery);
+        const unreadMessages = [];
+        
+        snapshot.forEach((child) => {
+            const message = child.val();
+            if (!message.read) {
+                unreadMessages.push({ id: child.key, ...message });
+            }
+        });
+        
+        return unreadMessages;
+    } catch (error) {
+        console.error('Erreur lors de la récupération des messages non lus:', error);
+        throw error;
     }
 } 
