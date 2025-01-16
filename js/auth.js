@@ -136,4 +136,20 @@ function logout() {
     localStorage.removeItem('user');
     updateAuthButtons();
     window.location.href = 'index.html';
-} 
+}
+
+// Gestion de la connexion admin
+document.getElementById('admin-form').addEventListener('submit', (e) => {
+    e.preventDefault();
+    const email = document.getElementById('admin-email').value;
+    const password = document.getElementById('admin-password').value;
+
+    // Vérification des identifiants admin
+    if (email === 'admin@mentalserenity.fr' && password === 'Admin123!') {
+        localStorage.setItem('isAdmin', 'true');
+        localStorage.setItem('isAuthenticated', 'true');
+        window.location.href = 'admin.html';
+    } else {
+        alert('Identifiants administrateur incorrects');
+    }
+}); 
