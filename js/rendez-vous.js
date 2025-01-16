@@ -270,10 +270,14 @@ function handleSubmit(e) {
         return;
     }
     
+    // Formatage de la date pour assurer la compatibilité
+    const selectedDateObj = new Date(selectedDate);
+    const formattedDate = selectedDateObj.toISOString().split('T')[0];
+    
     const data = {
-        id: Date.now(), // Générer un ID unique
+        id: Date.now().toString(), // ID unique sous forme de string
         domaine: selectedDomaine,
-        date: selectedDate,
+        date: formattedDate, // Date au format YYYY-MM-DD
         time: selectedTime,
         nom: formData.get('nom'),
         prenom: formData.get('prenom'),
@@ -283,6 +287,8 @@ function handleSubmit(e) {
         clientEmail: currentUser.email,
         status: 'upcoming'
     };
+    
+    console.log('Nouveau rendez-vous:', data); // Debug
     
     // Sauvegarder le rendez-vous
     const appointments = JSON.parse(localStorage.getItem('appointments') || '[]');

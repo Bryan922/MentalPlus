@@ -8,7 +8,7 @@ document.addEventListener('DOMContentLoaded', function() {
     initializeButtons();
     loadEmployeeList();
     loadClientList();
-    loadAppointments();
+    loadCalendar();
     initializeChat();
 });
 
@@ -26,106 +26,194 @@ function showSection(sectionId) {
 
 // Gestion du calendrier
 function loadCalendar() {
+    const calendar = document.querySelector('.calendar-grid');
     const today = new Date();
     const currentMonth = today.getMonth();
     const currentYear = today.getFullYear();
     
-    document.getElementById('current-month').textContent = new Date(currentYear, currentMonth).toLocaleDateString('fr-FR', { month: 'long', year: 'numeric' });
+    // Récupérer tous les rendez-vous
+    const appointments = JSON.parse(localStorage.getItem('appointments') || '[]');
+    console.log('Rendez-vous chargés:', appointments); // Debug
     
-    const calendarGrid = document.getElementById('calendar-grid');
-    calendarGrid.innerHTML = '';
+    // Mettre à jour l'affichage du mois courant
+    const monthNames = ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'];
+    document.querySelector('.calendar-header h3').textContent = `${monthNames[currentMonth]} ${currentYear}`;
+    
+    // Générer le calendrier
+    renderCalendar(currentMonth, currentYear, appointments);
+}
+
+function renderCalendar(month, year, appointments) {
+    const calendar = document.querySelector('.calendar-grid');
+    const firstDay = new Date(year, month, 1);
+    const lastDay = new Date(year, month + 1, 0);
+    const startingDay = firstDay.getDay() || 7; // Convertir dimanche (0) en 7
+    const monthLength = lastDay.getDate();
+    
+    let calendarHTML = '';
     
     // En-têtes des jours
     const days = ['Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam', 'Dim'];
     days.forEach(day => {
-        const dayHeader = document.createElement('div');
-        dayHeader.className = 'calendar-header-cell';
-        dayHeader.textContent = day;
-        calendarGrid.appendChild(dayHeader);
+        calendarHTML += `<div class="calendar-day-header">${day}</div>`;
     });
     
-    // Récupérer tous les rendez-vous
-    const appointments = JSON.parse(localStorage.getItem('appointments') || '[]');
+    // Remplir les jours
+    let day = 1;
+    const totalCells = Math.ceil((startingDay - 1 + monthLength) / 7) * 7;
     
-    // Jours du mois
-    const firstDay = new Date(currentYear, currentMonth, 1);
-    const lastDay = new Date(currentYear, currentMonth + 1, 0);
-    
-    for (let i = 1; i <= lastDay.getDate(); i++) {
-        const currentDate = new Date(currentYear, currentMonth, i);
-        const dayAppointments = appointments.filter(apt => {
-            const aptDate = new Date(apt.date);
-            return aptDate.getDate() === i && 
-                   aptDate.getMonth() === currentMonth && 
-                   aptDate.getFullYear() === currentYear;
-        });
-        
-        const dayCell = document.createElement('div');
-        dayCell.className = 'calendar-day';
-        if (dayAppointments.length > 0) {
-            dayCell.classList.add('has-appointments');
-            const count = document.createElement('span');
-            count.className = 'appointment-count';
-            count.textContent = dayAppointments.length;
-            dayCell.appendChild(count);
+    for (let i = 0; i < totalCells; i++) {
+        if (i < startingDay - 1 || day > monthLength) {
+            calendarHTML += '<div class="calendar-day empty"></div>';
+        } else {
+            const date = new Date(year, month, day);
+            const dayAppointments = appointments.filter(apt => {
+                const aptDate = new Date(apt.date);
+                return aptDate.getFullYear() === year &&
+                       aptDate.getMonth() === month &&
+                       aptDate.getDate() === day;
+            });
+            
+            const isToday = date.toDateString() === new Date().toDateString();
+            
+            calendarHTML += `
+                <div class="calendar-day ${isToday ? 'today' : ''} ${dayAppointments.length > 0 ? 'has-appointments' : ''}"
+                     onclick="showDayAppointments(${year}, ${month}, ${day})">
+                    ${day}
+                    ${dayAppointments.length > 0 ? `<span class="appointment-count">${dayAppointments.length}</span>` : ''}
+                </div>`;
+            day++;
         }
-        
-        const dayNumber = document.createElement('span');
-        dayNumber.textContent = i;
-        dayCell.appendChild(dayNumber);
-        
-        if (i === today.getDate() && currentMonth === today.getMonth()) {
-            dayCell.classList.add('today');
-        }
-        
-        dayCell.onclick = () => showDayAppointments(currentDate);
-        calendarGrid.appendChild(dayCell);
     }
+    
+    calendar.innerHTML = calendarHTML;
 }
 
-function showDayAppointments(date) {
+function showDayAppointments(year, month, day) {
+    const date = new Date(year, month, day);
     const appointments = JSON.parse(localStorage.getItem('appointments') || '[]');
     const dayAppointments = appointments.filter(apt => {
         const aptDate = new Date(apt.date);
-        return aptDate.getDate() === date.getDate() && 
-               aptDate.getMonth() === date.getMonth() && 
-               aptDate.getFullYear() === date.getFullYear();
+        return aptDate.getFullYear() === year &&
+               aptDate.getMonth() === month &&
+               aptDate.getDate() === day;
     });
     
-    const appointmentsList = document.getElementById('appointments-list');
-    appointmentsList.innerHTML = `<h3>Rendez-vous du ${date.toLocaleDateString('fr-FR')}</h3>`;
+    const appointmentsList = document.querySelector('.appointments-list');
+    appointmentsList.innerHTML = `<h3>Rendez-vous du ${date.toLocaleDateString('fr-FR', {
+        weekday: 'long',
+        day: 'numeric',
+        month: 'long',
+        year: 'numeric'
+    })}</h3>`;
     
     if (dayAppointments.length === 0) {
-        appointmentsList.innerHTML += '<p>Aucun rendez-vous pour cette date</p>';
+        appointmentsList.innerHTML += '<p class="no-appointments">Aucun rendez-vous pour cette date</p>';
         return;
     }
     
+    // Trier les rendez-vous par heure
     dayAppointments.sort((a, b) => a.time.localeCompare(b.time));
     
-    dayAppointments.forEach(appointment => {
-        const appointmentCard = document.createElement('div');
-        appointmentCard.className = 'appointment-card';
-        appointmentCard.innerHTML = `
-            <div class="appointment-header">
-                <h4>${appointment.clientName}</h4>
-                <span class="appointment-time">${appointment.time}</span>
-            </div>
-            <div class="appointment-details">
-                <p><i class="fas fa-tag"></i> ${appointment.type}</p>
-                <p><i class="fas fa-user-md"></i> ${appointment.therapist || 'Non assigné'}</p>
-                <p><i class="fas fa-comment"></i> ${appointment.notes || 'Aucune note'}</p>
+    dayAppointments.forEach(apt => {
+        appointmentsList.innerHTML += `
+            <div class="appointment-card">
+                <div class="appointment-header">
+                    <h4>${apt.prenom} ${apt.nom}</h4>
+                    <span class="appointment-time">${apt.time}</span>
+                </div>
+                <div class="appointment-details">
+                    <p><i class="fas fa-envelope"></i> ${apt.clientEmail}</p>
+                    <p><i class="fas fa-tag"></i> ${apt.domaine.name}</p>
+                    ${apt.notes ? `<p><i class="fas fa-comment"></i> ${apt.notes}</p>` : ''}
+                </div>
+                <div class="appointment-actions">
+                    <button class="btn-action" onclick="editAppointment('${apt.id}')">
+                        <i class="fas fa-edit"></i> Modifier
+                    </button>
+                    <button class="btn-action" onclick="cancelAppointment('${apt.id}')">
+                        <i class="fas fa-times"></i> Annuler
+                    </button>
+                </div>
             </div>
         `;
-        appointmentsList.appendChild(appointmentCard);
     });
 }
 
+// Fonctions de navigation du calendrier
 function previousMonth() {
-    // Implémenter le changement de mois précédent
+    const header = document.querySelector('.calendar-header h3');
+    const [month, year] = header.textContent.split(' ');
+    const monthNames = ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'];
+    const currentMonthIndex = monthNames.indexOf(month);
+    
+    let newMonth = currentMonthIndex - 1;
+    let newYear = parseInt(year);
+    
+    if (newMonth < 0) {
+        newMonth = 11;
+        newYear--;
+    }
+    
+    const appointments = JSON.parse(localStorage.getItem('appointments') || '[]');
+    renderCalendar(newMonth, newYear, appointments);
+    header.textContent = `${monthNames[newMonth]} ${newYear}`;
 }
 
 function nextMonth() {
-    // Implémenter le changement de mois suivant
+    const header = document.querySelector('.calendar-header h3');
+    const [month, year] = header.textContent.split(' ');
+    const monthNames = ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'];
+    const currentMonthIndex = monthNames.indexOf(month);
+    
+    let newMonth = currentMonthIndex + 1;
+    let newYear = parseInt(year);
+    
+    if (newMonth > 11) {
+        newMonth = 0;
+        newYear++;
+    }
+    
+    const appointments = JSON.parse(localStorage.getItem('appointments') || '[]');
+    renderCalendar(newMonth, newYear, appointments);
+    header.textContent = `${monthNames[newMonth]} ${newYear}`;
+}
+
+// Fonction de chargement des clients
+function loadAllClients() {
+    const clients = JSON.parse(localStorage.getItem('users') || '[]')
+        .filter(user => user.role === 'client');
+    
+    const clientsList = document.querySelector('.clients-list');
+    if (!clientsList) return;
+    
+    clientsList.innerHTML = '';
+    clients.forEach(client => {
+        clientsList.innerHTML += `
+            <div class="client-card">
+                <div class="client-info">
+                    <h4>${client.name}</h4>
+                    <p><i class="fas fa-envelope"></i> ${client.email}</p>
+                    ${client.phone ? `<p><i class="fas fa-phone"></i> ${client.phone}</p>` : ''}
+                </div>
+                <div class="client-actions">
+                    <button class="btn-action" onclick="viewClientDetails(${client.id})">
+                        <i class="fas fa-eye"></i> Voir détails
+                    </button>
+                </div>
+            </div>
+        `;
+    });
+}
+
+// Fonction d'initialisation des actions employés
+function initializeEmployeeActions() {
+    const addEmployeeBtn = document.querySelector('.add-employee-btn');
+    if (addEmployeeBtn) {
+        addEmployeeBtn.classList.add('btn-action');
+        addEmployeeBtn.innerHTML = '<i class="fas fa-plus"></i> Ajouter un employé';
+        addEmployeeBtn.onclick = showAddEmployeeModal;
+    }
 }
 
 // Gestion des rendez-vous
