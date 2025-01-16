@@ -3,86 +3,89 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Connexion - MentalSerenity</title>
-    <link rel="stylesheet" href="css/style.css">
+    <title>Authentification - MentalSerenity</title>
     <link rel="stylesheet" href="css/auth.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
-    <header>
-        <nav>
-            <div class="logo">MentalSerenity</div>
-            <ul>
-                <li><a href="index.html">Accueil</a></li>
-                <li><a href="index.html#services">Nos Services</a></li>
-                <li><a href="rendez-vous.html">Prendre RDV</a></li>
-                <li><a href="#tarifs">Tarifs</a></li>
-            </ul>
-        </nav>
-    </header>
-
-    <main>
-        <div class="auth-container">
-            <div class="auth-tabs">
-                <button class="tab-btn active" data-tab="login">Connexion</button>
-                <button class="tab-btn" data-tab="register">Créer un compte</button>
-                <button class="tab-btn admin-btn" data-tab="admin">Espace Admin</button>
-            </div>
-
-            <div class="auth-forms">
-                <!-- Formulaire de connexion -->
-                <form id="login-form" class="auth-form active">
-                    <h2>Connexion</h2>
-                    <div class="form-group">
-                        <label for="login-email">Email</label>
-                        <input type="email" id="login-email" name="email" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="login-password">Mot de passe</label>
-                        <input type="password" id="login-password" name="password" required>
-                    </div>
-                    <button type="submit" class="btn-primary">Se connecter</button>
-                </form>
-
-                <!-- Formulaire d'inscription -->
-                <form id="register-form" class="auth-form">
-                    <h2>Créer un compte</h2>
-                    <div class="form-group">
-                        <label for="register-name">Nom complet</label>
-                        <input type="text" id="register-name" name="name" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="register-email">Email</label>
-                        <input type="email" id="register-email" name="email" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="register-password">Mot de passe</label>
-                        <input type="password" id="register-password" name="password" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="register-confirm-password">Confirmer le mot de passe</label>
-                        <input type="password" id="register-confirm-password" name="confirm_password" required>
-                    </div>
-                    <button type="submit" class="btn-primary">S'inscrire</button>
-                </form>
-
-                <!-- Formulaire de connexion admin -->
-                <form id="admin-form" class="auth-form">
-                    <h2>Connexion Administrateur</h2>
-                    <div class="form-group">
-                        <label for="admin-email">Email Admin</label>
-                        <input type="email" id="admin-email" name="email" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="admin-password">Mot de passe Admin</label>
-                        <input type="password" id="admin-password" name="password" required>
-                    </div>
-                    <button type="submit" class="btn-primary">Connexion Admin</button>
-                </form>
-            </div>
+    <div class="auth-container">
+        <div class="auth-tabs">
+            <button class="tab-btn active" data-tab="login">Connexion</button>
+            <button class="tab-btn" data-tab="register">Créer un compte</button>
+            <button class="tab-btn" data-tab="admin">Espace Admin</button>
         </div>
-    </main>
 
-    <script src="js/auth.js"></script>
+        <div class="auth-content">
+            <!-- Formulaire de connexion -->
+            <form id="login-form" class="auth-form active" data-form="login">
+                <h2>Connexion</h2>
+                <div class="form-group">
+                    <label for="login-email">Email</label>
+                    <input type="email" id="login-email" name="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="login-password">Mot de passe</label>
+                    <div class="password-input">
+                        <input type="password" id="login-password" name="password" required>
+                        <button type="button" class="toggle-password">👁️</button>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>
+                        <input type="checkbox" id="remember-me" name="remember">
+                        Se souvenir de moi
+                    </label>
+                </div>
+                <button type="submit" class="btn-primary">Se connecter</button>
+            </form>
+
+            <!-- Formulaire d'inscription -->
+            <form id="register-form" class="auth-form" data-form="register">
+                <h2>Créer un compte</h2>
+                <div class="form-group">
+                    <label for="register-name">Nom complet</label>
+                    <input type="text" id="register-name" name="name" required>
+                </div>
+                <div class="form-group">
+                    <label for="register-email">Email</label>
+                    <input type="email" id="register-email" name="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="register-password">Mot de passe</label>
+                    <div class="password-input">
+                        <input type="password" id="register-password" name="password" required>
+                        <button type="button" class="toggle-password">👁️</button>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="register-confirm-password">Confirmer le mot de passe</label>
+                    <div class="password-input">
+                        <input type="password" id="register-confirm-password" name="confirm_password" required>
+                        <button type="button" class="toggle-password">👁️</button>
+                    </div>
+                </div>
+                <button type="submit" class="btn-primary">S'inscrire</button>
+            </form>
+
+            <!-- Formulaire de connexion admin -->
+            <form id="admin-form" class="auth-form" data-form="admin">
+                <h2>Connexion Admin</h2>
+                <div class="form-group">
+                    <label for="admin-email">Email administrateur</label>
+                    <input type="email" id="admin-email" name="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="admin-password">Mot de passe</label>
+                    <div class="password-input">
+                        <input type="password" id="admin-password" name="password" required>
+                        <button type="button" class="toggle-password">👁️</button>
+                    </div>
+                </div>
+                <button type="submit" class="btn-primary">Connexion Admin</button>
+            </form>
+        </div>
+    </div>
+
+    <script type="module" src="js/firebase-config.js"></script>
+    <script type="module" src="js/auth.js"></script>
 </body>
 </html> 
