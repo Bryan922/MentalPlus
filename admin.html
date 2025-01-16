@@ -3,186 +3,280 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Espace Admin - MentalSerenity</title>
+    <title>Administration - MentalSerenity</title>
     <link rel="stylesheet" href="css/style.css">
-    <link rel="stylesheet" href="css/admin.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .admin-container {
+            padding-top: 90px;
+            min-height: calc(100vh - 70px);
+            background: var(--background-color);
+        }
+
+        .admin-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .admin-header {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .admin-header h1 {
+            color: var(--primary-color);
+            margin: 0;
+        }
+
+        .admin-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .stat-card h3 {
+            color: var(--accent-color);
+            font-size: 1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-card .number {
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+
+        .admin-tables {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .table-container {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .table-container h2 {
+            color: var(--accent-color);
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--primary-color);
+        }
+
+        .admin-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .admin-table th,
+        .admin-table td {
+            padding: 0.75rem;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+
+        .admin-table th {
+            font-weight: 600;
+            color: var(--accent-color);
+        }
+
+        .btn-action {
+            padding: 0.25rem 0.5rem;
+            border-radius: 3px;
+            font-size: 0.8rem;
+            text-decoration: none;
+            color: white;
+            background: var(--primary-color);
+            transition: background 0.3s;
+        }
+
+        .btn-action:hover {
+            background: var(--secondary-color);
+        }
+
+        @media (max-width: 768px) {
+            .admin-content {
+                padding: 1rem;
+            }
+
+            .admin-header {
+                flex-direction: column;
+                text-align: center;
+                gap: 1rem;
+            }
+
+            .table-container {
+                overflow-x: auto;
+            }
+        }
+    </style>
 </head>
 <body>
-    <nav class="navbar">
-        <div class="logo">
-            <a href="index.html">MentalSerenity</a>
-        </div>
-        <div class="auth-buttons">
-            <!-- Les boutons seront ajoutés dynamiquement par le JavaScript -->
-        </div>
-    </nav>
+    <header>
+        <nav>
+            <a href="index.html" class="logo">MentalSerenity</a>
+            <div class="burger-menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+            <ul>
+                <li><a href="index.html">Accueil</a></li>
+                <li><a href="services.html">Services</a></li>
+                <li><a href="tarifs.html">Tarifs</a></li>
+                <li><a href="contact.html">Contact</a></li>
+                <li><a href="#" class="btn-connexion" id="btnLogout">Déconnexion</a></li>
+            </ul>
+        </nav>
+    </header>
 
     <div class="admin-container">
-        <!-- Menu de navigation -->
-        <div class="admin-nav">
-            <button class="nav-item active" data-section="dashboard">
-                <i class="fas fa-chart-line"></i>
-                <span>Tableau de bord</span>
-            </button>
-            <button class="nav-item" data-section="appointments">
-                <i class="fas fa-calendar-alt"></i>
-                <span>Rendez-vous</span>
-            </button>
-            <button class="nav-item" data-section="admins">
-                <i class="fas fa-user-shield"></i>
-                <span>Administrateurs</span>
-            </button>
-        </div>
+        <div class="admin-content">
+            <div class="admin-header">
+                <h1>Tableau de bord administrateur</h1>
+                <p>Dernière mise à jour : <span id="lastUpdate">Chargement...</span></p>
+            </div>
 
-        <!-- Section Tableau de bord -->
-        <div class="admin-section dashboard-section active">
-            <!-- Statistiques -->
-            <div class="stats-grid">
+            <div class="admin-stats">
                 <div class="stat-card">
-                    <div class="stat-header">
-                        <i class="fas fa-calendar-day"></i>
-                    </div>
-                    <div class="stat-value today-appointments-count">0</div>
-                    <div class="stat-label">Rendez-vous aujourd'hui</div>
+                    <h3>Utilisateurs actifs</h3>
+                    <div class="number" id="activeUsers">0</div>
                 </div>
                 <div class="stat-card">
-                    <div class="stat-header">
-                        <i class="fas fa-calendar-week"></i>
-                    </div>
-                    <div class="stat-value week-appointments-count">0</div>
-                    <div class="stat-label">Rendez-vous cette semaine</div>
+                    <h3>Rendez-vous aujourd'hui</h3>
+                    <div class="number" id="todayAppointments">0</div>
                 </div>
                 <div class="stat-card">
-                    <div class="stat-header">
-                        <i class="fas fa-users"></i>
-                    </div>
-                    <div class="stat-value total-clients-count">0</div>
-                    <div class="stat-label">Clients inscrits</div>
+                    <h3>Messages non lus</h3>
+                    <div class="number" id="unreadMessages">0</div>
                 </div>
                 <div class="stat-card">
-                    <div class="stat-header">
-                        <i class="fas fa-calendar-check"></i>
-                    </div>
-                    <div class="stat-value total-appointments-count">0</div>
-                    <div class="stat-label">Total des rendez-vous</div>
+                    <h3>Documents en attente</h3>
+                    <div class="number" id="pendingDocuments">0</div>
                 </div>
             </div>
 
-            <!-- Rendez-vous du jour -->
-            <div class="today-appointments">
-                <h3><i class="fas fa-calendar-day"></i> Rendez-vous du jour</h3>
-                <div class="today-appointments-list">
-                    <!-- Les rendez-vous seront ajoutés dynamiquement ici -->
+            <div class="admin-tables">
+                <div class="table-container">
+                    <h2>Derniers utilisateurs inscrits</h2>
+                    <table class="admin-table">
+                        <thead>
+                            <tr>
+                                <th>Nom</th>
+                                <th>Email</th>
+                                <th>Date</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="recentUsers">
+                            <tr>
+                                <td colspan="4">Chargement...</td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
-            </div>
-        </div>
 
-        <!-- Section Rendez-vous -->
-        <div class="admin-section appointments-section">
-            <!-- Calendrier -->
-            <div class="calendar-container">
-                <div class="calendar-header">
-                    <h3>Janvier 2024</h3>
-                    <div class="calendar-nav">
-                        <button class="prev-month">
-                            <i class="fas fa-chevron-left"></i>
-                            Précédent
-                        </button>
-                        <button class="next-month">
-                            Suivant
-                            <i class="fas fa-chevron-right"></i>
-                        </button>
-                    </div>
+                <div class="table-container">
+                    <h2>Prochains rendez-vous</h2>
+                    <table class="admin-table">
+                        <thead>
+                            <tr>
+                                <th>Client</th>
+                                <th>Date</th>
+                                <th>Type</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="upcomingAppointments">
+                            <tr>
+                                <td colspan="4">Chargement...</td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
-                <div class="calendar-grid">
-                    <!-- Le calendrier sera généré dynamiquement ici -->
-                </div>
-            </div>
-        </div>
-
-        <!-- Section Administrateurs -->
-        <div class="admin-section admins-section">
-            <div class="section-header">
-                <h2>Gestion des administrateurs</h2>
-                <button class="btn-action" onclick="showAddAdminModal()">
-                    <i class="fas fa-plus"></i> Nouvel administrateur
-                </button>
-            </div>
-
-            <div class="admins-list">
-                <!-- La liste des administrateurs sera générée dynamiquement ici -->
-            </div>
-        </div>
-
-        <!-- Section Utilisateurs -->
-        <div class="users-section">
-            <div class="users-header">
-                <h3><i class="fas fa-users"></i> Utilisateurs inscrits</h3>
-                <div class="search-box">
-                    <input type="text" id="user-search" placeholder="Rechercher un utilisateur...">
-                    <i class="fas fa-search"></i>
-                </div>
-            </div>
-            <div class="users-list" id="users-list">
-                <!-- La liste des utilisateurs sera chargée dynamiquement -->
             </div>
         </div>
     </div>
 
-    <!-- Template pour le modal d'ajout d'administrateur -->
-    <template id="add-admin-modal">
-        <div class="modal">
-            <div class="modal-content">
-                <h3>Ajouter un administrateur</h3>
-                <form id="add-admin-form">
-                    <div class="form-group">
-                        <label>Nom</label>
-                        <input type="text" name="name" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Email</label>
-                        <input type="email" name="email" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Mot de passe</label>
-                        <input type="password" name="password" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Droits d'accès</label>
-                        <div class="permissions-grid">
-                            <label class="permission-item">
-                                <input type="checkbox" name="permissions" value="dashboard">
-                                <span>Tableau de bord</span>
-                            </label>
-                            <label class="permission-item">
-                                <input type="checkbox" name="permissions" value="appointments">
-                                <span>Gestion des rendez-vous</span>
-                            </label>
-                            <label class="permission-item">
-                                <input type="checkbox" name="permissions" value="clients">
-                                <span>Gestion des clients</span>
-                            </label>
-                            <label class="permission-item">
-                                <input type="checkbox" name="permissions" value="employees">
-                                <span>Gestion des employés</span>
-                            </label>
-                            <label class="permission-item">
-                                <input type="checkbox" name="permissions" value="admins">
-                                <span>Gestion des administrateurs</span>
-                            </label>
-                        </div>
-                    </div>
-                    <div class="modal-actions">
-                        <button type="button" class="btn-cancel" onclick="closeModal()">Annuler</button>
-                        <button type="submit" class="btn-action">Ajouter</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </template>
+    <script src="js/main.js"></script>
+    <script>
+        // Vérification de l'authentification admin
+        document.addEventListener('DOMContentLoaded', function() {
+            const token = localStorage.getItem('token');
+            const isAdmin = localStorage.getItem('isAdmin');
+            
+            if (!token || !isAdmin) {
+                window.location.href = 'auth.html';
+                return;
+            }
 
-    <script src="js/auth.js"></script>
-    <script src="js/admin.js"></script>
+            // Déconnexion
+            document.getElementById('btnLogout').addEventListener('click', function(e) {
+                e.preventDefault();
+                localStorage.removeItem('token');
+                localStorage.removeItem('isAdmin');
+                window.location.href = 'auth.html';
+            });
+
+            // TODO: Charger les données depuis l'API
+            // Pour l'instant, on affiche des données de test
+            document.getElementById('lastUpdate').textContent = new Date().toLocaleString();
+            document.getElementById('activeUsers').textContent = '42';
+            document.getElementById('todayAppointments').textContent = '8';
+            document.getElementById('unreadMessages').textContent = '5';
+            document.getElementById('pendingDocuments').textContent = '3';
+
+            // Exemple d'utilisateurs récents
+            document.getElementById('recentUsers').innerHTML = `
+                <tr>
+                    <td>Marie Dupont</td>
+                    <td>marie@example.com</td>
+                    <td>01/03/2024</td>
+                    <td><a href="#" class="btn-action">Voir</a></td>
+                </tr>
+                <tr>
+                    <td>Jean Martin</td>
+                    <td>jean@example.com</td>
+                    <td>29/02/2024</td>
+                    <td><a href="#" class="btn-action">Voir</a></td>
+                </tr>
+            `;
+
+            // Exemple de rendez-vous
+            document.getElementById('upcomingAppointments').innerHTML = `
+                <tr>
+                    <td>Sophie Bernard</td>
+                    <td>02/03/2024 14:00</td>
+                    <td>Consultation</td>
+                    <td><a href="#" class="btn-action">Gérer</a></td>
+                </tr>
+                <tr>
+                    <td>Pierre Dubois</td>
+                    <td>02/03/2024 15:30</td>
+                    <td>Suivi</td>
+                    <td><a href="#" class="btn-action">Gérer</a></td>
+                </tr>
+            `;
+        });
+    </script>
 </body>
 </html> 

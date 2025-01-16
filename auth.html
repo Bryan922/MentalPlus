@@ -8,11 +8,12 @@
     <style>
         /* Styles spécifiques à la page d'authentification */
         .auth-container {
-            min-height: 100vh;
+            min-height: calc(100vh - 70px);
             display: flex;
             justify-content: center;
             align-items: center;
             padding: 2rem;
+            padding-top: 90px;
             background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
         }
 
@@ -205,6 +206,25 @@
     </style>
 </head>
 <body>
+    <!-- Menu de navigation -->
+    <header>
+        <nav>
+            <a href="index.html" class="logo">MentalSerenity</a>
+            <div class="burger-menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+            <ul>
+                <li><a href="index.html">Accueil</a></li>
+                <li><a href="services.html">Services</a></li>
+                <li><a href="tarifs.html">Tarifs</a></li>
+                <li><a href="contact.html">Contact</a></li>
+                <li><a href="auth.html" class="btn-connexion">Connexion</a></li>
+            </ul>
+        </nav>
+    </header>
+
     <div class="auth-container">
         <div class="auth-box">
             <div class="auth-tabs">
