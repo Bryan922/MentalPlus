@@ -1,6 +1,6 @@
 .auth-container {
     max-width: 500px;
-    margin: 80px auto 2rem;
+    margin: 60px auto 2rem;
     padding: 2rem;
     background: white;
     border-radius: 15px;
@@ -157,66 +157,104 @@
 /* Responsive */
 @media (max-width: 768px) {
     .auth-container {
+        max-width: 100%;
         margin: 0;
         padding: 1rem;
         min-height: 100vh;
-        display: flex;
-        align-items: center;
-    }
-
-    .auth-card {
-        width: 100%;
-        margin: 0;
-        padding: 1.5rem;
+        border-radius: 0;
         box-shadow: none;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
     }
 
-    .tab-group {
-        flex-direction: row;
-        justify-content: space-between;
-        margin-bottom: 2rem;
+    .auth-tabs {
+        margin-bottom: 1.5rem;
+        padding-bottom: 0.8rem;
     }
 
     .tab-btn {
-        flex: 1;
-        padding: 0.8rem;
+        padding: 0.7rem;
         font-size: 0.9rem;
     }
 
+    .auth-form h2 {
+        font-size: 1.5rem;
+        margin-bottom: 1.2rem;
+    }
+
     .form-group {
-        margin-bottom: 1rem;
+        margin-bottom: 0.8rem;
+    }
+
+    .form-group label {
+        font-size: 0.9rem;
+        margin-bottom: 0.3rem;
     }
 
     .form-group input {
-        padding: 0.8rem;
-        font-size: 1rem;
+        padding: 0.7rem;
+        font-size: 0.9rem;
+    }
+
+    .form-options {
+        margin: 1rem 0;
+        flex-direction: column;
+        gap: 0.8rem;
+    }
+
+    .remember-me, .terms {
+        font-size: 0.85rem;
+    }
+
+    .forgot-password {
+        font-size: 0.85rem;
+        float: none;
+        display: block;
+        text-align: center;
+        margin-top: 0.5rem;
     }
 
     .btn-submit {
         padding: 0.8rem;
-        font-size: 1rem;
-    }
-
-    .form-options {
-        flex-direction: column;
-        gap: 1rem;
-        align-items: flex-start;
-    }
-
-    .forgot-password {
-        float: none;
-        display: block;
-        margin-top: 0.5rem;
+        font-size: 0.9rem;
+        margin-top: 1rem;
     }
 }
 
 @media (max-width: 480px) {
-    .auth-card {
-        padding: 1rem;
+    .auth-container {
+        padding: 0.8rem;
+    }
+
+    .auth-tabs {
+        margin-bottom: 1.2rem;
     }
 
     .tab-btn {
         padding: 0.6rem;
+        font-size: 0.8rem;
+    }
+
+    .auth-form h2 {
+        font-size: 1.3rem;
+    }
+
+    .form-group label {
+        font-size: 0.85rem;
+    }
+
+    .form-group input {
+        padding: 0.6rem;
+        font-size: 0.85rem;
+    }
+
+    .remember-me, .terms, .forgot-password {
+        font-size: 0.8rem;
+    }
+
+    .btn-submit {
+        padding: 0.7rem;
         font-size: 0.85rem;
     }
 }
