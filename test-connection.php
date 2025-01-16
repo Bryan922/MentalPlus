@@ -1,57 +1,79 @@
 <?php
+require_once __DIR__ . '/config/database.php';
+
 header('Content-Type: text/html; charset=utf-8');
-require_once 'config.php';
-?>
 
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <title>Test de connexion à la base de données</title>
-    <style>
-        body { font-family: Arial, sans-serif; margin: 20px; }
-        .success { color: green; }
-        .error { color: red; }
-        .table { margin: 10px 0; padding: 10px; background: #f5f5f5; }
-        .column { margin-left: 20px; }
-    </style>
-</head>
-<body>
-    <h1>Test de connexion à la base de données</h1>
+try {
+    // Test de la connexion
+    $db = getDBConnection();
+    echo "<h2 style='color: green;'>✅ Connexion à la base de données réussie</h2>";
 
-    <?php
-    try {
-        $db = getDBConnection();
-        echo '<p class="success">✅ Connexion à la base de données réussie!</p>';
-
-        // Liste des tables
-        $query = "SHOW TABLES";
-        $stmt = $db->query($query);
-        $tables = $stmt->fetchAll(PDO::FETCH_COLUMN);
-
-        echo '<h2>Tables trouvées :</h2>';
-        foreach ($tables as $table) {
-            echo '<div class="table">';
-            echo "<h3>📋 $table</h3>";
+    // Récupération de la structure des tables
+    $tables = $db->query("SHOW TABLES")->fetchAll(PDO::FETCH_COLUMN);
+    
+    echo "<h3>Tables dans la base de données :</h3>";
+    echo "<ul>";
+    foreach ($tables as $table) {
+        echo "<li><strong>$table</strong>";
+        
+        // Structure de la table
+        $columns = $db->query("SHOW COLUMNS FROM $table")->fetchAll(PDO::FETCH_ASSOC);
+        echo "<ul>";
+        foreach ($columns as $column) {
+            $nullable = $column['Null'] === 'YES' ? '(nullable)' : '(required)';
+            $default = $column['Default'] ? " default: {$column['Default']}" : '';
+            $key = $column['Key'] ? " [{$column['Key']}]" : '';
             
-            // Structure de la table
-            $query = "DESCRIBE $table";
-            $stmt = $db->query($query);
-            $columns = $stmt->fetchAll();
-            
-            foreach ($columns as $column) {
-                echo '<div class="column">';
-                echo "• {$column['Field']} ({$column['Type']})";
-                if ($column['Key'] === 'PRI') echo " - Clé primaire";
-                if ($column['Key'] === 'UNI') echo " - Unique";
-                echo '</div>';
-            }
-            echo '</div>';
+            echo "<li>{$column['Field']} - {$column['Type']} $nullable$default$key</li>";
         }
-
-    } catch (Exception $e) {
-        echo '<p class="error">❌ Erreur : ' . htmlspecialchars($e->getMessage()) . '</p>';
+        echo "</ul></li>";
     }
-    ?>
-</body>
-</html> 
+    echo "</ul>";
+
+    // Test des requêtes préparées
+    $stmt = $db->prepare("SELECT 1");
+    $stmt->execute();
+    echo "<p style='color: green;'>✅ Les requêtes préparées fonctionnent correctement</p>";
+
+    // Test du jeu de caractères
+    $charset = $db->query("SHOW VARIABLES LIKE 'character_set_database'")->fetch();
+    echo "<p>Jeu de caractères de la base : {$charset['Value']}</p>";
+
+    // Test des droits utilisateur
+    $grants = $db->query("SHOW GRANTS")->fetchAll(PDO::FETCH_COLUMN);
+    echo "<h3>Droits de l'utilisateur :</h3>";
+    echo "<ul>";
+    foreach ($grants as $grant) {
+        echo "<li>" . htmlspecialchars($grant) . "</li>";
+    }
+    echo "</ul>";
+
+} catch (Exception $e) {
+    echo "<h2 style='color: red;'>❌ Erreur de connexion à la base de données</h2>";
+    echo "<p>Message d'erreur : " . htmlspecialchars($e->getMessage()) . "</p>";
+    
+    // Vérification des paramètres de connexion
+    echo "<h3>Vérification de la configuration :</h3>";
+    echo "<ul>";
+    echo "<li>Hôte : " . (defined('DB_HOST') ? DB_HOST : 'Non défini') . "</li>";
+    echo "<li>Base de données : " . (defined('DB_NAME') ? DB_NAME : 'Non définie') . "</li>";
+    echo "<li>Utilisateur : " . (defined('DB_USER') ? DB_USER : 'Non défini') . "</li>";
+    echo "<li>Mot de passe : " . (defined('DB_PASS') ? '******' : 'Non défini') . "</li>";
+    echo "</ul>";
+    
+    // Vérification de l'extension PDO
+    echo "<h3>Vérification de PDO :</h3>";
+    echo "<ul>";
+    echo "<li>Extension PDO : " . (extension_loaded('pdo') ? '✅ Installée' : '❌ Non installée') . "</li>";
+    echo "<li>Driver MySQL : " . (in_array('mysql', PDO::getAvailableDrivers()) ? '✅ Installé' : '❌ Non installé') . "</li>";
+    echo "</ul>";
+}
+
+// Affichage des erreurs PHP pour le débogage
+echo "<h3>Configuration PHP :</h3>";
+echo "<ul>";
+echo "<li>Version PHP : " . phpversion() . "</li>";
+echo "<li>Display Errors : " . ini_get('display_errors') . "</li>";
+echo "<li>Error Reporting : " . error_reporting() . "</li>";
+echo "<li>Error Log : " . ini_get('error_log') . "</li>";
+echo "</ul>"; 
