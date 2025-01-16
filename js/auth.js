@@ -66,8 +66,12 @@ async function handleLogin(e) {
     e.preventDefault();
     const email = document.getElementById('login-email').value;
     const password = document.getElementById('login-password').value;
+    const submitButton = e.target.querySelector('button[type="submit"]');
 
     try {
+        submitButton.disabled = true;
+        submitButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Connexion...';
+
         // Simulation d'une connexion réussie
         localStorage.setItem('isAuthenticated', 'true');
         localStorage.setItem('user', JSON.stringify({
@@ -80,32 +84,36 @@ async function handleLogin(e) {
     } catch (error) {
         console.error('Erreur de connexion:', error);
         alert('Erreur lors de la connexion. Veuillez réessayer.');
+        submitButton.disabled = false;
+        submitButton.innerHTML = 'Se connecter';
     }
 }
 
 async function handleRegister(e) {
     e.preventDefault();
     const formData = new FormData(e.target);
+    const submitButton = e.target.querySelector('button[type="submit"]');
     const data = {
         name: formData.get('name'),
-        firstname: formData.get('firstname'),
         email: formData.get('email'),
-        phone: formData.get('phone'),
         password: formData.get('password'),
-        passwordConfirm: formData.get('password-confirm')
+        confirmPassword: formData.get('confirm_password')
     };
 
-    if (data.password !== data.passwordConfirm) {
+    if (data.password !== data.confirmPassword) {
         alert('Les mots de passe ne correspondent pas.');
         return;
     }
 
     try {
+        submitButton.disabled = true;
+        submitButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Inscription...';
+
         // Simulation d'une inscription réussie
         localStorage.setItem('isAuthenticated', 'true');
         localStorage.setItem('user', JSON.stringify({
             email: data.email,
-            name: `${data.firstname} ${data.name}`
+            name: data.name
         }));
         
         updateAuthButtons();
@@ -113,6 +121,8 @@ async function handleRegister(e) {
     } catch (error) {
         console.error('Erreur d\'inscription:', error);
         alert('Erreur lors de l\'inscription. Veuillez réessayer.');
+        submitButton.disabled = false;
+        submitButton.innerHTML = 'S\'inscrire';
     }
 }
 

@@ -2,10 +2,10 @@
 .admin-container {
     display: grid;
     grid-template-columns: 250px 1fr;
-    height: calc(100vh - 80px);
-    padding-top: 2rem;
-    gap: 2rem;
-    overflow-y: auto;
+    min-height: calc(100vh - 80px);
+    margin-top: 1rem;
+    gap: 1rem;
+    padding: 0 1rem;
 }
 
 /* Sidebar */
@@ -13,7 +13,10 @@
     background: #fff;
     border-radius: 10px;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    padding: 1.5rem;
+    padding: 1rem;
+    height: fit-content;
+    position: sticky;
+    top: 1rem;
 }
 
 .admin-nav {
@@ -52,7 +55,9 @@
     background: #fff;
     border-radius: 10px;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    padding: 2rem;
+    padding: 1.5rem;
+    height: fit-content;
+    min-height: calc(100vh - 100px);
 }
 
 .admin-section {
@@ -397,6 +402,8 @@
 @media (max-width: 768px) {
     .admin-container {
         grid-template-columns: 1fr;
+        margin: 0;
+        padding: 0;
     }
     
     .admin-sidebar {
@@ -406,31 +413,113 @@
         right: 0;
         z-index: 100;
         border-radius: 10px 10px 0 0;
-        padding: 1rem;
+        padding: 0.8rem;
+        background: white;
+        box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
     }
     
     .admin-nav {
         flex-direction: row;
         justify-content: space-around;
+        gap: 0.5rem;
     }
     
     .admin-nav a {
         flex-direction: column;
         padding: 0.5rem;
-        font-size: 0.8rem;
+        font-size: 0.75rem;
         text-align: center;
+        gap: 0.3rem;
+    }
+
+    .admin-nav a i {
+        font-size: 1.2rem;
     }
     
     .admin-content {
-        margin-bottom: 80px;
+        margin-bottom: 70px;
+        padding: 1rem;
+        border-radius: 0;
     }
     
     .client-card, .employee-card {
         flex-direction: column;
         text-align: center;
+        gap: 1rem;
     }
-    
+
     .client-actions, .employee-actions {
-        margin-top: 1rem;
+        justify-content: center;
+    }
+
+    .calendar-grid {
+        grid-template-columns: repeat(7, 1fr);
+        gap: 0.3rem;
+    }
+
+    .calendar-day {
+        padding: 0.3rem;
+        font-size: 0.8rem;
+    }
+
+    .chat-container {
+        height: calc(100vh - 180px);
+    }
+
+    .chat-header {
+        padding: 0.8rem;
+    }
+
+    .chat-messages {
+        padding: 0.8rem;
+    }
+
+    .chat-input {
+        padding: 0.8rem;
+    }
+
+    .chat-input input {
+        padding: 0.6rem;
+    }
+
+    .chat-input button {
+        padding: 0.6rem 1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .admin-nav a {
+        font-size: 0.7rem;
+    }
+
+    .admin-nav a i {
+        font-size: 1rem;
+    }
+
+    .calendar-header {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+    .calendar-header h2 {
+        font-size: 1.2rem;
+    }
+
+    .calendar-day {
+        font-size: 0.7rem;
+    }
+
+    .appointment-card {
+        padding: 0.8rem;
+    }
+
+    .appointment-header {
+        flex-direction: column;
+        gap: 0.5rem;
+        text-align: center;
+    }
+
+    .appointment-actions {
+        justify-content: center;
     }
 } 

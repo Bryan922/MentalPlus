@@ -4,11 +4,12 @@ document.addEventListener('DOMContentLoaded', function() {
         window.location.href = 'auth.html';
         return;
     }
-    loadCalendar();
+    initializeNavigation();
+    initializeButtons();
+    loadEmployeeList();
+    loadClientList();
     loadAppointments();
-    loadClients();
-    loadEmployees();
-    initChat();
+    initializeChat();
 });
 
 // Gestion de la navigation
@@ -315,4 +316,90 @@ function saveSettings() {
 function logout() {
     localStorage.removeItem('isAdmin');
     window.location.href = 'index.html';
+}
+
+function initializeButtons() {
+    // Bouton d'ajout d'employé
+    const addEmployeeBtn = document.querySelector('.add-employee-btn');
+    if (addEmployeeBtn) {
+        addEmployeeBtn.addEventListener('click', () => {
+            const btn = addEmployeeBtn;
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Ajout...';
+            
+            setTimeout(() => {
+                showAddEmployeeModal();
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fas fa-plus"></i> Ajouter un employé';
+            }, 500);
+        });
+    }
+
+    // Boutons d'action des employés
+    document.querySelectorAll('.employee-actions button').forEach(button => {
+        button.addEventListener('click', (e) => {
+            const action = e.target.dataset.action;
+            const employeeId = e.target.closest('.employee-card').dataset.id;
+            
+            button.disabled = true;
+            const originalContent = button.innerHTML;
+            button.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+            
+            setTimeout(() => {
+                handleEmployeeAction(action, employeeId);
+                button.disabled = false;
+                button.innerHTML = originalContent;
+            }, 500);
+        });
+    });
+
+    // Boutons d'envoi de message
+    const sendMessageBtn = document.querySelector('.chat-input button');
+    if (sendMessageBtn) {
+        sendMessageBtn.addEventListener('click', () => {
+            const input = document.querySelector('.chat-input input');
+            const message = input.value.trim();
+            const recipient = document.querySelector('.chat-recipient-select').value;
+            
+            if (message && recipient) {
+                sendMessageBtn.disabled = true;
+                sendMessageBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+                
+                setTimeout(() => {
+                    sendMessage(message, recipient);
+                    input.value = '';
+                    sendMessageBtn.disabled = false;
+                    sendMessageBtn.innerHTML = '<i class="fas fa-paper-plane"></i>';
+                }, 500);
+            }
+        });
+    }
+}
+
+function showAddEmployeeModal() {
+    // Implémentation du modal d'ajout d'employé
+    console.log('Affichage du modal d\'ajout d\'employé');
+}
+
+function handleEmployeeAction(action, employeeId) {
+    // Implémentation des actions sur les employés
+    console.log(`Action ${action} sur l'employé ${employeeId}`);
+}
+
+function sendMessage(message, recipient) {
+    // Implémentation de l'envoi de message
+    console.log(`Message envoyé à ${recipient}: ${message}`);
+    
+    // Ajouter le message à la conversation
+    const chatMessages = document.querySelector('.chat-messages');
+    const messageElement = document.createElement('div');
+    messageElement.className = 'chat-message sent';
+    messageElement.innerHTML = `
+        <div class="message-content">
+            <p>${message}</p>
+            <span class="message-time">${new Date().toLocaleTimeString()}</span>
+        </div>
+    `;
+    chatMessages.appendChild(messageElement);
+    chatMessages.scrollTop = chatMessages.scrollHeight;
 } 
