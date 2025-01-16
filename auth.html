@@ -364,7 +364,11 @@
                     // Simulation de l'authentification (à remplacer par votre logique d'authentification)
                     showSuccess('Connexion réussie ! Redirection...');
                     setTimeout(() => {
-                        window.location.href = '/dashboard.html';
+                        if (form.id === 'adminForm') {
+                            window.location.href = './admin.html';
+                        } else {
+                            window.location.href = './profile.html';
+                        }
                     }, 1500);
                 });
             });

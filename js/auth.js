@@ -34,7 +34,7 @@ class AuthManager {
                 this.showSuccess('Connexion réussie ! Redirection...');
                 localStorage.setItem('token', response.token);
                 setTimeout(() => {
-                    window.location.href = 'profile.html';
+                    window.location.href = './profile.html';
                 }, 1500);
             }
         } catch (error) {
@@ -88,7 +88,7 @@ class AuthManager {
                 localStorage.setItem('token', response.token);
                 localStorage.setItem('isAdmin', 'true');
                 setTimeout(() => {
-                    window.location.href = 'admin.html';
+                    window.location.href = './admin.html';
                 }, 1500);
             }
         } catch (error) {
