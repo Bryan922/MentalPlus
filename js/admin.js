@@ -5,10 +5,9 @@ document.addEventListener('DOMContentLoaded', function() {
         return;
     }
     initializeNavigation();
-    initializeButtons();
-    loadEmployeeList();
-    loadClientList();
     loadCalendar();
+    loadAllClients();
+    initializeEmployeeActions();
     initializeChat();
 });
 
@@ -92,12 +91,13 @@ function renderCalendar(month, year, appointments) {
 function showDayAppointments(year, month, day) {
     const date = new Date(year, month, day);
     const appointments = JSON.parse(localStorage.getItem('appointments') || '[]');
-    const dayAppointments = appointments.filter(apt => {
-        const aptDate = new Date(apt.date);
-        return aptDate.getFullYear() === year &&
-               aptDate.getMonth() === month &&
-               aptDate.getDate() === day;
-    });
+    const formattedDate = date.toISOString().split('T')[0];
+    
+    console.log('Date recherchée:', formattedDate);
+    console.log('Tous les rendez-vous:', appointments);
+    
+    const dayAppointments = appointments.filter(apt => apt.date === formattedDate);
+    console.log('Rendez-vous du jour:', dayAppointments);
     
     const appointmentsList = document.querySelector('.appointments-list');
     appointmentsList.innerHTML = `<h3>Rendez-vous du ${date.toLocaleDateString('fr-FR', {
@@ -112,7 +112,6 @@ function showDayAppointments(year, month, day) {
         return;
     }
     
-    // Trier les rendez-vous par heure
     dayAppointments.sort((a, b) => a.time.localeCompare(b.time));
     
     dayAppointments.forEach(apt => {
@@ -181,8 +180,8 @@ function nextMonth() {
 
 // Fonction de chargement des clients
 function loadAllClients() {
-    const clients = JSON.parse(localStorage.getItem('users') || '[]')
-        .filter(user => user.role === 'client');
+    const users = JSON.parse(localStorage.getItem('users') || '[]');
+    const clients = users.filter(user => !user.isAdmin);
     
     const clientsList = document.querySelector('.clients-list');
     if (!clientsList) return;
@@ -192,18 +191,27 @@ function loadAllClients() {
         clientsList.innerHTML += `
             <div class="client-card">
                 <div class="client-info">
-                    <h4>${client.name}</h4>
+                    <h4>${client.name || 'Client'}</h4>
                     <p><i class="fas fa-envelope"></i> ${client.email}</p>
                     ${client.phone ? `<p><i class="fas fa-phone"></i> ${client.phone}</p>` : ''}
                 </div>
                 <div class="client-actions">
-                    <button class="btn-action" onclick="viewClientDetails(${client.id})">
-                        <i class="fas fa-eye"></i> Voir détails
+                    <button class="btn-action" onclick="startChat('${client.email}')">
+                        <i class="fas fa-comments"></i> Message
                     </button>
                 </div>
             </div>
         `;
     });
+
+    // Mettre à jour la liste des destinataires du chat
+    const recipientSelect = document.querySelector('.chat-recipient-select');
+    if (recipientSelect) {
+        recipientSelect.innerHTML = '<option value="">Sélectionner un destinataire</option>';
+        clients.forEach(client => {
+            recipientSelect.innerHTML += `<option value="${client.email}">${client.name || client.email}</option>`;
+        });
+    }
 }
 
 // Fonction d'initialisation des actions employés
@@ -216,182 +224,129 @@ function initializeEmployeeActions() {
     }
 }
 
-// Gestion des rendez-vous
-function loadAppointments() {
-    const appointments = JSON.parse(localStorage.getItem('appointments') || '[]');
-    const appointmentsList = document.getElementById('appointments-list');
-    appointmentsList.innerHTML = '';
+function showAddEmployeeModal() {
+    const modal = document.createElement('div');
+    modal.className = 'modal';
+    modal.innerHTML = `
+        <div class="modal-content">
+            <h3>Ajouter un employé</h3>
+            <form id="add-employee-form">
+                <div class="form-group">
+                    <label>Nom</label>
+                    <input type="text" name="name" required>
+                </div>
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" name="email" required>
+                </div>
+                <div class="form-group">
+                    <label>Mot de passe</label>
+                    <input type="password" name="password" required>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn-cancel" onclick="closeModal()">Annuler</button>
+                    <button type="submit" class="btn-action">Ajouter</button>
+                </div>
+            </form>
+        </div>
+    `;
     
-    appointments.forEach(appointment => {
-        const appointmentCard = document.createElement('div');
-        appointmentCard.className = 'appointment-card';
-        appointmentCard.innerHTML = `
-            <div class="appointment-header">
-                <h4>${appointment.clientName}</h4>
-                <span class="appointment-date">${new Date(appointment.date).toLocaleDateString('fr-FR')}</span>
-            </div>
-            <div class="appointment-details">
-                <p><i class="fas fa-clock"></i> ${appointment.time}</p>
-                <p><i class="fas fa-tag"></i> ${appointment.type}</p>
-            </div>
-        `;
-        appointmentsList.appendChild(appointmentCard);
-    });
-}
-
-// Gestion des clients
-function loadClients() {
-    const clients = JSON.parse(localStorage.getItem('clients') || '[]');
-    const clientsList = document.getElementById('clients-list');
-    clientsList.innerHTML = '';
+    document.body.appendChild(modal);
     
-    clients.forEach(client => {
-        const clientCard = document.createElement('div');
-        clientCard.className = 'client-card';
-        clientCard.innerHTML = `
-            <div class="client-info">
-                <h4>${client.name}</h4>
-                <p><i class="fas fa-envelope"></i> ${client.email}</p>
-                <p><i class="fas fa-phone"></i> ${client.phone}</p>
-            </div>
-            <div class="client-actions">
-                <button onclick="viewClientFile(${client.id})">
-                    <i class="fas fa-folder-open"></i> Dossier
-                </button>
-                <button onclick="startChat(${client.id})">
-                    <i class="fas fa-comments"></i> Message
-                </button>
-            </div>
-        `;
-        clientsList.appendChild(clientCard);
-    });
+    document.getElementById('add-employee-form').onsubmit = function(e) {
+        e.preventDefault();
+        const formData = new FormData(e.target);
+        const employee = {
+            name: formData.get('name'),
+            email: formData.get('email'),
+            password: formData.get('password'),
+            isAdmin: true,
+            role: 'employee'
+        };
+        
+        const users = JSON.parse(localStorage.getItem('users') || '[]');
+        users.push(employee);
+        localStorage.setItem('users', JSON.stringify(users));
+        
+        closeModal();
+        loadAllClients(); // Recharger la liste qui inclut aussi les employés
+    };
 }
 
-function filterClients(query) {
-    const clients = document.querySelectorAll('.client-card');
-    clients.forEach(client => {
-        const name = client.querySelector('h4').textContent.toLowerCase();
-        if (name.includes(query.toLowerCase())) {
-            client.style.display = 'flex';
-        } else {
-            client.style.display = 'none';
-        }
-    });
-}
-
-// Gestion des employés
-function loadEmployees() {
-    const employees = JSON.parse(localStorage.getItem('employees') || '[]');
-    const employeesList = document.getElementById('employees-list');
-    employeesList.innerHTML = '';
-    
-    employees.forEach(employee => {
-        const employeeCard = document.createElement('div');
-        employeeCard.className = 'employee-card';
-        employeeCard.innerHTML = `
-            <div class="employee-info">
-                <h4>${employee.name}</h4>
-                <p><i class="fas fa-envelope"></i> ${employee.email}</p>
-                <p><i class="fas fa-user-tag"></i> ${employee.role}</p>
-            </div>
-            <div class="employee-status ${employee.status}">
-                ${employee.status}
-            </div>
-            <div class="employee-actions">
-                <button onclick="editEmployee(${employee.id})">
-                    <i class="fas fa-edit"></i>
-                </button>
-                <button onclick="deleteEmployee(${employee.id})">
-                    <i class="fas fa-trash"></i>
-                </button>
-            </div>
-        `;
-        employeesList.appendChild(employeeCard);
-    });
-}
-
-// Gestion du chat
-function initChat() {
-    loadChatRecipients();
-    loadMessages();
-}
-
-function loadChatRecipients() {
-    const select = document.getElementById('chat-recipient');
-    const employeesGroup = select.querySelector('optgroup[label="Employés"]');
-    const clientsGroup = select.querySelector('optgroup[label="Clients"]');
-    
-    // Charger les employés
-    const employees = JSON.parse(localStorage.getItem('employees') || '[]');
-    employeesGroup.innerHTML = employees.map(emp => 
-        `<option value="emp_${emp.id}">${emp.name} (${emp.role})</option>`
-    ).join('');
-    
-    // Charger les clients
-    const clients = JSON.parse(localStorage.getItem('clients') || '[]');
-    clientsGroup.innerHTML = clients.map(client => 
-        `<option value="client_${client.id}">${client.name}</option>`
-    ).join('');
-}
-
-function loadMessages() {
-    const recipientId = document.getElementById('chat-recipient').value;
-    if (!recipientId) {
-        document.getElementById('chat-messages').innerHTML = 
-            '<div class="chat-placeholder">Sélectionnez un destinataire pour voir les messages</div>';
-        return;
+function closeModal() {
+    const modal = document.querySelector('.modal');
+    if (modal) {
+        modal.remove();
     }
+}
+
+// Initialisation du chat
+function initializeChat() {
+    const chatContainer = document.querySelector('.chat-container');
+    if (!chatContainer) return;
+    
+    const recipientSelect = document.createElement('select');
+    recipientSelect.className = 'chat-recipient-select';
+    recipientSelect.innerHTML = '<option value="">Sélectionner un destinataire</option>';
+    
+    const users = JSON.parse(localStorage.getItem('users') || '[]');
+    const clients = users.filter(user => !user.isAdmin);
+    
+    clients.forEach(client => {
+        recipientSelect.innerHTML += `<option value="${client.email}">${client.name || client.email}</option>`;
+    });
+    
+    chatContainer.querySelector('.chat-header').appendChild(recipientSelect);
+    
+    recipientSelect.onchange = function() {
+        loadMessages(this.value);
+    };
+}
+
+function loadMessages(recipientEmail) {
+    if (!recipientEmail) return;
     
     const messages = JSON.parse(localStorage.getItem('messages') || '[]')
-        .filter(msg => msg.recipientId === recipientId || msg.senderId === recipientId);
+        .filter(msg => msg.to === recipientEmail || msg.from === recipientEmail);
     
-    const chatMessages = document.getElementById('chat-messages');
+    const chatMessages = document.querySelector('.chat-messages');
     chatMessages.innerHTML = '';
     
-    messages.forEach(message => {
-        const messageElement = document.createElement('div');
-        messageElement.className = `chat-message ${message.senderId === 'admin' ? 'sent' : 'received'}`;
-        messageElement.innerHTML = `
-            <div class="message-content">
-                <p>${message.content}</p>
-                <span class="message-time">${new Date(message.timestamp).toLocaleTimeString('fr-FR')}</span>
+    messages.forEach(msg => {
+        const isAdmin = msg.from === 'admin';
+        chatMessages.innerHTML += `
+            <div class="chat-message ${isAdmin ? 'sent' : 'received'}">
+                <div class="message-content">
+                    <p>${msg.content}</p>
+                    <span class="message-time">${new Date(msg.timestamp).toLocaleTimeString()}</span>
+                </div>
             </div>
         `;
-        chatMessages.appendChild(messageElement);
     });
     
     chatMessages.scrollTop = chatMessages.scrollHeight;
 }
 
-function changeRecipient() {
-    loadMessages();
-}
-
 function sendMessage() {
-    const recipientId = document.getElementById('chat-recipient').value;
-    if (!recipientId) {
-        alert('Veuillez sélectionner un destinataire');
-        return;
-    }
-    
-    const input = document.getElementById('message-input');
+    const recipientEmail = document.querySelector('.chat-recipient-select').value;
+    const input = document.querySelector('.chat-input input');
     const content = input.value.trim();
     
-    if (content) {
-        const message = {
-            content,
-            senderId: 'admin',
-            recipientId,
-            timestamp: new Date().toISOString()
-        };
-        
-        const messages = JSON.parse(localStorage.getItem('messages') || '[]');
-        messages.push(message);
-        localStorage.setItem('messages', JSON.stringify(messages));
-        
-        input.value = '';
-        loadMessages();
-    }
+    if (!recipientEmail || !content) return;
+    
+    const message = {
+        from: 'admin',
+        to: recipientEmail,
+        content: content,
+        timestamp: new Date().toISOString()
+    };
+    
+    const messages = JSON.parse(localStorage.getItem('messages') || '[]');
+    messages.push(message);
+    localStorage.setItem('messages', JSON.stringify(messages));
+    
+    input.value = '';
+    loadMessages(recipientEmail);
 }
 
 // Gestion des paramètres
@@ -462,11 +417,6 @@ function initializeButtons() {
             }
         });
     }
-}
-
-function showAddEmployeeModal() {
-    // Implémentation du modal d'ajout d'employé
-    console.log('Affichage du modal d\'ajout d\'employé');
 }
 
 function handleEmployeeAction(action, employeeId) {
