@@ -34,7 +34,7 @@ class AuthManager {
                 this.showSuccess('Connexion réussie ! Redirection...');
                 localStorage.setItem('token', response.token);
                 setTimeout(() => {
-                    window.location.href = '../profile.html';
+                    window.location.href = 'profile.html';
                 }, 1500);
             }
         } catch (error) {
@@ -88,7 +88,7 @@ class AuthManager {
                 localStorage.setItem('token', response.token);
                 localStorage.setItem('isAdmin', 'true');
                 setTimeout(() => {
-                    window.location.href = '../admin.html';
+                    window.location.href = 'admin.html';
                 }, 1500);
             }
         } catch (error) {
@@ -99,7 +99,7 @@ class AuthManager {
     async handleForgotPassword(e) {
         e.preventDefault();
         const email = document.getElementById('loginEmail').value;
-
+        
         if (!email) {
             this.showError('Veuillez entrer votre email avant de réinitialiser le mot de passe');
             return;
@@ -107,34 +107,11 @@ class AuthManager {
 
         try {
             const response = await this.sendRequest('forgot-password', { email });
-
             if (response.success) {
                 this.showSuccess('Un email de réinitialisation a été envoyé à votre adresse');
             }
         } catch (error) {
             this.showError(error.message);
-        }
-    }
-
-    async sendRequest(action, data) {
-        try {
-            const response = await fetch(`${this.baseUrl}?action=${action}`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(data)
-            });
-
-            const result = await response.json();
-
-            if (!response.ok) {
-                throw new Error(result.error || 'Une erreur est survenue');
-            }
-
-            return result;
-        } catch (error) {
-            throw new Error(error.message || 'Erreur de connexion au serveur');
         }
     }
 
@@ -149,9 +126,28 @@ class AuthManager {
         this.successMessage.style.display = 'block';
         this.errorMessage.style.display = 'none';
     }
+
+    async sendRequest(action, data) {
+        try {
+            const response = await fetch(`${this.baseUrl}?action=${action}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            });
+
+            const result = await response.json();
+            if (!result.success) {
+                throw new Error(result.message || 'Une erreur est survenue');
+            }
+
+            return result;
+        } catch (error) {
+            throw new Error(error.message || 'Une erreur est survenue lors de la connexion au serveur');
+        }
+    }
 }
 
 // Initialisation
-document.addEventListener('DOMContentLoaded', () => {
-    new AuthManager();
-}); 
+new AuthManager(); 

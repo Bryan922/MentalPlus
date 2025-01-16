@@ -305,6 +305,8 @@
         </div>
     </div>
 
+    <script src="js/main.js"></script>
+    <script src="js/auth.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             // Gestion des onglets
@@ -342,61 +344,6 @@
                         this.textContent = '👁️';
                     }
                 });
-            });
-
-            // Gestion des formulaires
-            const forms = document.querySelectorAll('form');
-            forms.forEach(form => {
-                form.addEventListener('submit', function(e) {
-                    e.preventDefault();
-                    
-                    // Validation des formulaires
-                    if (form.id === 'registerForm') {
-                        const password = document.querySelector('#registerPassword').value;
-                        const confirmPassword = document.querySelector('#confirmPassword').value;
-
-                        if (password !== confirmPassword) {
-                            showError('Les mots de passe ne correspondent pas');
-                            return;
-                        }
-                    }
-
-                    // Simulation de l'authentification (à remplacer par votre logique d'authentification)
-                    showSuccess('Connexion réussie ! Redirection...');
-                    setTimeout(() => {
-                        if (form.id === 'adminForm') {
-                            window.location.href = 'admin.html';
-                        } else {
-                            window.location.href = 'profile.html';
-                        }
-                    }, 1500);
-                });
-            });
-
-            // Fonctions utilitaires pour afficher les messages
-            function showError(message) {
-                errorMessage.textContent = message;
-                errorMessage.style.display = 'block';
-                successMessage.style.display = 'none';
-            }
-
-            function showSuccess(message) {
-                successMessage.textContent = message;
-                successMessage.style.display = 'block';
-                errorMessage.style.display = 'none';
-            }
-
-            // Gestion du "mot de passe oublié"
-            document.querySelector('#forgotPassword').addEventListener('click', function(e) {
-                e.preventDefault();
-                const email = document.querySelector('#loginEmail').value;
-                
-                if (!email) {
-                    showError('Veuillez entrer votre email avant de réinitialiser le mot de passe');
-                    return;
-                }
-
-                showSuccess('Un email de réinitialisation a été envoyé à votre adresse');
             });
         });
     </script>
