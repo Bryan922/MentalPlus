@@ -2,6 +2,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initializeTabs();
     initializePasswordToggles();
     initializeForms();
+    checkRememberedUser();
     updateAuthButtons();
 });
 
@@ -67,6 +68,7 @@ async function handleLogin(e) {
     const formData = new FormData(e.target);
     const email = formData.get('email');
     const password = formData.get('password');
+    const rememberMe = formData.get('remember-me') === 'on';
     const isAdminLogin = window.location.pathname.includes('admin-login.html');
 
     const users = JSON.parse(localStorage.getItem('users') || '[]');
@@ -87,10 +89,17 @@ async function handleLogin(e) {
         return;
     }
 
-    localStorage.setItem('isAuthenticated', 'true');
-    localStorage.setItem('user', JSON.stringify(user));
+    if (rememberMe) {
+        localStorage.setItem('rememberedUser', JSON.stringify({
+            email: email,
+            isAdmin: user.isAdmin
+        }));
+    }
+
+    sessionStorage.setItem('isAuthenticated', 'true');
+    sessionStorage.setItem('user', JSON.stringify(user));
     if (user.isAdmin) {
-        localStorage.setItem('isAdmin', 'true');
+        sessionStorage.setItem('isAdmin', 'true');
         window.location.href = 'admin.html';
     } else {
         window.location.href = 'profile.html';
@@ -139,25 +148,36 @@ async function handleRegister(e) {
 
 // Mise à jour des boutons d'authentification
 function updateAuthButtons() {
-    const btnConnexion = document.querySelector('.btn-connexion');
-    const isAuthenticated = localStorage.getItem('isAuthenticated') === 'true';
+    const authButtons = document.querySelector('.auth-buttons');
+    if (!authButtons) return;
+
+    const isAuthenticated = sessionStorage.getItem('isAuthenticated') === 'true';
+    const user = JSON.parse(sessionStorage.getItem('user') || 'null');
     
-    if (btnConnexion) {
-        if (isAuthenticated) {
-            btnConnexion.textContent = 'Mon Profil';
-            btnConnexion.href = 'profile.html';
+    if (isAuthenticated && user) {
+        if (user.isAdmin) {
+            authButtons.innerHTML = `
+                <a href="admin.html" class="btn-auth">Espace Admin</a>
+                <button onclick="logout()" class="btn-auth">Déconnexion</button>
+            `;
         } else {
-            btnConnexion.textContent = 'Connexion';
-            btnConnexion.href = 'auth.html';
+            authButtons.innerHTML = `
+                <a href="profile.html" class="btn-auth">Mon Profil</a>
+                <button onclick="logout()" class="btn-auth">Déconnexion</button>
+            `;
         }
+    } else {
+        authButtons.innerHTML = `
+            <a href="auth.html" class="btn-auth">Connexion</a>
+            <a href="auth.html#register" class="btn-auth">S'inscrire</a>
+            <a href="admin-login.html" class="btn-auth btn-admin">Espace Admin</a>
+        `;
     }
 }
 
 // Déconnexion
 function logout() {
-    localStorage.removeItem('isAuthenticated');
-    localStorage.removeItem('user');
-    updateAuthButtons();
+    sessionStorage.clear(); // Effacer toutes les données de session
     window.location.href = 'index.html';
 }
 
@@ -179,5 +199,15 @@ function handleAdminLogin(e) {
         window.location.href = 'admin.html';
     } else {
         alert('Identifiants administrateur incorrects');
+    }
+}
+
+function checkRememberedUser() {
+    const rememberedUser = JSON.parse(localStorage.getItem('rememberedUser') || 'null');
+    if (rememberedUser) {
+        const emailInput = document.querySelector('input[name="email"]');
+        if (emailInput) {
+            emailInput.value = rememberedUser.email;
+        }
     }
 } 
