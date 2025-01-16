@@ -128,6 +128,67 @@
                 overflow-x: auto;
             }
         }
+
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 600px;
+            position: relative;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .close-modal {
+            position: absolute;
+            right: 1rem;
+            top: 1rem;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #666;
+        }
+
+        .detail-group {
+            margin-bottom: 1rem;
+        }
+
+        .detail-group label {
+            font-weight: bold;
+            color: var(--primary-color);
+            margin-right: 0.5rem;
+        }
+
+        .modal-actions {
+            margin-top: 2rem;
+            display: flex;
+            gap: 1rem;
+            justify-content: flex-end;
+        }
+
+        .btn-action {
+            padding: 0.5rem 1rem;
+        }
+
+        small {
+            display: block;
+            color: #666;
+            font-size: 0.8rem;
+            margin-top: 0.5rem;
+        }
     </style>
 </head>
 <body>
@@ -160,18 +221,22 @@
                 <div class="stat-card">
                     <h3>Utilisateurs actifs</h3>
                     <div class="number" id="activeUsers">0</div>
+                    <small>(Données de test)</small>
                 </div>
                 <div class="stat-card">
                     <h3>Rendez-vous aujourd'hui</h3>
                     <div class="number" id="todayAppointments">0</div>
+                    <small>(Données de test)</small>
                 </div>
                 <div class="stat-card">
                     <h3>Messages non lus</h3>
                     <div class="number" id="unreadMessages">0</div>
+                    <small>(Données de test)</small>
                 </div>
                 <div class="stat-card">
                     <h3>Documents en attente</h3>
                     <div class="number" id="pendingDocuments">0</div>
+                    <small>(Données de test)</small>
                 </div>
             </div>
 
@@ -215,12 +280,51 @@
                 </div>
             </div>
         </div>
+
+        <!-- Modal pour les détails du rendez-vous -->
+        <div id="appointmentModal" class="modal" style="display: none;">
+            <div class="modal-content">
+                <span class="close-modal">&times;</span>
+                <h2>Détails du rendez-vous</h2>
+                <div class="appointment-details">
+                    <div class="detail-group">
+                        <label>Client :</label>
+                        <span id="modalClientName"></span>
+                    </div>
+                    <div class="detail-group">
+                        <label>Date :</label>
+                        <span id="modalDate"></span>
+                    </div>
+                    <div class="detail-group">
+                        <label>Type :</label>
+                        <span id="modalType"></span>
+                    </div>
+                    <div class="detail-group">
+                        <label>Téléphone :</label>
+                        <span id="modalPhone"></span>
+                    </div>
+                    <div class="detail-group">
+                        <label>Email :</label>
+                        <span id="modalEmail"></span>
+                    </div>
+                    <div class="detail-group">
+                        <label>Notes :</label>
+                        <p id="modalNotes"></p>
+                    </div>
+                    <div class="modal-actions">
+                        <button class="btn-action" onclick="updateAppointmentStatus('confirmed')">Confirmer</button>
+                        <button class="btn-action" onclick="updateAppointmentStatus('cancelled')">Annuler</button>
+                        <button class="btn-action" onclick="updateAppointmentStatus('rescheduled')">Reprogrammer</button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
     <script src="js/main.js"></script>
     <script>
-        // Vérification de l'authentification admin
         document.addEventListener('DOMContentLoaded', function() {
+            // Vérification de l'authentification admin
             const token = localStorage.getItem('token');
             const isAdmin = localStorage.getItem('isAdmin');
             
@@ -237,46 +341,113 @@
                 window.location.href = 'auth.html';
             });
 
-            // TODO: Charger les données depuis l'API
-            // Pour l'instant, on affiche des données de test
+            // Données de test pour la démo
+            const testData = {
+                appointments: [
+                    {
+                        id: 1,
+                        client: 'Sophie Bernard',
+                        date: '02/03/2024 14:00',
+                        type: 'Consultation',
+                        phone: '+33 6 12 34 56 78',
+                        email: 'sophie@example.com',
+                        notes: 'Première consultation - Suivi anxiété'
+                    },
+                    {
+                        id: 2,
+                        client: 'Pierre Dubois',
+                        date: '02/03/2024 15:30',
+                        type: 'Suivi',
+                        phone: '+33 6 98 76 54 32',
+                        email: 'pierre@example.com',
+                        notes: 'Suivi mensuel - Progrès notables'
+                    }
+                ],
+                users: [
+                    {
+                        name: 'Marie Dupont',
+                        email: 'marie@example.com',
+                        date: '01/03/2024'
+                    },
+                    {
+                        name: 'Jean Martin',
+                        email: 'jean@example.com',
+                        date: '29/02/2024'
+                    }
+                ]
+            };
+
+            // Mise à jour des statistiques
             document.getElementById('lastUpdate').textContent = new Date().toLocaleString();
             document.getElementById('activeUsers').textContent = '42';
             document.getElementById('todayAppointments').textContent = '8';
             document.getElementById('unreadMessages').textContent = '5';
             document.getElementById('pendingDocuments').textContent = '3';
 
-            // Exemple d'utilisateurs récents
-            document.getElementById('recentUsers').innerHTML = `
+            // Affichage des utilisateurs récents
+            document.getElementById('recentUsers').innerHTML = testData.users.map(user => `
                 <tr>
-                    <td>Marie Dupont</td>
-                    <td>marie@example.com</td>
-                    <td>01/03/2024</td>
-                    <td><a href="#" class="btn-action">Voir</a></td>
+                    <td>${user.name}</td>
+                    <td>${user.email}</td>
+                    <td>${user.date}</td>
+                    <td><a href="#" class="btn-action" onclick="showUserDetails('${user.email}')">Voir</a></td>
                 </tr>
-                <tr>
-                    <td>Jean Martin</td>
-                    <td>jean@example.com</td>
-                    <td>29/02/2024</td>
-                    <td><a href="#" class="btn-action">Voir</a></td>
-                </tr>
-            `;
+            `).join('');
 
-            // Exemple de rendez-vous
-            document.getElementById('upcomingAppointments').innerHTML = `
+            // Affichage des rendez-vous
+            document.getElementById('upcomingAppointments').innerHTML = testData.appointments.map(apt => `
                 <tr>
-                    <td>Sophie Bernard</td>
-                    <td>02/03/2024 14:00</td>
-                    <td>Consultation</td>
-                    <td><a href="#" class="btn-action">Gérer</a></td>
+                    <td>${apt.client}</td>
+                    <td>${apt.date}</td>
+                    <td>${apt.type}</td>
+                    <td><a href="#" class="btn-action" onclick="showAppointmentDetails(${apt.id})">Gérer</a></td>
                 </tr>
-                <tr>
-                    <td>Pierre Dubois</td>
-                    <td>02/03/2024 15:30</td>
-                    <td>Suivi</td>
-                    <td><a href="#" class="btn-action">Gérer</a></td>
-                </tr>
-            `;
+            `).join('');
+
+            // Gestion du modal
+            const modal = document.getElementById('appointmentModal');
+            const closeBtn = document.querySelector('.close-modal');
+
+            closeBtn.onclick = function() {
+                modal.style.display = "none";
+            }
+
+            window.onclick = function(event) {
+                if (event.target == modal) {
+                    modal.style.display = "none";
+                }
+            }
+
+            // Rendre les données de test disponibles globalement
+            window.testData = testData;
         });
+
+        function showAppointmentDetails(appointmentId) {
+            const appointment = testData.appointments.find(apt => apt.id === appointmentId);
+            if (!appointment) return;
+
+            // Mise à jour du contenu du modal
+            document.getElementById('modalClientName').textContent = appointment.client;
+            document.getElementById('modalDate').textContent = appointment.date;
+            document.getElementById('modalType').textContent = appointment.type;
+            document.getElementById('modalPhone').textContent = appointment.phone;
+            document.getElementById('modalEmail').textContent = appointment.email;
+            document.getElementById('modalNotes').textContent = appointment.notes;
+
+            // Affichage du modal
+            document.getElementById('appointmentModal').style.display = "flex";
+        }
+
+        function showUserDetails(email) {
+            // Pour l'instant, on affiche juste une alerte
+            alert(`Détails de l'utilisateur ${email}\nFonctionnalité à venir`);
+        }
+
+        function updateAppointmentStatus(status) {
+            // Simulation de mise à jour du statut
+            alert(`Statut du rendez-vous mis à jour : ${status}`);
+            document.getElementById('appointmentModal').style.display = "none";
+        }
     </script>
 </body>
 </html> 
