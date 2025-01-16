@@ -189,6 +189,31 @@
             font-size: 0.8rem;
             margin-top: 0.5rem;
         }
+
+        .status-badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 15px;
+            background: #e6ffe6;
+            color: #27ae60;
+            font-size: 0.9rem;
+        }
+
+        .user-appointments-list {
+            list-style: none;
+            padding: 0;
+            margin: 0.5rem 0;
+        }
+
+        .user-appointments-list li {
+            padding: 0.5rem;
+            border-bottom: 1px solid #eee;
+            color: var(--text-color);
+        }
+
+        .user-appointments-list li:last-child {
+            border-bottom: none;
+        }
     </style>
 </head>
 <body>
@@ -319,6 +344,48 @@
                 </div>
             </div>
         </div>
+
+        <!-- Modal pour les détails utilisateur -->
+        <div id="userModal" class="modal" style="display: none;">
+            <div class="modal-content">
+                <span class="close-modal" onclick="closeUserModal()">&times;</span>
+                <h2>Détails de l'utilisateur</h2>
+                <div class="user-details">
+                    <div class="detail-group">
+                        <label>Nom :</label>
+                        <span id="userModalName"></span>
+                    </div>
+                    <div class="detail-group">
+                        <label>Email :</label>
+                        <span id="userModalEmail"></span>
+                    </div>
+                    <div class="detail-group">
+                        <label>Date d'inscription :</label>
+                        <span id="userModalDate"></span>
+                    </div>
+                    <div class="detail-group">
+                        <label>Statut :</label>
+                        <span id="userModalStatus" class="status-badge">Actif</span>
+                    </div>
+                    <div class="detail-group">
+                        <label>Dernière connexion :</label>
+                        <span id="userModalLastLogin">Aujourd'hui à 14:30</span>
+                    </div>
+                    <div class="detail-group">
+                        <label>Rendez-vous planifiés :</label>
+                        <ul id="userModalAppointments" class="user-appointments-list">
+                            <li>02/03/2024 14:00 - Consultation initiale</li>
+                            <li>15/03/2024 15:30 - Suivi mensuel</li>
+                        </ul>
+                    </div>
+                    <div class="modal-actions">
+                        <button class="btn-action" onclick="updateUserStatus('blocked')">Bloquer</button>
+                        <button class="btn-action" onclick="updateUserStatus('reset_password')">Réinitialiser mot de passe</button>
+                        <button class="btn-action" onclick="updateUserStatus('delete')">Supprimer</button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
     <script src="js/main.js"></script>
@@ -404,17 +471,22 @@
                 </tr>
             `).join('');
 
-            // Gestion du modal
-            const modal = document.getElementById('appointmentModal');
-            const closeBtn = document.querySelector('.close-modal');
+            // Gestion des modals
+            const appointmentModal = document.getElementById('appointmentModal');
+            const userModal = document.getElementById('userModal');
+            const closeBtns = document.querySelectorAll('.close-modal');
 
-            closeBtn.onclick = function() {
-                modal.style.display = "none";
-            }
+            closeBtns.forEach(btn => {
+                btn.onclick = function() {
+                    appointmentModal.style.display = "none";
+                    userModal.style.display = "none";
+                }
+            });
 
             window.onclick = function(event) {
-                if (event.target == modal) {
-                    modal.style.display = "none";
+                if (event.target == appointmentModal || event.target == userModal) {
+                    appointmentModal.style.display = "none";
+                    userModal.style.display = "none";
                 }
             }
 
@@ -439,8 +511,37 @@
         }
 
         function showUserDetails(email) {
-            // Pour l'instant, on affiche juste une alerte
-            alert(`Détails de l'utilisateur ${email}\nFonctionnalité à venir`);
+            const user = testData.users.find(u => u.email === email);
+            if (!user) return;
+
+            // Mise à jour du contenu du modal
+            document.getElementById('userModalName').textContent = user.name;
+            document.getElementById('userModalEmail').textContent = user.email;
+            document.getElementById('userModalDate').textContent = user.date;
+
+            // Affichage du modal
+            document.getElementById('userModal').style.display = "flex";
+        }
+
+        function closeUserModal() {
+            document.getElementById('userModal').style.display = "none";
+        }
+
+        function updateUserStatus(action) {
+            let message;
+            switch(action) {
+                case 'blocked':
+                    message = 'Utilisateur bloqué';
+                    break;
+                case 'reset_password':
+                    message = 'Email de réinitialisation envoyé';
+                    break;
+                case 'delete':
+                    message = 'Utilisateur supprimé';
+                    break;
+            }
+            alert(message);
+            closeUserModal();
         }
 
         function updateAppointmentStatus(status) {
