@@ -11,95 +11,118 @@
 <body>
     <header>
         <nav>
-            <div class="logo">MentalSerenity</div>
+            <div class="logo">
+                <a href="index.html" style="text-decoration: none; color: inherit;">MentalSerenity</a>
+            </div>
             <ul>
                 <li><a href="index.html">Accueil</a></li>
-                <li><a href="#" class="active">Administration</a></li>
-                <li><a href="#" id="logout-btn">Déconnexion</a></li>
+                <li><a href="index.html#services">Nos Services</a></li>
+                <li><a href="rendez-vous.html">Prendre RDV</a></li>
+                <li><a href="#" onclick="logout()">Déconnexion</a></li>
             </ul>
         </nav>
     </header>
 
-    <main class="admin-container">
+    <div class="admin-container">
         <aside class="admin-sidebar">
             <nav class="admin-nav">
-                <a href="#dashboard" class="active"><i class="fas fa-chart-line"></i> Tableau de bord</a>
-                <a href="#employees"><i class="fas fa-users"></i> Gestion des employés</a>
-                <a href="#settings"><i class="fas fa-cog"></i> Paramètres</a>
+                <a href="#planning" class="active" onclick="showSection('planning')">
+                    <i class="fas fa-calendar"></i>Planning
+                </a>
+                <a href="#clients" onclick="showSection('clients')">
+                    <i class="fas fa-users"></i>Liste des clients
+                </a>
+                <a href="#employees" onclick="showSection('employees')">
+                    <i class="fas fa-user-tie"></i>Gestion des employés
+                </a>
+                <a href="#chat" onclick="showSection('chat')">
+                    <i class="fas fa-comments"></i>Messagerie
+                </a>
+                <a href="#settings" onclick="showSection('settings')">
+                    <i class="fas fa-cog"></i>Paramètres
+                </a>
             </nav>
         </aside>
 
-        <div class="admin-content">
-            <section id="employees" class="admin-section">
-                <div class="section-header">
-                    <h2>Gestion des employés</h2>
-                    <button class="add-employee-btn">
-                        <i class="fas fa-plus"></i> Ajouter un employé
-                    </button>
-                </div>
-
-                <div class="employees-list">
-                    <div class="employee-filters">
-                        <input type="text" placeholder="Rechercher un employé..." class="search-input">
-                        <select class="filter-select">
-                            <option value="all">Tous les rôles</option>
-                            <option value="psychologue">Psychologue</option>
-                            <option value="admin">Administrateur</option>
-                        </select>
+        <main class="admin-content">
+            <!-- Section Planning -->
+            <section id="planning" class="admin-section active">
+                <h2>Planning des rendez-vous</h2>
+                <div class="admin-calendar">
+                    <div class="calendar-header">
+                        <button class="btn-primary" onclick="previousMonth()">
+                            <i class="fas fa-chevron-left"></i>
+                        </button>
+                        <h3 id="current-month">Septembre 2023</h3>
+                        <button class="btn-primary" onclick="nextMonth()">
+                            <i class="fas fa-chevron-right"></i>
+                        </button>
                     </div>
-
-                    <table class="employees-table">
-                        <thead>
-                            <tr>
-                                <th>Nom</th>
-                                <th>Email</th>
-                                <th>Rôle</th>
-                                <th>Statut</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody id="employeesList">
-                            <!-- Les employés seront ajoutés dynamiquement ici -->
-                        </tbody>
-                    </table>
+                    <div class="calendar-grid" id="calendar-grid">
+                        <!-- Le calendrier sera généré en JavaScript -->
+                    </div>
+                </div>
+                <div id="appointments-list">
+                    <!-- La liste des rendez-vous sera générée en JavaScript -->
                 </div>
             </section>
-        </div>
-    </main>
 
-    <!-- Modal pour ajouter/modifier un employé -->
-    <div id="employeeModal" class="modal">
-        <div class="modal-content">
-            <h3>Gérer un employé</h3>
-            <form id="employeeForm">
-                <div class="form-group">
-                    <label>Nom</label>
-                    <input type="text" name="name" required>
+            <!-- Section Clients -->
+            <section id="clients" class="admin-section">
+                <h2>Liste des clients</h2>
+                <div class="search-filters">
+                    <input type="text" placeholder="Rechercher un client..." onkeyup="filterClients(this.value)">
                 </div>
-                <div class="form-group">
-                    <label>Email</label>
-                    <input type="email" name="email" required>
+                <div class="clients-list" id="clients-list">
+                    <!-- La liste des clients sera générée en JavaScript -->
                 </div>
-                <div class="form-group">
-                    <label>Rôle</label>
-                    <select name="role" required>
-                        <option value="psychologue">Psychologue</option>
-                        <option value="admin">Administrateur</option>
-                    </select>
+            </section>
+
+            <!-- Section Employés -->
+            <section id="employees" class="admin-section">
+                <h2>Gestion des employés</h2>
+                <button class="btn-primary" onclick="showAddEmployeeModal()">
+                    <i class="fas fa-plus"></i> Ajouter un employé
+                </button>
+                <div class="employees-list" id="employees-list">
+                    <!-- La liste des employés sera générée en JavaScript -->
                 </div>
-                <div class="form-group">
-                    <label>Statut</label>
-                    <select name="status">
-                        <option value="active">Actif</option>
-                        <option value="inactive">Inactif</option>
-                    </select>
+            </section>
+
+            <!-- Section Chat -->
+            <section id="chat" class="admin-section">
+                <h2>Messagerie</h2>
+                <div class="chat-container">
+                    <div class="chat-messages" id="chat-messages">
+                        <!-- Les messages seront générés en JavaScript -->
+                    </div>
+                    <div class="chat-input">
+                        <input type="text" placeholder="Écrivez votre message..." id="message-input">
+                        <button onclick="sendMessage()">Envoyer</button>
+                    </div>
                 </div>
-                <div class="form-actions">
-                    <button type="button" class="cancel-btn">Annuler</button>
-                    <button type="submit" class="save-btn">Enregistrer</button>
+            </section>
+
+            <!-- Section Paramètres -->
+            <section id="settings" class="admin-section">
+                <h2>Paramètres</h2>
+                <div class="settings-form">
+                    <div class="form-group">
+                        <label>Nom de l'établissement</label>
+                        <input type="text" value="MentalSerenity">
+                    </div>
+                    <div class="form-group">
+                        <label>Email de contact</label>
+                        <input type="email" value="contact@mentalserenity.fr">
+                    </div>
+                    <div class="form-group">
+                        <label>Horaires d'ouverture</label>
+                        <input type="text" value="Lun-Ven: 9h-18h">
+                    </div>
+                    <button class="btn-primary" onclick="saveSettings()">Enregistrer</button>
                 </div>
-            </form>
-        </div>
+            </section>
+        </main>
     </div>
 
     <script src="js/admin.js"></script>

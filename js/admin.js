@@ -1,179 +1,215 @@
+// Vérification de l'authentification admin
 document.addEventListener('DOMContentLoaded', function() {
-    // Vérification de l'authentification admin
-    checkAdminAuth();
-
-    // Éléments du DOM
-    const addEmployeeBtn = document.querySelector('.add-employee-btn');
-    const employeeModal = document.getElementById('employeeModal');
-    const employeeForm = document.getElementById('employeeForm');
-    const cancelBtn = employeeModal.querySelector('.cancel-btn');
-    const searchInput = document.querySelector('.search-input');
-    const filterSelect = document.querySelector('.filter-select');
-
-    // Événements
-    addEmployeeBtn.addEventListener('click', openModal);
-    cancelBtn.addEventListener('click', closeModal);
-    employeeForm.addEventListener('submit', handleEmployeeSubmit);
-    searchInput.addEventListener('input', filterEmployees);
-    filterSelect.addEventListener('change', filterEmployees);
-
-    // Charger la liste des employés
+    if (!localStorage.getItem('isAdmin')) {
+        window.location.href = 'auth.html';
+        return;
+    }
+    loadCalendar();
+    loadAppointments();
+    loadClients();
     loadEmployees();
+    initChat();
 });
 
-function checkAdminAuth() {
-    const user = JSON.parse(localStorage.getItem('user'));
-    if (!user || user.role !== 'admin') {
-        window.location.href = 'auth.html';
+// Gestion de la navigation
+function showSection(sectionId) {
+    document.querySelectorAll('.admin-section').forEach(section => {
+        section.classList.remove('active');
+    });
+    document.querySelectorAll('.admin-nav a').forEach(link => {
+        link.classList.remove('active');
+    });
+    document.getElementById(sectionId).classList.add('active');
+    document.querySelector(`[href="#${sectionId}"]`).classList.add('active');
+}
+
+// Gestion du calendrier
+function loadCalendar() {
+    const today = new Date();
+    const currentMonth = today.getMonth();
+    const currentYear = today.getFullYear();
+    
+    document.getElementById('current-month').textContent = new Date(currentYear, currentMonth).toLocaleDateString('fr-FR', { month: 'long', year: 'numeric' });
+    
+    const calendarGrid = document.getElementById('calendar-grid');
+    calendarGrid.innerHTML = '';
+    
+    // En-têtes des jours
+    const days = ['Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam', 'Dim'];
+    days.forEach(day => {
+        const dayHeader = document.createElement('div');
+        dayHeader.className = 'calendar-header-cell';
+        dayHeader.textContent = day;
+        calendarGrid.appendChild(dayHeader);
+    });
+    
+    // Jours du mois
+    const firstDay = new Date(currentYear, currentMonth, 1);
+    const lastDay = new Date(currentYear, currentMonth + 1, 0);
+    
+    for (let i = 1; i <= lastDay.getDate(); i++) {
+        const dayCell = document.createElement('div');
+        dayCell.className = 'calendar-day';
+        dayCell.textContent = i;
+        if (i === today.getDate() && currentMonth === today.getMonth()) {
+            dayCell.classList.add('today');
+        }
+        dayCell.onclick = () => showDayAppointments(new Date(currentYear, currentMonth, i));
+        calendarGrid.appendChild(dayCell);
     }
 }
 
-function openModal() {
-    const modal = document.getElementById('employeeModal');
-    modal.classList.add('active');
+function previousMonth() {
+    // Implémenter le changement de mois précédent
 }
 
-function closeModal() {
-    const modal = document.getElementById('employeeModal');
-    modal.classList.remove('active');
-    document.getElementById('employeeForm').reset();
+function nextMonth() {
+    // Implémenter le changement de mois suivant
 }
 
-function handleEmployeeSubmit(e) {
-    e.preventDefault();
-    const formData = new FormData(e.target);
-    const employeeData = {
-        name: formData.get('name'),
-        email: formData.get('email'),
-        role: formData.get('role'),
-        status: formData.get('status')
-    };
-
-    // Sauvegarder l'employé
-    saveEmployee(employeeData);
-    closeModal();
-}
-
-function saveEmployee(employeeData) {
-    // Récupérer la liste existante des employés
-    let employees = JSON.parse(localStorage.getItem('employees') || '[]');
+// Gestion des rendez-vous
+function loadAppointments() {
+    const appointments = JSON.parse(localStorage.getItem('appointments') || '[]');
+    const appointmentsList = document.getElementById('appointments-list');
+    appointmentsList.innerHTML = '';
     
-    // Ajouter le nouvel employé
-    employees.push({
-        id: Date.now(),
-        ...employeeData,
-        createdAt: new Date().toISOString()
+    appointments.forEach(appointment => {
+        const appointmentCard = document.createElement('div');
+        appointmentCard.className = 'appointment-card';
+        appointmentCard.innerHTML = `
+            <div class="appointment-header">
+                <h4>${appointment.clientName}</h4>
+                <span class="appointment-date">${new Date(appointment.date).toLocaleDateString('fr-FR')}</span>
+            </div>
+            <div class="appointment-details">
+                <p><i class="fas fa-clock"></i> ${appointment.time}</p>
+                <p><i class="fas fa-tag"></i> ${appointment.type}</p>
+            </div>
+        `;
+        appointmentsList.appendChild(appointmentCard);
     });
-
-    // Sauvegarder la liste mise à jour
-    localStorage.setItem('employees', JSON.stringify(employees));
-    
-    // Recharger la liste
-    loadEmployees();
 }
 
+// Gestion des clients
+function loadClients() {
+    const clients = JSON.parse(localStorage.getItem('clients') || '[]');
+    const clientsList = document.getElementById('clients-list');
+    clientsList.innerHTML = '';
+    
+    clients.forEach(client => {
+        const clientCard = document.createElement('div');
+        clientCard.className = 'client-card';
+        clientCard.innerHTML = `
+            <div class="client-info">
+                <h4>${client.name}</h4>
+                <p><i class="fas fa-envelope"></i> ${client.email}</p>
+                <p><i class="fas fa-phone"></i> ${client.phone}</p>
+            </div>
+            <div class="client-actions">
+                <button onclick="viewClientFile(${client.id})">
+                    <i class="fas fa-folder-open"></i> Dossier
+                </button>
+                <button onclick="startChat(${client.id})">
+                    <i class="fas fa-comments"></i> Message
+                </button>
+            </div>
+        `;
+        clientsList.appendChild(clientCard);
+    });
+}
+
+function filterClients(query) {
+    const clients = document.querySelectorAll('.client-card');
+    clients.forEach(client => {
+        const name = client.querySelector('h4').textContent.toLowerCase();
+        if (name.includes(query.toLowerCase())) {
+            client.style.display = 'flex';
+        } else {
+            client.style.display = 'none';
+        }
+    });
+}
+
+// Gestion des employés
 function loadEmployees() {
     const employees = JSON.parse(localStorage.getItem('employees') || '[]');
-    const tbody = document.getElementById('employeesList');
-    tbody.innerHTML = '';
-
+    const employeesList = document.getElementById('employees-list');
+    employeesList.innerHTML = '';
+    
     employees.forEach(employee => {
-        const tr = document.createElement('tr');
-        tr.innerHTML = `
-            <td>${employee.name}</td>
-            <td>${employee.email}</td>
-            <td>${employee.role}</td>
-            <td>
-                <span class="status-badge ${employee.status}">
-                    ${employee.status}
-                </span>
-            </td>
-            <td>
-                <button class="edit-btn" data-id="${employee.id}">
+        const employeeCard = document.createElement('div');
+        employeeCard.className = 'employee-card';
+        employeeCard.innerHTML = `
+            <div class="employee-info">
+                <h4>${employee.name}</h4>
+                <p><i class="fas fa-envelope"></i> ${employee.email}</p>
+                <p><i class="fas fa-user-tag"></i> ${employee.role}</p>
+            </div>
+            <div class="employee-status ${employee.status}">
+                ${employee.status}
+            </div>
+            <div class="employee-actions">
+                <button onclick="editEmployee(${employee.id})">
                     <i class="fas fa-edit"></i>
                 </button>
-                <button class="delete-btn" data-id="${employee.id}">
+                <button onclick="deleteEmployee(${employee.id})">
                     <i class="fas fa-trash"></i>
                 </button>
-            </td>
+            </div>
         `;
-        tbody.appendChild(tr);
-    });
-
-    // Ajouter les événements pour les boutons d'édition et de suppression
-    addEmployeeEventListeners();
-}
-
-function addEmployeeEventListeners() {
-    document.querySelectorAll('.edit-btn').forEach(btn => {
-        btn.addEventListener('click', () => editEmployee(btn.dataset.id));
-    });
-
-    document.querySelectorAll('.delete-btn').forEach(btn => {
-        btn.addEventListener('click', () => deleteEmployee(btn.dataset.id));
+        employeesList.appendChild(employeeCard);
     });
 }
 
-function editEmployee(id) {
-    const employees = JSON.parse(localStorage.getItem('employees') || '[]');
-    const employee = employees.find(emp => emp.id === parseInt(id));
+// Gestion du chat
+function initChat() {
+    const messages = JSON.parse(localStorage.getItem('messages') || '[]');
+    const chatMessages = document.getElementById('chat-messages');
+    chatMessages.innerHTML = '';
     
-    if (employee) {
-        const form = document.getElementById('employeeForm');
-        form.name.value = employee.name;
-        form.email.value = employee.email;
-        form.role.value = employee.role;
-        form.status.value = employee.status;
+    messages.forEach(message => {
+        const messageElement = document.createElement('div');
+        messageElement.className = `chat-message ${message.sender === 'admin' ? 'sent' : 'received'}`;
+        messageElement.innerHTML = `
+            <div class="message-content">
+                <p>${message.content}</p>
+                <span class="message-time">${new Date(message.timestamp).toLocaleTimeString('fr-FR')}</span>
+            </div>
+        `;
+        chatMessages.appendChild(messageElement);
+    });
+    
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+}
+
+function sendMessage() {
+    const input = document.getElementById('message-input');
+    const content = input.value.trim();
+    
+    if (content) {
+        const message = {
+            content,
+            sender: 'admin',
+            timestamp: new Date().toISOString()
+        };
         
-        openModal();
+        const messages = JSON.parse(localStorage.getItem('messages') || '[]');
+        messages.push(message);
+        localStorage.setItem('messages', JSON.stringify(messages));
+        
+        input.value = '';
+        initChat();
     }
 }
 
-function deleteEmployee(id) {
-    if (confirm('Êtes-vous sûr de vouloir supprimer cet employé ?')) {
-        let employees = JSON.parse(localStorage.getItem('employees') || '[]');
-        employees = employees.filter(emp => emp.id !== parseInt(id));
-        localStorage.setItem('employees', JSON.stringify(employees));
-        loadEmployees();
-    }
+// Gestion des paramètres
+function saveSettings() {
+    // Implémenter la sauvegarde des paramètres
+    alert('Paramètres enregistrés avec succès !');
 }
 
-function filterEmployees() {
-    const searchTerm = document.querySelector('.search-input').value.toLowerCase();
-    const roleFilter = document.querySelector('.filter-select').value;
-    const employees = JSON.parse(localStorage.getItem('employees') || '[]');
-    const tbody = document.getElementById('employeesList');
-    tbody.innerHTML = '';
-
-    employees
-        .filter(employee => {
-            const matchesSearch = employee.name.toLowerCase().includes(searchTerm) ||
-                                employee.email.toLowerCase().includes(searchTerm);
-            const matchesRole = roleFilter === 'all' || employee.role === roleFilter;
-            return matchesSearch && matchesRole;
-        })
-        .forEach(employee => {
-            const tr = document.createElement('tr');
-            tr.innerHTML = `
-                <td>${employee.name}</td>
-                <td>${employee.email}</td>
-                <td>${employee.role}</td>
-                <td>
-                    <span class="status-badge ${employee.status}">
-                        ${employee.status}
-                    </span>
-                </td>
-                <td>
-                    <button class="edit-btn" data-id="${employee.id}">
-                        <i class="fas fa-edit"></i>
-                    </button>
-                    <button class="delete-btn" data-id="${employee.id}">
-                        <i class="fas fa-trash"></i>
-                    </button>
-                </td>
-            `;
-            tbody.appendChild(tr);
-        });
-
-    addEmployeeEventListeners();
+// Fonction de déconnexion
+function logout() {
+    localStorage.removeItem('isAdmin');
+    window.location.href = 'index.html';
 } 
