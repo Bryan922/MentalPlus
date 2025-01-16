@@ -3,142 +3,172 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Administration - MentalSerenity</title>
+    <title>Espace Admin - MentalSerenity</title>
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/admin.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
-    <header>
-        <nav>
-            <div class="logo">
-                <a href="index.html" style="text-decoration: none; color: inherit;">MentalSerenity</a>
-            </div>
-            <ul>
-                <li><a href="index.html">Accueil</a></li>
-                <li><a href="index.html#services">Nos Services</a></li>
-                <li><a href="rendez-vous.html">Prendre RDV</a></li>
-                <li><a href="#" onclick="logout()">Déconnexion</a></li>
-            </ul>
-        </nav>
-    </header>
+    <nav class="navbar">
+        <div class="logo">
+            <a href="index.html">MentalSerenity</a>
+        </div>
+        <div class="auth-buttons">
+            <!-- Les boutons seront ajoutés dynamiquement par le JavaScript -->
+        </div>
+    </nav>
 
     <div class="admin-container">
-        <aside class="admin-sidebar">
-            <nav class="admin-nav">
-                <a href="#planning" class="active" onclick="showSection('planning')">
-                    <i class="fas fa-calendar"></i>Planning
-                </a>
-                <a href="#clients" onclick="showSection('clients')">
-                    <i class="fas fa-users"></i>Liste des clients
-                </a>
-                <a href="#employees" onclick="showSection('employees')">
-                    <i class="fas fa-user-tie"></i>Gestion des employés
-                </a>
-                <a href="#chat" onclick="showSection('chat')">
-                    <i class="fas fa-comments"></i>Messagerie
-                </a>
-                <a href="#settings" onclick="showSection('settings')">
-                    <i class="fas fa-cog"></i>Paramètres
-                </a>
-            </nav>
-        </aside>
+        <!-- Menu de navigation -->
+        <div class="admin-nav">
+            <button class="nav-item active" data-section="dashboard">
+                <i class="fas fa-chart-line"></i>
+                <span>Tableau de bord</span>
+            </button>
+            <button class="nav-item" data-section="appointments">
+                <i class="fas fa-calendar-alt"></i>
+                <span>Rendez-vous</span>
+            </button>
+            <button class="nav-item" data-section="admins">
+                <i class="fas fa-user-shield"></i>
+                <span>Administrateurs</span>
+            </button>
+        </div>
 
-        <main class="admin-content">
-            <!-- Section Planning -->
-            <section id="planning" class="admin-section active">
-                <h2>Planning des rendez-vous</h2>
-                <div class="admin-calendar">
-                    <div class="calendar-header">
-                        <button class="btn-primary" onclick="previousMonth()">
+        <!-- Section Tableau de bord -->
+        <div class="admin-section dashboard-section active">
+            <!-- Statistiques -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <i class="fas fa-calendar-day"></i>
+                    </div>
+                    <div class="stat-value today-appointments-count">0</div>
+                    <div class="stat-label">Rendez-vous aujourd'hui</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <i class="fas fa-calendar-week"></i>
+                    </div>
+                    <div class="stat-value week-appointments-count">0</div>
+                    <div class="stat-label">Rendez-vous cette semaine</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div class="stat-value total-clients-count">0</div>
+                    <div class="stat-label">Clients inscrits</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <i class="fas fa-calendar-check"></i>
+                    </div>
+                    <div class="stat-value total-appointments-count">0</div>
+                    <div class="stat-label">Total des rendez-vous</div>
+                </div>
+            </div>
+
+            <!-- Rendez-vous du jour -->
+            <div class="today-appointments">
+                <h3><i class="fas fa-calendar-day"></i> Rendez-vous du jour</h3>
+                <div class="today-appointments-list">
+                    <!-- Les rendez-vous seront ajoutés dynamiquement ici -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Section Rendez-vous -->
+        <div class="admin-section appointments-section">
+            <!-- Calendrier -->
+            <div class="calendar-container">
+                <div class="calendar-header">
+                    <h3>Janvier 2024</h3>
+                    <div class="calendar-nav">
+                        <button class="prev-month">
                             <i class="fas fa-chevron-left"></i>
+                            Précédent
                         </button>
-                        <h3 id="current-month">Septembre 2023</h3>
-                        <button class="btn-primary" onclick="nextMonth()">
+                        <button class="next-month">
+                            Suivant
                             <i class="fas fa-chevron-right"></i>
                         </button>
                     </div>
-                    <div class="calendar-grid" id="calendar-grid">
-                        <!-- Le calendrier sera généré en JavaScript -->
-                    </div>
                 </div>
-                <div id="appointments-list" class="appointments-list">
-                    <h3>Rendez-vous du jour</h3>
-                    <!-- La liste des rendez-vous sera générée en JavaScript -->
+                <div class="calendar-grid">
+                    <!-- Le calendrier sera généré dynamiquement ici -->
                 </div>
-            </section>
+            </div>
+        </div>
 
-            <!-- Section Clients -->
-            <section id="clients" class="admin-section">
-                <h2>Liste des clients</h2>
-                <div class="search-filters">
-                    <input type="text" placeholder="Rechercher un client..." onkeyup="filterClients(this.value)">
-                </div>
-                <div class="clients-list" id="clients-list">
-                    <!-- La liste des clients sera générée en JavaScript -->
-                </div>
-            </section>
-
-            <!-- Section Employés -->
-            <section id="employees" class="admin-section">
-                <h2>Gestion des employés</h2>
-                <button class="btn-primary" onclick="showAddEmployeeModal()">
-                    <i class="fas fa-plus"></i> Ajouter un employé
+        <!-- Section Administrateurs -->
+        <div class="admin-section admins-section">
+            <div class="section-header">
+                <h2>Gestion des administrateurs</h2>
+                <button class="btn-action" onclick="showAddAdminModal()">
+                    <i class="fas fa-plus"></i> Nouvel administrateur
                 </button>
-                <div class="employees-list" id="employees-list">
-                    <!-- La liste des employés sera générée en JavaScript -->
-                </div>
-            </section>
+            </div>
 
-            <!-- Section Chat -->
-            <section id="chat" class="admin-section">
-                <h2>Messagerie</h2>
-                <div class="chat-container">
-                    <div class="chat-header">
-                        <select class="chat-recipient-select" id="chat-recipient" onchange="changeRecipient()">
-                            <option value="">Sélectionner un destinataire...</option>
-                            <optgroup label="Employés">
-                                <!-- Les employés seront ajoutés en JavaScript -->
-                            </optgroup>
-                            <optgroup label="Clients">
-                                <!-- Les clients seront ajoutés en JavaScript -->
-                            </optgroup>
-                        </select>
-                    </div>
-                    <div class="chat-messages" id="chat-messages">
-                        <!-- Les messages seront générés en JavaScript -->
-                    </div>
-                    <div class="chat-input">
-                        <input type="text" placeholder="Écrivez votre message..." id="message-input">
-                        <button class="btn-primary" onclick="sendMessage()">
-                            <i class="fas fa-paper-plane"></i> Envoyer
-                        </button>
-                    </div>
-                </div>
-            </section>
-
-            <!-- Section Paramètres -->
-            <section id="settings" class="admin-section">
-                <h2>Paramètres</h2>
-                <div class="settings-form">
-                    <div class="form-group">
-                        <label>Nom de l'établissement</label>
-                        <input type="text" value="MentalSerenity">
-                    </div>
-                    <div class="form-group">
-                        <label>Email de contact</label>
-                        <input type="email" value="contact@mentalserenity.fr">
-                    </div>
-                    <div class="form-group">
-                        <label>Horaires d'ouverture</label>
-                        <input type="text" value="Lun-Ven: 9h-18h">
-                    </div>
-                    <button class="btn-primary" onclick="saveSettings()">Enregistrer</button>
-                </div>
-            </section>
-        </main>
+            <div class="admins-list">
+                <!-- La liste des administrateurs sera générée dynamiquement ici -->
+            </div>
+        </div>
     </div>
 
+    <!-- Template pour le modal d'ajout d'administrateur -->
+    <template id="add-admin-modal">
+        <div class="modal">
+            <div class="modal-content">
+                <h3>Ajouter un administrateur</h3>
+                <form id="add-admin-form">
+                    <div class="form-group">
+                        <label>Nom</label>
+                        <input type="text" name="name" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Email</label>
+                        <input type="email" name="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Mot de passe</label>
+                        <input type="password" name="password" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Droits d'accès</label>
+                        <div class="permissions-grid">
+                            <label class="permission-item">
+                                <input type="checkbox" name="permissions" value="dashboard">
+                                <span>Tableau de bord</span>
+                            </label>
+                            <label class="permission-item">
+                                <input type="checkbox" name="permissions" value="appointments">
+                                <span>Gestion des rendez-vous</span>
+                            </label>
+                            <label class="permission-item">
+                                <input type="checkbox" name="permissions" value="clients">
+                                <span>Gestion des clients</span>
+                            </label>
+                            <label class="permission-item">
+                                <input type="checkbox" name="permissions" value="employees">
+                                <span>Gestion des employés</span>
+                            </label>
+                            <label class="permission-item">
+                                <input type="checkbox" name="permissions" value="admins">
+                                <span>Gestion des administrateurs</span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="modal-actions">
+                        <button type="button" class="btn-cancel" onclick="closeModal()">Annuler</button>
+                        <button type="submit" class="btn-action">Ajouter</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </template>
+
+    <script src="js/auth.js"></script>
     <script src="js/admin.js"></script>
 </body>
 </html> 
