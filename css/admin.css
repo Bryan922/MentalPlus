@@ -2,9 +2,10 @@
 .admin-container {
     display: grid;
     grid-template-columns: 250px 1fr;
-    min-height: calc(100vh - 80px);
+    height: calc(100vh - 80px);
     padding-top: 2rem;
     gap: 2rem;
+    overflow-y: auto;
 }
 
 /* Sidebar */
@@ -89,22 +90,45 @@
 .calendar-day {
     aspect-ratio: 1;
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
     background: #f5f5f5;
     border-radius: 8px;
     cursor: pointer;
     transition: all 0.3s ease;
+    position: relative;
+    padding: 0.5rem;
+}
+
+.calendar-day .appointment-count {
+    position: absolute;
+    top: 2px;
+    right: 2px;
+    background: var(--primary-color);
+    color: white;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    font-size: 0.8rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .calendar-day:hover {
-    background: var(--primary-color);
-    color: white;
+    background: #e0e0e0;
+    transform: translateY(-2px);
 }
 
 .calendar-day.today {
     background: var(--primary-color);
     color: white;
+    font-weight: bold;
+}
+
+.calendar-day.has-appointments {
+    border: 2px solid var(--primary-color);
 }
 
 /* Liste des rendez-vous */
@@ -240,12 +264,43 @@
 
 /* Chat */
 .chat-container {
-    display: flex;
-    flex-direction: column;
+    display: grid;
+    grid-template-rows: auto 1fr auto;
     height: 500px;
     background: #f5f5f5;
     border-radius: 8px;
     overflow: hidden;
+}
+
+.chat-header {
+    padding: 1rem;
+    background: white;
+    border-bottom: 1px solid #ddd;
+}
+
+.chat-recipient-select {
+    width: 100%;
+    padding: 0.8rem;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+    font-size: 1rem;
+}
+
+.chat-input button {
+    background: var(--primary-color);
+    color: white;
+    padding: 0.8rem 1.5rem;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.chat-input button:hover {
+    background: var(--secondary-color);
+    transform: translateY(-2px);
 }
 
 .chat-messages {

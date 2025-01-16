@@ -43,20 +43,80 @@ function loadCalendar() {
         calendarGrid.appendChild(dayHeader);
     });
     
+    // Récupérer tous les rendez-vous
+    const appointments = JSON.parse(localStorage.getItem('appointments') || '[]');
+    
     // Jours du mois
     const firstDay = new Date(currentYear, currentMonth, 1);
     const lastDay = new Date(currentYear, currentMonth + 1, 0);
     
     for (let i = 1; i <= lastDay.getDate(); i++) {
+        const currentDate = new Date(currentYear, currentMonth, i);
+        const dayAppointments = appointments.filter(apt => {
+            const aptDate = new Date(apt.date);
+            return aptDate.getDate() === i && 
+                   aptDate.getMonth() === currentMonth && 
+                   aptDate.getFullYear() === currentYear;
+        });
+        
         const dayCell = document.createElement('div');
         dayCell.className = 'calendar-day';
-        dayCell.textContent = i;
+        if (dayAppointments.length > 0) {
+            dayCell.classList.add('has-appointments');
+            const count = document.createElement('span');
+            count.className = 'appointment-count';
+            count.textContent = dayAppointments.length;
+            dayCell.appendChild(count);
+        }
+        
+        const dayNumber = document.createElement('span');
+        dayNumber.textContent = i;
+        dayCell.appendChild(dayNumber);
+        
         if (i === today.getDate() && currentMonth === today.getMonth()) {
             dayCell.classList.add('today');
         }
-        dayCell.onclick = () => showDayAppointments(new Date(currentYear, currentMonth, i));
+        
+        dayCell.onclick = () => showDayAppointments(currentDate);
         calendarGrid.appendChild(dayCell);
     }
+}
+
+function showDayAppointments(date) {
+    const appointments = JSON.parse(localStorage.getItem('appointments') || '[]');
+    const dayAppointments = appointments.filter(apt => {
+        const aptDate = new Date(apt.date);
+        return aptDate.getDate() === date.getDate() && 
+               aptDate.getMonth() === date.getMonth() && 
+               aptDate.getFullYear() === date.getFullYear();
+    });
+    
+    const appointmentsList = document.getElementById('appointments-list');
+    appointmentsList.innerHTML = `<h3>Rendez-vous du ${date.toLocaleDateString('fr-FR')}</h3>`;
+    
+    if (dayAppointments.length === 0) {
+        appointmentsList.innerHTML += '<p>Aucun rendez-vous pour cette date</p>';
+        return;
+    }
+    
+    dayAppointments.sort((a, b) => a.time.localeCompare(b.time));
+    
+    dayAppointments.forEach(appointment => {
+        const appointmentCard = document.createElement('div');
+        appointmentCard.className = 'appointment-card';
+        appointmentCard.innerHTML = `
+            <div class="appointment-header">
+                <h4>${appointment.clientName}</h4>
+                <span class="appointment-time">${appointment.time}</span>
+            </div>
+            <div class="appointment-details">
+                <p><i class="fas fa-tag"></i> ${appointment.type}</p>
+                <p><i class="fas fa-user-md"></i> ${appointment.therapist || 'Non assigné'}</p>
+                <p><i class="fas fa-comment"></i> ${appointment.notes || 'Aucune note'}</p>
+            </div>
+        `;
+        appointmentsList.appendChild(appointmentCard);
+    });
 }
 
 function previousMonth() {
@@ -163,13 +223,45 @@ function loadEmployees() {
 
 // Gestion du chat
 function initChat() {
-    const messages = JSON.parse(localStorage.getItem('messages') || '[]');
+    loadChatRecipients();
+    loadMessages();
+}
+
+function loadChatRecipients() {
+    const select = document.getElementById('chat-recipient');
+    const employeesGroup = select.querySelector('optgroup[label="Employés"]');
+    const clientsGroup = select.querySelector('optgroup[label="Clients"]');
+    
+    // Charger les employés
+    const employees = JSON.parse(localStorage.getItem('employees') || '[]');
+    employeesGroup.innerHTML = employees.map(emp => 
+        `<option value="emp_${emp.id}">${emp.name} (${emp.role})</option>`
+    ).join('');
+    
+    // Charger les clients
+    const clients = JSON.parse(localStorage.getItem('clients') || '[]');
+    clientsGroup.innerHTML = clients.map(client => 
+        `<option value="client_${client.id}">${client.name}</option>`
+    ).join('');
+}
+
+function loadMessages() {
+    const recipientId = document.getElementById('chat-recipient').value;
+    if (!recipientId) {
+        document.getElementById('chat-messages').innerHTML = 
+            '<div class="chat-placeholder">Sélectionnez un destinataire pour voir les messages</div>';
+        return;
+    }
+    
+    const messages = JSON.parse(localStorage.getItem('messages') || '[]')
+        .filter(msg => msg.recipientId === recipientId || msg.senderId === recipientId);
+    
     const chatMessages = document.getElementById('chat-messages');
     chatMessages.innerHTML = '';
     
     messages.forEach(message => {
         const messageElement = document.createElement('div');
-        messageElement.className = `chat-message ${message.sender === 'admin' ? 'sent' : 'received'}`;
+        messageElement.className = `chat-message ${message.senderId === 'admin' ? 'sent' : 'received'}`;
         messageElement.innerHTML = `
             <div class="message-content">
                 <p>${message.content}</p>
@@ -182,14 +274,25 @@ function initChat() {
     chatMessages.scrollTop = chatMessages.scrollHeight;
 }
 
+function changeRecipient() {
+    loadMessages();
+}
+
 function sendMessage() {
+    const recipientId = document.getElementById('chat-recipient').value;
+    if (!recipientId) {
+        alert('Veuillez sélectionner un destinataire');
+        return;
+    }
+    
     const input = document.getElementById('message-input');
     const content = input.value.trim();
     
     if (content) {
         const message = {
             content,
-            sender: 'admin',
+            senderId: 'admin',
+            recipientId,
             timestamp: new Date().toISOString()
         };
         
@@ -198,7 +301,7 @@ function sendMessage() {
         localStorage.setItem('messages', JSON.stringify(messages));
         
         input.value = '';
-        initChat();
+        loadMessages();
     }
 }
 

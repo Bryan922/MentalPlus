@@ -62,7 +62,8 @@
                         <!-- Le calendrier sera généré en JavaScript -->
                     </div>
                 </div>
-                <div id="appointments-list">
+                <div id="appointments-list" class="appointments-list">
+                    <h3>Rendez-vous du jour</h3>
                     <!-- La liste des rendez-vous sera générée en JavaScript -->
                 </div>
             </section>
@@ -93,12 +94,25 @@
             <section id="chat" class="admin-section">
                 <h2>Messagerie</h2>
                 <div class="chat-container">
+                    <div class="chat-header">
+                        <select class="chat-recipient-select" id="chat-recipient" onchange="changeRecipient()">
+                            <option value="">Sélectionner un destinataire...</option>
+                            <optgroup label="Employés">
+                                <!-- Les employés seront ajoutés en JavaScript -->
+                            </optgroup>
+                            <optgroup label="Clients">
+                                <!-- Les clients seront ajoutés en JavaScript -->
+                            </optgroup>
+                        </select>
+                    </div>
                     <div class="chat-messages" id="chat-messages">
                         <!-- Les messages seront générés en JavaScript -->
                     </div>
                     <div class="chat-input">
                         <input type="text" placeholder="Écrivez votre message..." id="message-input">
-                        <button onclick="sendMessage()">Envoyer</button>
+                        <button class="btn-primary" onclick="sendMessage()">
+                            <i class="fas fa-paper-plane"></i> Envoyer
+                        </button>
                     </div>
                 </div>
             </section>
