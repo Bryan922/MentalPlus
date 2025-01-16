@@ -150,37 +150,18 @@ function initializeForms() {
 function loadAppointments(filter = 'upcoming') {
     const appointmentsList = document.querySelector('.appointments-list');
     let appointments = JSON.parse(localStorage.getItem('appointments') || '[]');
+    const currentUser = JSON.parse(localStorage.getItem('user') || '{}');
     
-    // Si aucun rendez-vous n'existe encore, initialiser avec des exemples
+    // Filtrer les rendez-vous pour ne montrer que ceux du client connecté
+    appointments = appointments.filter(apt => apt.clientEmail === currentUser.email);
+    
+    appointmentsList.innerHTML = '';
+
     if (appointments.length === 0) {
-        appointments = [
-            {
-                id: 1,
-                type: 'Consultation Standard',
-                date: '2024-02-15',
-                time: '14:30',
-                status: 'upcoming'
-            },
-            {
-                id: 2,
-                type: 'Suivi Psychologique',
-                date: '2024-02-20',
-                time: '10:00',
-                status: 'upcoming'
-            },
-            {
-                id: 3,
-                type: 'Consultation Standard',
-                date: '2024-01-10',
-                time: '11:00',
-                status: 'past'
-            }
-        ];
-        localStorage.setItem('appointments', JSON.stringify(appointments));
+        appointmentsList.innerHTML = '<p class="no-appointments">Aucun rendez-vous</p>';
+        return;
     }
 
-    appointmentsList.innerHTML = '';
-    
     appointments
         .filter(apt => apt.status === filter)
         .forEach(appointment => {

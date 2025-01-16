@@ -262,7 +262,16 @@ function initializeForm() {
 function handleSubmit(e) {
     e.preventDefault();
     const formData = new FormData(e.target);
+    const currentUser = JSON.parse(localStorage.getItem('user') || '{}');
+    
+    if (!currentUser.email) {
+        alert('Veuillez vous connecter pour prendre rendez-vous');
+        window.location.href = 'auth.html';
+        return;
+    }
+    
     const data = {
+        id: Date.now(), // Générer un ID unique
         domaine: selectedDomaine,
         date: selectedDate,
         time: selectedTime,
@@ -270,11 +279,16 @@ function handleSubmit(e) {
         prenom: formData.get('prenom'),
         email: formData.get('email'),
         telephone: formData.get('telephone'),
-        notes: formData.get('notes')
+        notes: formData.get('notes'),
+        clientEmail: currentUser.email,
+        status: 'upcoming'
     };
     
-    console.log('Données du rendez-vous:', data);
-    // Ici, vous ajouteriez la logique pour envoyer les données au serveur
+    // Sauvegarder le rendez-vous
+    const appointments = JSON.parse(localStorage.getItem('appointments') || '[]');
+    appointments.push(data);
+    localStorage.setItem('appointments', JSON.stringify(appointments));
+    
     alert('Rendez-vous confirmé ! Vous allez recevoir un email de confirmation.');
     window.location.href = 'confirmation.html';
 }
