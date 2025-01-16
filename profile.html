@@ -3,142 +3,37 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mon Profil - MentalSerenity</title>
-    <link rel="stylesheet" href="css/style.css">
+    <title>Profil - MentalSerenity</title>
     <link rel="stylesheet" href="css/profile.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <script>
+    // La configuration de l'authentification sera mise à jour avec PlanetScale
+    </script>
 </head>
 <body>
     <header>
         <nav>
-            <div class="logo">
-                <a href="index.html" style="text-decoration: none; color: inherit;">MentalSerenity</a>
-            </div>
+            <div class="logo">MentalSerenity</div>
             <ul>
                 <li><a href="index.html">Accueil</a></li>
-                <li><a href="rendez-vous.html">Prendre RDV</a></li>
-                <li><a href="#" class="active">Mon Profil</a></li>
-                <li><a href="#" id="logout-btn">Déconnexion</a></li>
+                <li><a href="rendez-vous.html">Mes rendez-vous</a></li>
+                <li><a href="#" onclick="logout()">Déconnexion</a></li>
             </ul>
         </nav>
     </header>
 
-    <main class="profile-container">
-        <aside class="profile-sidebar">
-            <div class="user-info">
-                <div class="avatar">
-                    <img src="images/default-avatar.png" alt="Photo de profil" id="profile-image">
-                    <button class="edit-avatar" title="Modifier la photo">
-                        <i class="fas fa-camera"></i>
-                    </button>
-                </div>
-                <h2 id="user-name">John Doe</h2>
-                <p id="user-email">john.doe@email.com</p>
+    <main>
+        <section class="profile-section">
+            <h1>Mon Profil</h1>
+            <div class="profile-info">
+                <p><strong>Nom:</strong> <span id="user-name">Chargement...</span></p>
+                <p><strong>Email:</strong> <span id="user-email">Chargement...</span></p>
             </div>
-            <nav class="profile-nav">
-                <a href="#informations" class="active"><i class="fas fa-user"></i> Informations personnelles</a>
-                <a href="#appointments"><i class="fas fa-calendar-alt"></i> Mes rendez-vous</a>
-                <a href="#documents"><i class="fas fa-file-alt"></i> Mes documents</a>
-                <a href="#security"><i class="fas fa-lock"></i> Sécurité</a>
-                <a href="#notifications"><i class="fas fa-bell"></i> Notifications</a>
-            </nav>
-        </aside>
-
-        <div class="profile-content">
-            <!-- Section Informations personnelles -->
-            <section id="informations" class="profile-section active">
-                <h2>Informations personnelles</h2>
-                <form id="personal-info-form">
-                    <div class="form-grid">
-                        <div class="form-group">
-                            <label for="name">Nom</label>
-                            <input type="text" id="name" name="name" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="firstname">Prénom</label>
-                            <input type="text" id="firstname" name="firstname" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="email">Email</label>
-                            <input type="email" id="email" name="email" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="phone">Téléphone</label>
-                            <input type="tel" id="phone" name="phone" required>
-                        </div>
-                        <div class="form-group full-width">
-                            <label for="address">Adresse</label>
-                            <input type="text" id="address" name="address">
-                        </div>
-                    </div>
-                    <button type="submit" class="btn-primary">Enregistrer les modifications</button>
-                </form>
-            </section>
-
-            <!-- Section Rendez-vous -->
-            <section id="appointments" class="profile-section">
-                <h2>Mes rendez-vous</h2>
-                <div class="appointments-filter">
-                    <button class="active" data-filter="upcoming">À venir</button>
-                    <button data-filter="past">Passés</button>
-                </div>
-                <div class="appointments-list">
-                    <!-- Les rendez-vous seront ajoutés dynamiquement ici -->
-                </div>
-            </section>
-
-            <!-- Section Documents -->
-            <section id="documents" class="profile-section">
-                <h2>Mes documents</h2>
-                <div class="documents-grid">
-                    <!-- Les documents seront ajoutés dynamiquement ici -->
-                </div>
-            </section>
-
-            <!-- Section Sécurité -->
-            <section id="security" class="profile-section">
-                <h2>Sécurité</h2>
-                <form id="security-form">
-                    <div class="form-group">
-                        <label for="current-password">Mot de passe actuel</label>
-                        <input type="password" id="current-password" name="current-password" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="new-password">Nouveau mot de passe</label>
-                        <input type="password" id="new-password" name="new-password" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="confirm-password">Confirmer le nouveau mot de passe</label>
-                        <input type="password" id="confirm-password" name="confirm-password" required>
-                    </div>
-                    <button type="submit" class="btn-primary">Modifier le mot de passe</button>
-                </form>
-            </section>
-
-            <!-- Section Notifications -->
-            <section id="notifications" class="profile-section">
-                <h2>Notifications</h2>
-                <div class="notifications-settings">
-                    <div class="notification-option">
-                        <label>
-                            <input type="checkbox" name="email-notifications" checked>
-                            Recevoir les notifications par email
-                        </label>
-                        <p>Rappels de rendez-vous, confirmations, etc.</p>
-                    </div>
-                    <div class="notification-option">
-                        <label>
-                            <input type="checkbox" name="sms-notifications" checked>
-                            Recevoir les notifications par SMS
-                        </label>
-                        <p>Rappels de rendez-vous uniquement</p>
-                    </div>
-                </div>
-                <button type="submit" class="btn-primary">Enregistrer les préférences</button>
-            </section>
-        </div>
+            <div class="profile-actions">
+                <a href="rendez-vous.html" class="btn-primary">Prendre un rendez-vous</a>
+                <button onclick="logout()" class="btn-secondary">Se déconnecter</button>
+            </div>
+        </section>
     </main>
-
-    <script src="js/profile.js"></script>
 </body>
 </html> 
