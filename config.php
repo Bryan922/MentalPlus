@@ -1,9 +1,10 @@
 <?php
 // Configuration de la base de données
-define('DB_HOST', 'localhost');     // À remplacer par l'hôte OVH
-define('DB_NAME', 'mentalserenity'); // Nom de la base de données
-define('DB_USER', 'user');          // À remplacer par votre utilisateur OVH
-define('DB_PASS', 'password');      // À remplacer par votre mot de passe OVH
+define('DB_HOST', 'roundhouse.proxy.rlwy.net');
+define('DB_NAME', 'railway');
+define('DB_USER', 'root');
+define('DB_PASS', 'zNURSRiiQFPslwkOKbdDNOOwfjgojCPe');
+define('DB_PORT', '16051');
 
 // Configuration du site
 define('SITE_URL', 'https://mentalserenity.fr');
@@ -22,7 +23,7 @@ ini_set('error_log', __DIR__ . '/logs/error.log');
 // Fonction de connexion à la base de données
 function getDBConnection() {
     try {
-        $dsn = "mysql:host=" . DB_HOST . ";dbname=" . DB_NAME . ";charset=utf8mb4";
+        $dsn = "mysql:host=" . DB_HOST . ";port=" . DB_PORT . ";dbname=" . DB_NAME . ";charset=utf8mb4";
         $options = [
             PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
             PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
