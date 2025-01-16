@@ -1,10 +1,15 @@
 // Initialisation
 document.addEventListener('DOMContentLoaded', () => {
-    if (!checkAdminAccess()) {
+    const user = JSON.parse(sessionStorage.getItem('user') || 'null');
+    console.log('Current user:', user); // Debug
+
+    if (!user || !user.isAdmin) {
+        alert('Vous devez être connecté en tant qu\'administrateur pour accéder à cette page.');
         window.location.href = 'auth.html';
         return;
     }
-    
+
+    // Si l'utilisateur est admin, initialiser l'interface
     initializeNavigation();
     loadStats();
     loadTodayAppointments();
@@ -15,15 +20,23 @@ document.addEventListener('DOMContentLoaded', () => {
 // Vérification des droits d'accès
 function checkAdminAccess() {
     const user = JSON.parse(sessionStorage.getItem('user') || 'null');
-    if (!user || !user.isAdmin) return false;
+    console.log('Checking admin access for user:', user); // Debug
+
+    if (!user) return false;
+    if (user.isSuperAdmin) return true; // Super admin a accès à tout
+    if (!user.isAdmin) return false;
 
     // Vérifier les permissions spécifiques
     const currentSection = document.querySelector('.admin-section.active')?.classList[1];
-    if (currentSection && user.permissions && !user.permissions.includes(currentSection)) {
-        return false;
+    console.log('Current section:', currentSection); // Debug
+    
+    if (currentSection && user.permissions) {
+        const hasAccess = user.permissions.includes(currentSection);
+        console.log('Has access to section:', hasAccess); // Debug
+        return hasAccess;
     }
 
-    return true;
+    return true; // Par défaut, autoriser l'accès si pas de permissions spécifiques
 }
 
 // Navigation
@@ -32,6 +45,8 @@ function initializeNavigation() {
     navItems.forEach(item => {
         item.addEventListener('click', () => {
             const section = item.dataset.section;
+            console.log('Navigating to section:', section); // Debug
+            
             if (!checkSectionAccess(section)) {
                 alert('Vous n\'avez pas accès à cette section');
                 return;
@@ -50,8 +65,12 @@ function initializeNavigation() {
 
 function checkSectionAccess(section) {
     const user = JSON.parse(sessionStorage.getItem('user') || 'null');
-    if (!user || !user.isAdmin) return false;
-    if (user.isSuperAdmin) return true; // Super admin a accès à tout
+    console.log('Checking section access:', section, 'for user:', user); // Debug
+
+    if (!user) return false;
+    if (user.isSuperAdmin) return true;
+    if (!user.isAdmin) return false;
+    
     return !user.permissions || user.permissions.includes(section);
 }
 

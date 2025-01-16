@@ -89,6 +89,16 @@ async function handleLogin(e) {
         return;
     }
 
+    // Stocker les informations de session
+    const sessionUser = {
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        isAdmin: user.isAdmin,
+        permissions: user.permissions,
+        isSuperAdmin: user.isSuperAdmin || false
+    };
+
     if (rememberMe) {
         localStorage.setItem('rememberedUser', JSON.stringify({
             email: email,
@@ -97,9 +107,11 @@ async function handleLogin(e) {
     }
 
     sessionStorage.setItem('isAuthenticated', 'true');
-    sessionStorage.setItem('user', JSON.stringify(user));
+    sessionStorage.setItem('user', JSON.stringify(sessionUser));
+    
+    console.log('Login successful:', sessionUser); // Debug
+
     if (user.isAdmin) {
-        sessionStorage.setItem('isAdmin', 'true');
         window.location.href = 'admin.html';
     } else {
         window.location.href = 'profile.html';
@@ -132,15 +144,27 @@ async function handleRegister(e) {
         name: name,
         email: email,
         password: password,
-        role: 'client', // Par défaut, les nouveaux comptes sont des clients
+        role: 'client',
         isAdmin: false,
         createdAt: new Date().toISOString()
     };
 
     users.push(newUser);
     localStorage.setItem('users', JSON.stringify(users));
-    localStorage.setItem('isAuthenticated', 'true');
-    localStorage.setItem('user', JSON.stringify(newUser));
+
+    // Stocker les informations de session
+    const sessionUser = {
+        id: newUser.id,
+        name: newUser.name,
+        email: newUser.email,
+        isAdmin: false,
+        role: 'client'
+    };
+
+    sessionStorage.setItem('isAuthenticated', 'true');
+    sessionStorage.setItem('user', JSON.stringify(sessionUser));
+
+    console.log('Registration successful:', sessionUser); // Debug
 
     alert('Compte créé avec succès !');
     window.location.href = 'profile.html';
@@ -154,6 +178,8 @@ function updateAuthButtons() {
     const isAuthenticated = sessionStorage.getItem('isAuthenticated') === 'true';
     const user = JSON.parse(sessionStorage.getItem('user') || 'null');
     
+    console.log('Updating auth buttons:', { isAuthenticated, user }); // Debug
+
     if (isAuthenticated && user) {
         if (user.isAdmin) {
             authButtons.innerHTML = `
@@ -177,7 +203,9 @@ function updateAuthButtons() {
 
 // Déconnexion
 function logout() {
-    sessionStorage.clear(); // Effacer toutes les données de session
+    console.log('Logging out...'); // Debug
+    sessionStorage.clear();
+    localStorage.removeItem('isAdmin');
     window.location.href = 'index.html';
 }
 
@@ -189,13 +217,20 @@ function handleAdminLogin(e) {
 
     // Vérification des identifiants admin
     if (email === 'admin@mentalserenity.fr' && password === 'Admin123!') {
-        localStorage.setItem('isAdmin', 'true');
-        localStorage.setItem('isAuthenticated', 'true');
-        localStorage.setItem('user', JSON.stringify({
+        const adminUser = {
+            id: 'admin',
             email: email,
             name: 'Administrateur',
-            role: 'admin'
-        }));
+            role: 'admin',
+            isAdmin: true,
+            isSuperAdmin: true
+        };
+
+        sessionStorage.setItem('isAuthenticated', 'true');
+        sessionStorage.setItem('user', JSON.stringify(adminUser));
+        
+        console.log('Admin login successful:', adminUser); // Debug
+        
         window.location.href = 'admin.html';
     } else {
         alert('Identifiants administrateur incorrects');
@@ -204,6 +239,8 @@ function handleAdminLogin(e) {
 
 function checkRememberedUser() {
     const rememberedUser = JSON.parse(localStorage.getItem('rememberedUser') || 'null');
+    console.log('Remembered user:', rememberedUser); // Debug
+    
     if (rememberedUser) {
         const emailInput = document.querySelector('input[name="email"]');
         if (emailInput) {
