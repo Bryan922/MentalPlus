@@ -77,20 +77,28 @@ function loadUserData() {
 
 // Gestion de l'upload d'image
 function initializeImageUpload() {
-    const editButton = document.querySelector('.edit-avatar');
+    const profileImage = document.getElementById('profile-image');
+    const editAvatarBtn = document.querySelector('.edit-avatar');
     const fileInput = document.createElement('input');
     fileInput.type = 'file';
     fileInput.accept = 'image/*';
-    
-    editButton.addEventListener('click', () => fileInput.click());
-    
+
+    // Charger l'image sauvegardée si elle existe
+    const savedImage = localStorage.getItem('profileImage');
+    if (savedImage) {
+        profileImage.src = savedImage;
+    }
+
+    editAvatarBtn.addEventListener('click', () => fileInput.click());
+
     fileInput.addEventListener('change', (e) => {
         const file = e.target.files[0];
         if (file) {
             const reader = new FileReader();
             reader.onload = (e) => {
-                document.getElementById('profile-image').src = e.target.result;
-                // Ici, vous pourriez envoyer l'image à votre serveur
+                profileImage.src = e.target.result;
+                // Sauvegarder l'image dans localStorage
+                localStorage.setItem('profileImage', e.target.result);
             };
             reader.readAsDataURL(file);
         }
@@ -141,30 +149,35 @@ function initializeForms() {
 // Chargement des rendez-vous
 function loadAppointments(filter = 'upcoming') {
     const appointmentsList = document.querySelector('.appointments-list');
-    // Simuler des rendez-vous pour l'exemple
-    const appointments = [
-        {
-            id: 1,
-            type: 'Consultation Standard',
-            date: '2024-02-15',
-            time: '14:30',
-            status: 'upcoming'
-        },
-        {
-            id: 2,
-            type: 'Suivi Psychologique',
-            date: '2024-02-20',
-            time: '10:00',
-            status: 'upcoming'
-        },
-        {
-            id: 3,
-            type: 'Consultation Standard',
-            date: '2024-01-10',
-            time: '11:00',
-            status: 'past'
-        }
-    ];
+    let appointments = JSON.parse(localStorage.getItem('appointments') || '[]');
+    
+    // Si aucun rendez-vous n'existe encore, initialiser avec des exemples
+    if (appointments.length === 0) {
+        appointments = [
+            {
+                id: 1,
+                type: 'Consultation Standard',
+                date: '2024-02-15',
+                time: '14:30',
+                status: 'upcoming'
+            },
+            {
+                id: 2,
+                type: 'Suivi Psychologique',
+                date: '2024-02-20',
+                time: '10:00',
+                status: 'upcoming'
+            },
+            {
+                id: 3,
+                type: 'Consultation Standard',
+                date: '2024-01-10',
+                time: '11:00',
+                status: 'past'
+            }
+        ];
+        localStorage.setItem('appointments', JSON.stringify(appointments));
+    }
 
     appointmentsList.innerHTML = '';
     
@@ -205,14 +218,82 @@ function loadAppointments(filter = 'upcoming') {
 
 // Fonctions pour gérer les actions sur les rendez-vous
 function rescheduleAppointment(appointmentId) {
-    // Pour l'instant, on simule juste une action
-    alert('Fonctionnalité de reprogrammation à venir. ID du rendez-vous : ' + appointmentId);
+    // Créer le modal de reprogrammation
+    const modal = document.createElement('div');
+    modal.className = 'modal';
+    modal.innerHTML = `
+        <div class="modal-content">
+            <h3>Reprogrammer le rendez-vous</h3>
+            <form id="reschedule-form">
+                <div class="form-group">
+                    <label>Nouvelle date</label>
+                    <input type="date" name="new-date" required min="${new Date().toISOString().split('T')[0]}">
+                </div>
+                <div class="form-group">
+                    <label>Nouvelle heure</label>
+                    <select name="new-time" required>
+                        ${generateTimeSlots()}
+                    </select>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn-cancel" onclick="closeModal()">Annuler</button>
+                    <button type="submit" class="btn-primary">Confirmer</button>
+                </div>
+            </form>
+        </div>
+    `;
+
+    document.body.appendChild(modal);
+    modal.style.display = 'block';
+
+    // Gérer la soumission du formulaire
+    document.getElementById('reschedule-form').addEventListener('submit', (e) => {
+        e.preventDefault();
+        const formData = new FormData(e.target);
+        const newDate = formData.get('new-date');
+        const newTime = formData.get('new-time');
+
+        // Mettre à jour le rendez-vous dans le localStorage
+        let appointments = JSON.parse(localStorage.getItem('appointments') || '[]');
+        appointments = appointments.map(apt => {
+            if (apt.id === appointmentId) {
+                return { ...apt, date: newDate, time: newTime };
+            }
+            return apt;
+        });
+        localStorage.setItem('appointments', JSON.stringify(appointments));
+
+        // Fermer le modal et recharger les rendez-vous
+        closeModal();
+        loadAppointments('upcoming');
+    });
+}
+
+function closeModal() {
+    const modal = document.querySelector('.modal');
+    if (modal) {
+        modal.remove();
+    }
+}
+
+function generateTimeSlots() {
+    const slots = [];
+    for (let hour = 9; hour <= 17; hour++) {
+        for (let minute of ['00', '30']) {
+            const time = `${hour.toString().padStart(2, '0')}:${minute}`;
+            slots.push(`<option value="${time}">${time}</option>`);
+        }
+    }
+    return slots.join('');
 }
 
 function cancelAppointment(appointmentId) {
     if (confirm('Êtes-vous sûr de vouloir annuler ce rendez-vous ?')) {
-        // Pour l'instant, on simule juste une action
-        alert('Rendez-vous annulé avec succès. ID du rendez-vous : ' + appointmentId);
+        // Supprimer le rendez-vous du localStorage
+        let appointments = JSON.parse(localStorage.getItem('appointments') || '[]');
+        appointments = appointments.filter(apt => apt.id !== appointmentId);
+        localStorage.setItem('appointments', JSON.stringify(appointments));
+
         // Recharger la liste des rendez-vous
         loadAppointments('upcoming');
     }
