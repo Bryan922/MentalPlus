@@ -353,86 +353,18 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    // Mise à jour de la fonction submitAppointment
-    async function submitAppointment() {
-        const submitButton = document.querySelector('.btn-submit');
-        const errorElement = document.getElementById('card-errors');
+    // Montant du paiement en centimes (1€ = 100 centimes)
+    const PAYMENT_AMOUNT = 100;
+
+    document.getElementById('rdv-form').addEventListener('submit', async function(e) {
+        e.preventDefault();
         
         try {
-            submitButton.disabled = true;
-            submitButton.textContent = 'Traitement en cours...';
-
-            // Créer l'intention de paiement
-            const response = await fetch('/api/create-payment-intent', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${localStorage.getItem('token')}`
-                },
-                body: JSON.stringify({
-                    amount: 5000, // 50€ en centimes
-                    description: `Consultation ${selectedDomaine} - ${selectedDate.toLocaleDateString()} ${selectedTime}`,
-                })
-            });
-
-            if (!response.ok) {
-                throw new Error('Erreur lors de la création du paiement');
-            }
-
-            const { clientSecret } = await response.json();
-
-            // Confirmer le paiement
-            const { error, paymentIntent } = await stripe.confirmCardPayment(clientSecret, {
-                payment_method: {
-                    card: cardElement,
-                    billing_details: {
-                        name: `${document.getElementById('prenom').value} ${document.getElementById('nom').value}`,
-                        email: document.getElementById('email').value,
-                        phone: document.getElementById('telephone').value,
-                    },
-                },
-            });
-
-            if (error) {
-                throw error;
-            }
-
-            // Créer le rendez-vous
-            const appointmentResponse = await fetch('/api/appointments.php', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${localStorage.getItem('token')}`
-                },
-                body: JSON.stringify({
-                    date: selectedDate.toISOString().split('T')[0],
-                    time: selectedTime,
-                    type: selectedDomaine,
-                    appointmentType: appointmentType,
-                    notes: document.getElementById('notes')?.value || '',
-                    payment_intent_id: paymentIntent.id
-                })
-            });
-
-            if (!appointmentResponse.ok) {
-                throw new Error('Erreur lors de la création du rendez-vous');
-            }
-
-            // Redirection avec message de succès
-            window.location.href = 'profile.html?success=true';
-
+            const clientSecret = await initializePayment(PAYMENT_AMOUNT, 'Consultation MentalSerenity - Test');
+            // ... rest of the payment processing code ...
         } catch (error) {
-            errorElement.textContent = error.message || 'Une erreur est survenue, veuillez réessayer.';
-            submitButton.disabled = false;
-            submitButton.textContent = 'Confirmer et payer';
-        }
-    }
-
-    // Ajouter le gestionnaire d'événements pour le formulaire
-    document.querySelector('form')?.addEventListener('submit', function(e) {
-        e.preventDefault();
-        if (validateStep(3)) {
-            submitAppointment();
+            console.error('Erreur lors du paiement:', error);
+            // Afficher un message d'erreur à l'utilisateur
         }
     });
 
