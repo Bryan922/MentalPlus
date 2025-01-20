@@ -650,9 +650,11 @@
     display: flex;
     gap: 2.5rem;
     align-items: center;
-    margin-top: 1rem;
-    padding: 1rem 0;
+    justify-content: center;
+    margin: 1.5rem auto;
+    padding: 1.5rem 0;
     background: transparent;
+    max-width: 400px;
 }
 
 /* Style commun pour tous les badges */
@@ -662,6 +664,11 @@
     object-fit: contain;
     filter: brightness(1.1) contrast(1.1);
     background: transparent !important;
+    transition: transform 0.3s ease;
+}
+
+.payment-badges img:hover {
+    transform: translateY(-2px);
 }
 
 /* Style spécifique pour Stripe */
@@ -714,8 +721,9 @@
     }
 
     .payment-badges {
-        justify-content: center;
         gap: 2rem;
+        padding: 1rem 0;
+        max-width: 300px;
     }
 
     .payment-badges img {
