@@ -69,20 +69,32 @@
     background: white;
     padding: 1.5rem;
     border-radius: 10px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    text-align: center;
     cursor: pointer;
     transition: all 0.3s ease;
-    text-align: center;
+    border: 2px solid transparent;
+    position: relative;
 }
 
 .domaine-card:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    transform: translateY(-5px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
 }
 
 .domaine-card.selected {
-    border: 2px solid var(--primary-color);
-    background: rgba(74, 144, 226, 0.05);
+    border-color: var(--primary-color);
+    background: rgba(44, 62, 80, 0.05);
+}
+
+.domaine-card.selected::after {
+    content: '✓';
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    color: var(--primary-color);
+    font-size: 1.2rem;
+    font-weight: bold;
 }
 
 .domaine-card i {
@@ -92,9 +104,8 @@
 }
 
 .domaine-card h3 {
-    color: var(--accent-color);
+    color: var(--text-color);
     margin-bottom: 0.5rem;
-    font-size: 1.1rem;
 }
 
 .domaine-card p {
@@ -313,25 +324,26 @@
 /* Buttons */
 .form-buttons {
     display: flex;
-    justify-content: flex-end;
-    gap: 1rem;
+    justify-content: space-between;
     margin-top: 2rem;
+    padding: 0 1rem;
 }
 
 .btn-prev,
 .btn-next,
 .btn-submit {
-    padding: 0.8rem 1.5rem;
+    padding: 0.8rem 2rem;
     border: none;
     border-radius: 5px;
+    font-size: 1rem;
+    font-weight: 600;
     cursor: pointer;
-    font-weight: 500;
     transition: all 0.3s ease;
 }
 
 .btn-prev {
-    background: #f8f9fa;
-    color: var(--accent-color);
+    background: #eee;
+    color: var(--text-color);
 }
 
 .btn-next,
@@ -340,14 +352,18 @@
     color: white;
 }
 
-.btn-prev:hover {
-    background: #e9ecef;
+.btn-next:hover {
+    background: var(--secondary-color);
 }
 
-.btn-next:hover,
-.btn-submit:hover {
-    background: var(--secondary-color);
-    transform: translateY(-2px);
+.btn-prev:hover {
+    background: #ddd;
+}
+
+.btn-next:disabled,
+.btn-prev:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
 }
 
 /* Booking summary */
@@ -389,6 +405,23 @@
         opacity: 1;
         transform: translateY(0);
     }
+}
+
+/* Animation de sélection */
+@keyframes selectCard {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.05);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+.domaine-card.selected {
+    animation: selectCard 0.3s ease;
 }
 
 /* Responsive adjustments */
