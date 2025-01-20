@@ -947,65 +947,68 @@
 
 /* Styles spécifiques pour le mode nuit */
 .night-mode .calendar-container {
-    background: #1a1a2e;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+    background: white;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
 }
 
 .night-mode .calendar-day-header {
-    color: #fff;
-    opacity: 0.9;
+    color: var(--accent-color);
 }
 
 .night-mode .calendar-day {
-    background: #2d2d44;
-    color: #fff;
-    border: 1px solid #3d3d56;
+    background: #f8f9fa;
+    color: var(--accent-color);
+    border: none;
 }
 
 .night-mode .calendar-day:not(.empty):not(.disabled):hover {
-    background: #3d3d56;
-    color: #ffeb3b;
-    border-color: #ffeb3b;
+    background: var(--primary-color);
+    color: white;
+    transform: scale(1.1);
 }
 
 .night-mode .calendar-day.selected {
     background: #1a237e;
     color: #ffeb3b;
-    border-color: #ffeb3b;
     box-shadow: 0 0 10px rgba(255, 235, 59, 0.3);
 }
 
 .night-mode .calendar-day.disabled {
-    background: #1a1a2e;
-    color: #666;
-    border-color: #2d2d44;
+    background: #f1f3f5;
+    color: #adb5bd;
+    cursor: not-allowed;
+    opacity: 0.7;
 }
 
 .night-mode .calendar-day.empty {
     background: transparent;
-    border: none;
 }
 
 .night-mode .calendar-day.sunday {
-    background: #2d1f1f;
-    color: #ff6b6b;
-    border-color: #ff6b6b;
+    color: #ff4444;
+    background: #fff1f1;
 }
 
 .night-mode .closed-message {
-    background: #2d1f1f;
-    color: #ff6b6b;
+    color: #ff4444;
+    background: #fff1f1;
     border: 1px solid #ff6b6b;
 }
 
+/* Styles spécifiques pour les créneaux horaires en mode nuit */
 .night-mode .time-slots {
     background: #1a1a2e;
     border-left: 2px solid #2d2d44;
 }
 
+.night-mode .time-slots h3 {
+    color: white;
+    border-bottom: 2px solid #ffeb3b;
+}
+
 .night-mode .time-slot {
     background: #2d2d44;
-    color: #fff;
+    color: white;
     border: 1px solid #3d3d56;
 }
 
@@ -1032,15 +1035,9 @@
 }
 
 .night-mode .calendar-header button {
-    color: #fff;
-    opacity: 0.9;
-}
-
-.night-mode .calendar-header button:hover {
-    opacity: 1;
+    color: var(--accent-color);
 }
 
 .night-mode .calendar-header h3 {
-    color: #fff;
-    opacity: 0.9;
+    color: var(--accent-color);
 } 
