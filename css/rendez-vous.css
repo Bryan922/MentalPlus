@@ -1040,4 +1040,25 @@
 
 .night-mode .calendar-header h3 {
     color: var(--accent-color);
+}
+
+.btn-profile {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    background: var(--primary-color);
+    color: white;
+    border-radius: 8px;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.btn-profile:hover {
+    background: #3b4fd7;
+    transform: translateY(-2px);
+}
+
+.btn-profile i {
+    font-size: 1rem;
 } 

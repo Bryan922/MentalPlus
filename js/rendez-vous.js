@@ -1,4 +1,22 @@
 document.addEventListener('DOMContentLoaded', function() {
+    // Gestion de l'affichage du bouton de connexion
+    function updateAuthButton() {
+        const authLink = document.getElementById('auth-link');
+        const token = localStorage.getItem('token');
+        
+        if (token) {
+            // L'utilisateur est connecté
+            authLink.innerHTML = `
+                <a href="profile.html" class="btn-profile">
+                    <i class="fas fa-user"></i> Mon Profil
+                </a>
+            `;
+        }
+    }
+
+    // Appel de la fonction au chargement
+    updateAuthButton();
+
     // Variables globales
     let selectedDomaine = null;
     let selectedDate = null;
