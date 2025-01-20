@@ -885,7 +885,17 @@
     color: #ffd700;
 }
 
+.type-btn[data-type="night"].active {
+    background-color: #1a237e;
+    color: white;
+}
+
 .type-btn[data-type="night"].active i {
+    color: #ffeb3b;
+}
+
+.type-btn[data-type="night"]:hover {
+    background-color: #283593;
     color: white;
 }
 

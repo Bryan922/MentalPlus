@@ -401,52 +401,68 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     // Modification de la fonction updateTimeSlots pour gérer les horaires selon les jours
-    function updateTimeSlots(date) {
-        const slotsGrid = document.querySelector('.slots-grid');
-        slotsGrid.innerHTML = '';
+    function updateTimeSlots(selectedDate) {
+        const timeSlotContainer = document.querySelector('.time-slots');
+        timeSlotContainer.innerHTML = '';
+        
+        const date = new Date(selectedDate);
+        const dayOfWeek = date.getDay(); // 0 = Dimanche, 1 = Lundi, ..., 6 = Samedi
+        const appointmentType = document.querySelector('.type-btn.active').dataset.type;
+        
+        // Si c'est dimanche, on n'affiche aucun créneau
+        if (dayOfWeek === 0) {
+            const message = document.createElement('p');
+            message.className = 'closed-message';
+            message.textContent = 'Fermé le dimanche';
+            timeSlotContainer.appendChild(message);
+            return;
+        }
 
         let startHour, endHour;
-        const dayOfWeek = date.getDay();
-
+        
         if (appointmentType === 'night') {
-            // Horaires de nuit (20h-6h) tous les jours
+            // Horaires de nuit (20h-6h) tous les jours sauf dimanche
             startHour = 20;
             endHour = 6;
         } else {
-            // Horaires classiques
+            // Horaires de jour
             if (dayOfWeek === 6) { // Samedi
                 startHour = 10;
                 endHour = 16;
-            } else if (dayOfWeek === 0) { // Dimanche
-                slotsGrid.innerHTML = '<p class="closed-message">Fermé le dimanche</p>';
-                return;
             } else { // Lundi au vendredi
                 startHour = 10;
                 endHour = 19;
             }
         }
 
-        let currentHour = startHour;
-        while (currentHour !== endHour) {
-            const timeSlot = document.createElement('div');
-            timeSlot.className = 'time-slot';
-            const formattedHour = currentHour.toString().padStart(2, '0');
-            timeSlot.textContent = `${formattedHour}:00`;
-            
-            timeSlot.addEventListener('click', () => {
-                document.querySelectorAll('.time-slot').forEach(slot => slot.classList.remove('selected'));
-                timeSlot.classList.add('selected');
-                selectedTime = `${formattedHour}:00`;
-                updateSummary();
-            });
-
-            slotsGrid.appendChild(timeSlot);
-            if (appointmentType === 'night' && currentHour === 23) {
-                currentHour = 0;
-            } else {
-                currentHour = (currentHour + 1) % 24;
+        // Génération des créneaux
+        if (appointmentType === 'night') {
+            // Pour les horaires de nuit, on doit gérer le changement de jour
+            for (let hour = startHour; hour <= 23; hour++) {
+                addTimeSlot(hour, timeSlotContainer);
             }
-            if (appointmentType === 'night' && currentHour === endHour) break;
+            for (let hour = 0; hour <= endHour; hour++) {
+                addTimeSlot(hour, timeSlotContainer);
+            }
+        } else {
+            for (let hour = startHour; hour < endHour; hour++) {
+                addTimeSlot(hour, timeSlotContainer);
+            }
         }
+    }
+
+    function addTimeSlot(hour, container) {
+        const timeSlot = document.createElement('div');
+        timeSlot.className = 'time-slot';
+        timeSlot.textContent = `${hour.toString().padStart(2, '0')}:00`;
+        timeSlot.dataset.time = `${hour.toString().padStart(2, '0')}:00`;
+        
+        timeSlot.addEventListener('click', function() {
+            document.querySelectorAll('.time-slot').forEach(slot => slot.classList.remove('selected'));
+            this.classList.add('selected');
+            updateSummary();
+        });
+        
+        container.appendChild(timeSlot);
     }
 }); 
