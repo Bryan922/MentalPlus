@@ -1,23 +1,42 @@
 document.addEventListener('DOMContentLoaded', function() {
     // Gestion des onglets de rendez-vous
     const tabButtons = document.querySelectorAll('.appointment-tabs .tab-btn');
+    const regularAppointments = document.getElementById('regularAppointments');
+    const nightAppointments = document.getElementById('nightAppointments');
     
-    tabButtons.forEach(button => {
-        button.addEventListener('click', () => {
-            // Mise à jour des boutons
-            tabButtons.forEach(btn => btn.classList.remove('active'));
-            button.classList.add('active');
+    function switchTab(type) {
+        // Mise à jour des boutons
+        tabButtons.forEach(btn => {
+            btn.classList.remove('active');
+            if(btn.dataset.type === type) {
+                btn.classList.add('active');
+            }
+        });
 
+        // Animation de transition
+        regularAppointments.style.opacity = '0';
+        nightAppointments.style.opacity = '0';
+        
+        setTimeout(() => {
             // Mise à jour de l'affichage des tables
-            const type = button.dataset.type;
-            document.getElementById('regularAppointments').classList.remove('active');
-            document.getElementById('nightAppointments').classList.remove('active');
+            regularAppointments.classList.remove('active');
+            nightAppointments.classList.remove('active');
             
             if (type === 'regular') {
-                document.getElementById('regularAppointments').classList.add('active');
+                regularAppointments.classList.add('active');
+                regularAppointments.style.opacity = '1';
+                loadRegularAppointments();
             } else {
-                document.getElementById('nightAppointments').classList.add('active');
+                nightAppointments.classList.add('active');
+                nightAppointments.style.opacity = '1';
+                loadNightAppointments();
             }
+        }, 300);
+    }
+
+    tabButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            switchTab(button.dataset.type);
         });
     });
 
