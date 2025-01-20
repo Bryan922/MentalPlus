@@ -4,6 +4,7 @@ document.addEventListener('DOMContentLoaded', function() {
     let selectedDate = null;
     let selectedTime = null;
     let currentMonth = new Date();
+    let appointmentType = 'regular';
 
     // Initialisation du calendrier
     function initCalendar() {
@@ -342,6 +343,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     date: selectedDate.toISOString().split('T')[0],
                     time: selectedTime,
                     type: selectedDomaine,
+                    appointmentType: appointmentType,
                     notes: document.getElementById('notes')?.value || '',
                     payment_intent_id: paymentIntent.id
                 })
@@ -368,4 +370,54 @@ document.addEventListener('DOMContentLoaded', function() {
             submitAppointment();
         }
     });
+
+    // Gestion du type de rendez-vous (classique/nuit)
+    document.querySelectorAll('.type-btn').forEach(button => {
+        button.addEventListener('click', () => {
+            // Mise à jour des boutons
+            document.querySelectorAll('.type-btn').forEach(btn => btn.classList.remove('active'));
+            button.classList.add('active');
+
+            // Mise à jour du type de rendez-vous
+            appointmentType = button.dataset.type;
+
+            // Mise à jour des créneaux horaires disponibles
+            if (selectedDate) {
+                updateTimeSlots(selectedDate);
+            }
+        });
+    });
+
+    // Modification de la fonction updateTimeSlots pour gérer les créneaux de nuit
+    function updateTimeSlots(date) {
+        const slotsGrid = document.querySelector('.slots-grid');
+        slotsGrid.innerHTML = '';
+
+        let startHour, endHour;
+        if (appointmentType === 'night') {
+            startHour = 20;
+            endHour = 5;
+        } else {
+            startHour = 9;
+            endHour = 19;
+        }
+
+        let currentHour = startHour;
+        while (currentHour !== endHour) {
+            const timeSlot = document.createElement('div');
+            timeSlot.className = 'time-slot';
+            const formattedHour = currentHour.toString().padStart(2, '0');
+            timeSlot.textContent = `${formattedHour}:00`;
+            
+            timeSlot.addEventListener('click', () => {
+                document.querySelectorAll('.time-slot').forEach(slot => slot.classList.remove('selected'));
+                timeSlot.classList.add('selected');
+                selectedTime = `${formattedHour}:00`;
+                updateSummary();
+            });
+
+            slotsGrid.appendChild(timeSlot);
+            currentHour = (currentHour + 1) % 24;
+        }
+    }
 }); 
