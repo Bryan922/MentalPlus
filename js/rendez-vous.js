@@ -359,12 +359,58 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('rdv-form').addEventListener('submit', async function(e) {
         e.preventDefault();
         
+        const submitButton = document.querySelector('.btn-submit');
+        const errorElement = document.getElementById('card-errors');
+        
         try {
-            const clientSecret = await initializePayment(PAYMENT_AMOUNT, 'Consultation MentalSerenity - Test');
-            // ... rest of the payment processing code ...
+            submitButton.disabled = true;
+            submitButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Traitement en cours...';
+
+            // Créer l'intention de paiement
+            const response = await fetch('http://localhost:3000/api/create-payment-intent', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    amount: PAYMENT_AMOUNT,
+                    currency: 'eur'
+                })
+            });
+
+            if (!response.ok) {
+                throw new Error('Erreur lors de la création du paiement');
+            }
+
+            const { clientSecret } = await response.json();
+
+            // Confirmer le paiement avec Stripe
+            const { error, paymentIntent } = await stripe.confirmCardPayment(clientSecret, {
+                payment_method: {
+                    card: cardElement,
+                    billing_details: {
+                        name: `${document.getElementById('prenom').value} ${document.getElementById('nom').value}`,
+                        email: document.getElementById('email').value,
+                        phone: document.getElementById('telephone').value
+                    }
+                }
+            });
+
+            if (error) {
+                throw error;
+            }
+
+            if (paymentIntent.status === 'succeeded') {
+                // Paiement réussi
+                submitButton.innerHTML = '<i class="fas fa-check"></i> Paiement réussi !';
+                window.location.href = 'confirmation.html';
+            }
+
         } catch (error) {
-            console.error('Erreur lors du paiement:', error);
-            // Afficher un message d'erreur à l'utilisateur
+            console.error('Erreur:', error);
+            errorElement.textContent = error.message || "Une erreur est survenue lors du paiement.";
+            submitButton.disabled = false;
+            submitButton.innerHTML = '<i class="fas fa-lock"></i> Réessayer le paiement';
         }
     });
 
