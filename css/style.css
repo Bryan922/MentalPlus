@@ -208,6 +208,46 @@ nav a:hover {
     animation: fadeInUp 0.8s ease-out 0.2s both;
 }
 
+.emergency-banner {
+    background: linear-gradient(135deg, #FF3131 0%, #FF4D4D 100%);
+    padding: 0.8rem 2rem;
+    border-radius: 50px;
+    margin: 2rem auto;
+    max-width: fit-content;
+    display: inline-flex;
+    align-items: center;
+    gap: 1rem;
+    box-shadow: 0 4px 15px rgba(255, 49, 49, 0.3);
+}
+
+.emergency-banner strong {
+    color: white;
+    font-size: 1rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.emergency-banner strong i {
+    font-size: 0.9rem;
+    color: #FFD700;
+}
+
+.emergency-banner a {
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+    transition: all 0.3s ease;
+    background: rgba(255, 255, 255, 0.2);
+    padding: 0.2rem 0.8rem;
+    border-radius: 20px;
+}
+
+.emergency-banner a:hover {
+    background: rgba(255, 255, 255, 0.3);
+    transform: translateY(-1px);
+}
+
 .urgent-banner {
     background: rgba(255, 255, 255, 0.15);
     backdrop-filter: blur(10px);
