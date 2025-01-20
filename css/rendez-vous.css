@@ -657,7 +657,7 @@
 
 /* Style commun pour tous les badges */
 .payment-badges img {
-    height: 35px;
+    height: 40px;
     width: auto;
     object-fit: contain;
     filter: brightness(1.1) contrast(1.1);
@@ -666,7 +666,7 @@
 
 /* Style spécifique pour Stripe */
 .payment-badges img[src*="stripe"] {
-    height: 35px;
+    height: 45px;
     filter: brightness(1.1) contrast(1.1) grayscale(0.1);
     background-color: transparent !important;
     mix-blend-mode: darken;
@@ -674,7 +674,7 @@
 
 /* Style spécifique pour Mastercard */
 .payment-badges img[src*="mastercard"] {
-    height: 35px;
+    height: 45px;
     filter: brightness(1.1) contrast(1.1);
     background-color: transparent !important;
     mix-blend-mode: darken;
@@ -718,10 +718,13 @@
         gap: 2rem;
     }
 
-    .payment-badges img,
+    .payment-badges img {
+        height: 35px;
+    }
+
     .payment-badges img[src*="stripe"],
     .payment-badges img[src*="mastercard"] {
-        height: 30px;
+        height: 40px;
     }
     
     .payment-security-info {
