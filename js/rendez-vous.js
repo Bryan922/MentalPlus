@@ -245,39 +245,119 @@ document.addEventListener('DOMContentLoaded', function() {
     initCalendar();
     updateSummary();
 
-    // Fonction pour envoyer le rendez-vous à l'API
-    async function submitAppointment() {
-        const appointmentData = {
-            date: selectedDate.toISOString().split('T')[0],
-            time: selectedTime,
-            type: selectedDomaine,
-            notes: document.getElementById('appointment-notes')?.value || ''
-        };
+    // Initialisation de Stripe Elements
+    const stripe = Stripe('pk_live_51QhYTQG6ANFCmFDzl7XLynpC5qx0tplCUpTFy90KkZNNGbkNkgKSzr22sUKy3L8OCJJIJz84bOvvLn12D4OFQYg000jn8pCue7');
+    const elements = stripe.elements({
+        locale: 'fr',
+        appearance: {
+            theme: 'stripe',
+            variables: {
+                colorPrimary: '#4361ee',
+                colorBackground: '#ffffff',
+                colorText: '#1a1a1a',
+                colorDanger: '#df1b41',
+                fontFamily: 'Poppins, system-ui, sans-serif',
+                spacingUnit: '4px',
+                borderRadius: '8px',
+            },
+        },
+    });
 
+    const cardElement = elements.create('card', {
+        style: {
+            base: {
+                fontSize: '16px',
+                color: '#1a1a1a',
+                '::placeholder': {
+                    color: '#87868c',
+                },
+            },
+        },
+        hidePostalCode: true,
+    });
+
+    cardElement.mount('#card-element');
+
+    cardElement.on('change', function(event) {
+        const displayError = document.getElementById('card-errors');
+        if (event.error) {
+            displayError.textContent = event.error.message;
+        } else {
+            displayError.textContent = '';
+        }
+    });
+
+    // Mise à jour de la fonction submitAppointment
+    async function submitAppointment() {
+        const submitButton = document.querySelector('.btn-submit');
+        const errorElement = document.getElementById('card-errors');
+        
         try {
-            const response = await fetch('/api/appointments.php', {
+            submitButton.disabled = true;
+            submitButton.textContent = 'Traitement en cours...';
+
+            // Créer l'intention de paiement
+            const response = await fetch('/api/create-payment-intent', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${localStorage.getItem('token')}`
                 },
-                body: JSON.stringify(appointmentData)
+                body: JSON.stringify({
+                    amount: 5000, // 50€ en centimes
+                    description: `Consultation ${selectedDomaine} - ${selectedDate.toLocaleDateString()} ${selectedTime}`,
+                })
             });
 
-            const data = await response.json();
-
             if (!response.ok) {
-                throw new Error(data.error || 'Erreur lors de la création du rendez-vous');
+                throw new Error('Erreur lors de la création du paiement');
             }
 
-            // Afficher un message de succès
-            alert('Rendez-vous créé avec succès !');
-            // Rediriger vers la page de profil
-            window.location.href = 'profile.html';
+            const { clientSecret } = await response.json();
+
+            // Confirmer le paiement
+            const { error, paymentIntent } = await stripe.confirmCardPayment(clientSecret, {
+                payment_method: {
+                    card: cardElement,
+                    billing_details: {
+                        name: `${document.getElementById('prenom').value} ${document.getElementById('nom').value}`,
+                        email: document.getElementById('email').value,
+                        phone: document.getElementById('telephone').value,
+                    },
+                },
+            });
+
+            if (error) {
+                throw error;
+            }
+
+            // Créer le rendez-vous
+            const appointmentResponse = await fetch('/api/appointments.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`
+                },
+                body: JSON.stringify({
+                    date: selectedDate.toISOString().split('T')[0],
+                    time: selectedTime,
+                    type: selectedDomaine,
+                    notes: document.getElementById('notes')?.value || '',
+                    payment_intent_id: paymentIntent.id
+                })
+            });
+
+            if (!appointmentResponse.ok) {
+                throw new Error('Erreur lors de la création du rendez-vous');
+            }
+
+            // Redirection avec message de succès
+            window.location.href = 'profile.html?success=true';
 
         } catch (error) {
-            console.error('Erreur:', error);
-            alert(error.message);
+            errorElement.textContent = error.message || 'Une erreur est survenue, veuillez réessayer.';
+            submitButton.disabled = false;
+            submitButton.textContent = 'Confirmer et payer';
         }
     }
 
