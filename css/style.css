@@ -170,68 +170,39 @@ nav a:hover {
 
     .emergency-banner {
         flex-direction: column;
-        padding: 1rem;
-        width: 90%;
-        margin: 1rem auto;
+        padding: 1.5rem;
         text-align: center;
-        border-radius: 15px;
+        gap: 1rem;
     }
 
     .emergency-banner strong {
-        margin-bottom: 0.5rem;
-        font-size: 0.95rem;
         justify-content: center;
+        font-size: 1.2rem;
     }
 
     .emergency-banner a {
-        display: inline-block;
-        padding: 0.4rem 1rem;
-        margin: 0.2rem;
-        font-size: 0.95rem;
-        width: auto;
+        width: 100%;
+        max-width: 200px;
+        padding: 0.8rem 1.5rem;
+        font-size: 1.1rem;
     }
 
     .testimonials-section {
-        padding: 4rem 1rem;
+        padding: 6rem 5%;
+        background: linear-gradient(135deg, #f8faff 0%, #ffffff 100%);
+        position: relative;
+        overflow: hidden;
     }
-    
+
     .testimonials-grid {
         grid-template-columns: 1fr;
         gap: 3rem;
-        margin-top: 3rem;
+        padding: 0.5rem;
     }
-    
+
     .testimonial-card {
-        padding: 1.8rem;
-        margin-top: 1.5rem;
-    }
-
-    .testimonial-card::after {
-        top: -25px;
-        font-size: 1.8rem;
-    }
-
-    .quote-icon {
-        font-size: 2rem;
-        margin-bottom: 1.2rem;
-    }
-
-    .testimonial-text {
-        font-size: 1rem;
-        line-height: 1.6;
-        margin-bottom: 1.5rem;
-    }
-
-    .testimonial-author {
-        padding-top: 1.2rem;
-    }
-
-    .author-info strong {
-        font-size: 1.05rem;
-    }
-
-    .author-info span {
-        font-size: 0.9rem;
+        padding: 2rem;
+        margin: 0 0.5rem;
     }
 }
 
@@ -304,25 +275,21 @@ nav a:hover {
     }
 
     .emergency-banner {
-        width: 95%;
-        padding: 0.8rem;
+        width: 92%;
+        padding: 1.2rem;
     }
 
     .emergency-banner strong {
-        font-size: 0.9rem;
+        font-size: 1.1rem;
     }
 
     .emergency-banner a {
-        font-size: 0.9rem;
-        padding: 0.3rem 0.8rem;
-    }
-
-    .testimonials-section {
-        padding: 3rem 0.8rem;
+        font-size: 1rem;
+        padding: 0.7rem 1.2rem;
     }
 
     .testimonial-card {
-        padding: 1.5rem;
+        padding: 1.8rem;
     }
 }
 
@@ -367,42 +334,51 @@ nav a:hover {
 
 .emergency-banner {
     background: linear-gradient(135deg, #FF3131 0%, #FF4D4D 100%);
-    padding: 0.8rem 2rem;
-    border-radius: 50px;
+    padding: 1.2rem 2rem;
+    border-radius: 20px;
     margin: 2rem auto;
-    max-width: fit-content;
-    display: inline-flex;
+    width: 90%;
+    max-width: 800px;
+    display: flex;
     align-items: center;
-    gap: 1rem;
-    box-shadow: 0 4px 15px rgba(255, 49, 49, 0.3);
+    justify-content: center;
+    gap: 1.5rem;
+    box-shadow: 0 8px 25px rgba(255, 49, 49, 0.25);
+    flex-wrap: wrap;
 }
 
 .emergency-banner strong {
     color: white;
-    font-size: 1rem;
-    display: inline-flex;
+    font-size: 1.1rem;
+    display: flex;
     align-items: center;
-    gap: 0.5rem;
+    gap: 0.8rem;
+    white-space: nowrap;
 }
 
 .emergency-banner strong i {
-    font-size: 0.9rem;
+    font-size: 1.2rem;
     color: #FFD700;
 }
 
 .emergency-banner a {
     color: white;
     text-decoration: none;
-    font-weight: bold;
+    font-weight: 600;
     transition: all 0.3s ease;
     background: rgba(255, 255, 255, 0.2);
-    padding: 0.2rem 0.8rem;
-    border-radius: 20px;
+    padding: 0.6rem 1.2rem;
+    border-radius: 30px;
+    backdrop-filter: blur(5px);
+    min-width: 110px;
+    text-align: center;
+    white-space: nowrap;
 }
 
 .emergency-banner a:hover {
     background: rgba(255, 255, 255, 0.3);
-    transform: translateY(-1px);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 .urgent-banner {
@@ -851,8 +827,8 @@ footer {
 }
 
 .testimonials-section {
-    padding: 8rem 5%;
-    background: #f8faff;
+    padding: 6rem 5%;
+    background: linear-gradient(135deg, #f8faff 0%, #ffffff 100%);
     position: relative;
     overflow: hidden;
 }
@@ -871,23 +847,26 @@ footer {
 
 .testimonials-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     gap: 2.5rem;
-    max-width: 1400px;
-    margin: 4rem auto 0;
-    position: relative;
-    z-index: 1;
-    padding-top: 30px;
+    max-width: 1200px;
+    margin: 3rem auto 0;
+    padding: 1rem;
 }
 
 .testimonial-card {
     background: white;
     padding: 2.5rem;
-    border-radius: 24px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04),
-                0 0 0 1px rgba(0, 0, 0, 0.02);
-    transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+    transition: all 0.4s ease;
     position: relative;
+    border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.testimonial-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
 }
 
 .testimonial-card::after {
