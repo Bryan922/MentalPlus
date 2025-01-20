@@ -82,11 +82,23 @@ document.addEventListener('DOMContentLoaded', function() {
             dayElement.textContent = day;
 
             const date = new Date(currentMonth.getFullYear(), currentMonth.getMonth(), day);
+            const dayOfWeek = date.getDay();
             
-            // Désactive les jours passés et le dimanche
-            if (date < new Date().setHours(0,0,0,0) || date.getDay() === 0) {
+            // Désactive les jours passés
+            if (date < new Date().setHours(0,0,0,0)) {
                 dayElement.classList.add('disabled');
-            } else {
+            } 
+            // Marque les dimanches en rouge et les désactive
+            else if (dayOfWeek === 0) {
+                dayElement.classList.add('sunday');
+                dayElement.classList.add('disabled');
+            }
+            // Marque les samedis
+            else if (dayOfWeek === 6) {
+                dayElement.classList.add('saturday');
+                dayElement.addEventListener('click', () => selectDate(date));
+            }
+            else {
                 dayElement.addEventListener('click', () => selectDate(date));
             }
 
@@ -388,18 +400,30 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    // Modification de la fonction updateTimeSlots pour gérer les créneaux de nuit
+    // Modification de la fonction updateTimeSlots pour gérer les horaires selon les jours
     function updateTimeSlots(date) {
         const slotsGrid = document.querySelector('.slots-grid');
         slotsGrid.innerHTML = '';
 
         let startHour, endHour;
+        const dayOfWeek = date.getDay();
+
         if (appointmentType === 'night') {
+            // Horaires de nuit (20h-6h) tous les jours
             startHour = 20;
-            endHour = 5;
+            endHour = 6;
         } else {
-            startHour = 9;
-            endHour = 19;
+            // Horaires classiques
+            if (dayOfWeek === 6) { // Samedi
+                startHour = 10;
+                endHour = 16;
+            } else if (dayOfWeek === 0) { // Dimanche
+                slotsGrid.innerHTML = '<p class="closed-message">Fermé le dimanche</p>';
+                return;
+            } else { // Lundi au vendredi
+                startHour = 10;
+                endHour = 19;
+            }
         }
 
         let currentHour = startHour;
@@ -417,7 +441,12 @@ document.addEventListener('DOMContentLoaded', function() {
             });
 
             slotsGrid.appendChild(timeSlot);
-            currentHour = (currentHour + 1) % 24;
+            if (appointmentType === 'night' && currentHour === 23) {
+                currentHour = 0;
+            } else {
+                currentHour = (currentHour + 1) % 24;
+            }
+            if (appointmentType === 'night' && currentHour === endHour) break;
         }
     }
 }); 
