@@ -947,49 +947,79 @@
 
 /* Styles spécifiques pour le mode nuit */
 .night-mode .calendar-container {
-    background: #1a1a1a;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+    background: #1a1a2e;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.3);
 }
 
 .night-mode .calendar-day-header {
     color: #fff;
+    opacity: 0.9;
 }
 
 .night-mode .calendar-day {
-    background: #2a2a2a;
+    background: #2d2d44;
     color: #fff;
+    border: 1px solid #3d3d56;
 }
 
 .night-mode .calendar-day:not(.empty):not(.disabled):hover {
-    background: #3a3a3a;
+    background: #3d3d56;
     color: #ffeb3b;
+    border-color: #ffeb3b;
 }
 
 .night-mode .calendar-day.selected {
     background: #1a237e;
     color: #ffeb3b;
+    border-color: #ffeb3b;
+    box-shadow: 0 0 10px rgba(255, 235, 59, 0.3);
 }
 
 .night-mode .calendar-day.disabled {
-    background: #222;
+    background: #1a1a2e;
     color: #666;
+    border-color: #2d2d44;
+}
+
+.night-mode .calendar-day.empty {
+    background: transparent;
+    border: none;
+}
+
+.night-mode .calendar-day.sunday {
+    background: #2d1f1f;
+    color: #ff6b6b;
+    border-color: #ff6b6b;
+}
+
+.night-mode .closed-message {
+    background: #2d1f1f;
+    color: #ff6b6b;
+    border: 1px solid #ff6b6b;
+}
+
+.night-mode .time-slots {
+    background: #1a1a2e;
+    border-left: 2px solid #2d2d44;
 }
 
 .night-mode .time-slot {
-    background: #2a2a2a;
+    background: #2d2d44;
     color: #fff;
-    border-color: #3a3a3a;
+    border: 1px solid #3d3d56;
 }
 
 .night-mode .time-slot:hover {
-    background: #3a3a3a;
+    background: #3d3d56;
     border-color: #ffeb3b;
+    transform: translateY(-2px);
 }
 
 .night-mode .time-slot.selected {
     background: #1a237e;
     color: #ffeb3b;
     border-color: #ffeb3b;
+    box-shadow: 0 0 10px rgba(255, 235, 59, 0.2);
 }
 
 .night-mode .time-slot::before {
@@ -997,14 +1027,20 @@
 }
 
 .night-mode .time-slot::after {
-    background: rgba(255,255,255,0.1);
+    background: rgba(255, 235, 59, 0.1);
     color: #ffeb3b;
 }
 
 .night-mode .calendar-header button {
     color: #fff;
+    opacity: 0.9;
+}
+
+.night-mode .calendar-header button:hover {
+    opacity: 1;
 }
 
 .night-mode .calendar-header h3 {
     color: #fff;
+    opacity: 0.9;
 } 

@@ -401,10 +401,16 @@ document.addEventListener('DOMContentLoaded', function() {
                 calendarContainer.classList.remove('night-mode');
             }
 
+            // Réinitialisation de la sélection
+            selectedTime = null;
+
             // Mise à jour des créneaux horaires disponibles
             if (selectedDate) {
                 updateTimeSlots(selectedDate);
             }
+            
+            // Mise à jour du résumé
+            updateSummary();
         });
     });
 
@@ -424,6 +430,11 @@ document.addEventListener('DOMContentLoaded', function() {
             timeSlotContainer.appendChild(message);
             return;
         }
+
+        // Titre des créneaux
+        const title = document.createElement('h3');
+        title.textContent = appointmentType === 'night' ? 'Créneaux de nuit disponibles' : 'Créneaux disponibles';
+        timeSlotContainer.appendChild(title);
 
         // Création de la grille des créneaux
         const slotsGrid = document.createElement('div');
