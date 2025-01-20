@@ -170,21 +170,29 @@ nav a:hover {
 
     .emergency-banner {
         flex-direction: column;
-        padding: 1.5rem;
+        padding: 1.2rem;
         text-align: center;
         gap: 1rem;
+        width: 85%;
+    }
+
+    .emergency-banner .emergency-left {
+        flex-direction: column;
+        gap: 0.8rem;
+        width: 100%;
     }
 
     .emergency-banner strong {
         justify-content: center;
-        font-size: 1.2rem;
+        font-size: 1.1rem;
+        margin-bottom: 0.3rem;
     }
 
-    .emergency-banner a {
-        width: 100%;
-        max-width: 200px;
+    .emergency-banner a.btn-primary {
+        width: auto;
+        min-width: 200px;
+        margin: 0.5rem auto 0;
         padding: 0.8rem 1.5rem;
-        font-size: 1.1rem;
     }
 
     .testimonials-section {
@@ -275,17 +283,17 @@ nav a:hover {
     }
 
     .emergency-banner {
-        width: 92%;
-        padding: 1.2rem;
+        width: 90%;
+        padding: 1rem;
     }
 
     .emergency-banner strong {
-        font-size: 1.1rem;
+        font-size: 1rem;
     }
 
     .emergency-banner a {
-        font-size: 1rem;
-        padding: 0.7rem 1.2rem;
+        font-size: 0.95rem;
+        padding: 0.6rem 1rem;
     }
 
     .testimonial-card {
@@ -334,22 +342,24 @@ nav a:hover {
 
 .emergency-banner {
     background: linear-gradient(135deg, #FF3131 0%, #FF4D4D 100%);
-    padding: 1rem 2rem;
+    padding: 1.2rem 2rem;
     border-radius: 50px;
     margin: 2rem auto;
-    width: auto;
+    width: 90%;
     max-width: 1200px;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 2rem;
+    gap: 1.5rem;
     box-shadow: 0 8px 25px rgba(255, 49, 49, 0.15);
 }
 
 .emergency-banner .emergency-left {
     display: flex;
     align-items: center;
-    gap: 1.5rem;
+    gap: 1rem;
+    flex-wrap: nowrap;
+    white-space: nowrap;
 }
 
 .emergency-banner strong {
