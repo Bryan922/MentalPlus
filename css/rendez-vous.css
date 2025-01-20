@@ -648,19 +648,36 @@
 
 .payment-badges {
     display: flex;
-    gap: 1.5rem;
+    gap: 2rem;
     align-items: center;
-    margin-top: 0.5rem;
+    margin-top: 1rem;
+    padding: 1rem 0;
 }
 
 .payment-badges .stripe-badge {
-    height: 32px;
+    height: 40px;
+    width: auto;
     object-fit: contain;
+    mix-blend-mode: multiply;
 }
 
 .payment-badges .card-badge {
-    height: 24px;
+    height: 35px;
+    width: auto;
     object-fit: contain;
+    mix-blend-mode: multiply;
+}
+
+.payment-badges img[src*="mastercard"] {
+    height: 45px;
+    background: transparent;
+    mix-blend-mode: multiply;
+}
+
+.payment-badges img[src*="stripe"] {
+    height: 45px;
+    background: transparent;
+    mix-blend-mode: multiply;
 }
 
 .payment-security-info {
@@ -697,9 +714,18 @@
     }
 
     .payment-badges {
-        flex-wrap: wrap;
         justify-content: center;
-        width: 100%;
+        gap: 1.5rem;
+    }
+
+    .payment-badges .stripe-badge,
+    .payment-badges .card-badge {
+        height: 30px;
+    }
+    
+    .payment-badges img[src*="mastercard"],
+    .payment-badges img[src*="stripe"] {
+        height: 35px;
     }
 
     .payment-security-info {
