@@ -944,3 +944,67 @@
         padding: 0.8rem;
     }
 } 
+
+/* Styles spécifiques pour le mode nuit */
+.night-mode .calendar-container {
+    background: #1a1a1a;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+}
+
+.night-mode .calendar-day-header {
+    color: #fff;
+}
+
+.night-mode .calendar-day {
+    background: #2a2a2a;
+    color: #fff;
+}
+
+.night-mode .calendar-day:not(.empty):not(.disabled):hover {
+    background: #3a3a3a;
+    color: #ffeb3b;
+}
+
+.night-mode .calendar-day.selected {
+    background: #1a237e;
+    color: #ffeb3b;
+}
+
+.night-mode .calendar-day.disabled {
+    background: #222;
+    color: #666;
+}
+
+.night-mode .time-slot {
+    background: #2a2a2a;
+    color: #fff;
+    border-color: #3a3a3a;
+}
+
+.night-mode .time-slot:hover {
+    background: #3a3a3a;
+    border-color: #ffeb3b;
+}
+
+.night-mode .time-slot.selected {
+    background: #1a237e;
+    color: #ffeb3b;
+    border-color: #ffeb3b;
+}
+
+.night-mode .time-slot::before {
+    color: #ffeb3b;
+}
+
+.night-mode .time-slot::after {
+    background: rgba(255,255,255,0.1);
+    color: #ffeb3b;
+}
+
+.night-mode .calendar-header button {
+    color: #fff;
+}
+
+.night-mode .calendar-header h3 {
+    color: #fff;
+} 

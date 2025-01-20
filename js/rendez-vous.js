@@ -393,6 +393,14 @@ document.addEventListener('DOMContentLoaded', function() {
             // Mise à jour du type de rendez-vous
             appointmentType = button.dataset.type;
 
+            // Gestion du mode nuit/jour
+            const calendarContainer = document.querySelector('.calendar-container');
+            if (appointmentType === 'night') {
+                calendarContainer.classList.add('night-mode');
+            } else {
+                calendarContainer.classList.remove('night-mode');
+            }
+
             // Mise à jour des créneaux horaires disponibles
             if (selectedDate) {
                 updateTimeSlots(selectedDate);
@@ -400,13 +408,12 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    // Modification de la fonction updateTimeSlots pour gérer les horaires selon les jours
     function updateTimeSlots(selectedDate) {
         const timeSlotContainer = document.querySelector('.time-slots');
         timeSlotContainer.innerHTML = '';
         
         const date = new Date(selectedDate);
-        const dayOfWeek = date.getDay(); // 0 = Dimanche, 1 = Lundi, ..., 6 = Samedi
+        const dayOfWeek = date.getDay(); // 0 = Dimanche
         const appointmentType = document.querySelector('.type-btn.active').dataset.type;
         
         // Si c'est dimanche, on n'affiche aucun créneau
@@ -418,35 +425,28 @@ document.addEventListener('DOMContentLoaded', function() {
             return;
         }
 
-        let startHour, endHour;
-        
+        // Création de la grille des créneaux
+        const slotsGrid = document.createElement('div');
+        slotsGrid.className = 'slots-grid';
+        timeSlotContainer.appendChild(slotsGrid);
+
         if (appointmentType === 'night') {
             // Horaires de nuit (20h-6h) tous les jours sauf dimanche
-            startHour = 20;
-            endHour = 6;
+            // Créneaux du soir
+            for (let hour = 20; hour <= 23; hour++) {
+                addTimeSlot(hour, slotsGrid);
+            }
+            // Créneaux du matin
+            for (let hour = 0; hour <= 6; hour++) {
+                addTimeSlot(hour, slotsGrid);
+            }
         } else {
             // Horaires de jour
-            if (dayOfWeek === 6) { // Samedi
-                startHour = 10;
-                endHour = 16;
-            } else { // Lundi au vendredi
-                startHour = 10;
-                endHour = 19;
-            }
-        }
+            const startHour = 10;
+            const endHour = dayOfWeek === 6 ? 16 : 18; // 16h le samedi, 18h en semaine
 
-        // Génération des créneaux
-        if (appointmentType === 'night') {
-            // Pour les horaires de nuit, on doit gérer le changement de jour
-            for (let hour = startHour; hour <= 23; hour++) {
-                addTimeSlot(hour, timeSlotContainer);
-            }
-            for (let hour = 0; hour <= endHour; hour++) {
-                addTimeSlot(hour, timeSlotContainer);
-            }
-        } else {
-            for (let hour = startHour; hour < endHour; hour++) {
-                addTimeSlot(hour, timeSlotContainer);
+            for (let hour = startHour; hour <= endHour; hour++) {
+                addTimeSlot(hour, slotsGrid);
             }
         }
     }
@@ -454,12 +454,19 @@ document.addEventListener('DOMContentLoaded', function() {
     function addTimeSlot(hour, container) {
         const timeSlot = document.createElement('div');
         timeSlot.className = 'time-slot';
-        timeSlot.textContent = `${hour.toString().padStart(2, '0')}:00`;
-        timeSlot.dataset.time = `${hour.toString().padStart(2, '0')}:00`;
+        const formattedHour = hour.toString().padStart(2, '0');
+        timeSlot.textContent = `${formattedHour}:00`;
+        timeSlot.dataset.time = `${formattedHour}:00`;
+        
+        // Vérifie si le créneau est déjà sélectionné
+        if (selectedTime === `${formattedHour}:00`) {
+            timeSlot.classList.add('selected');
+        }
         
         timeSlot.addEventListener('click', function() {
             document.querySelectorAll('.time-slot').forEach(slot => slot.classList.remove('selected'));
             this.classList.add('selected');
+            selectedTime = this.dataset.time;
             updateSummary();
         });
         
