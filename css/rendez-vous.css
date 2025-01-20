@@ -648,36 +648,36 @@
 
 .payment-badges {
     display: flex;
-    gap: 2rem;
+    gap: 2.5rem;
     align-items: center;
     margin-top: 1rem;
     padding: 1rem 0;
+    background: transparent;
 }
 
-.payment-badges .stripe-badge {
-    height: 40px;
-    width: auto;
-    object-fit: contain;
-    mix-blend-mode: multiply;
-}
-
-.payment-badges .card-badge {
+/* Style commun pour tous les badges */
+.payment-badges img {
     height: 35px;
     width: auto;
     object-fit: contain;
-    mix-blend-mode: multiply;
+    filter: brightness(1.1) contrast(1.1);
+    background: transparent !important;
 }
 
-.payment-badges img[src*="mastercard"] {
-    height: 45px;
-    background: transparent;
-    mix-blend-mode: multiply;
-}
-
+/* Style spécifique pour Stripe */
 .payment-badges img[src*="stripe"] {
-    height: 45px;
-    background: transparent;
-    mix-blend-mode: multiply;
+    height: 35px;
+    filter: brightness(1.1) contrast(1.1) grayscale(0.1);
+    background-color: transparent !important;
+    mix-blend-mode: darken;
+}
+
+/* Style spécifique pour Mastercard */
+.payment-badges img[src*="mastercard"] {
+    height: 35px;
+    filter: brightness(1.1) contrast(1.1);
+    background-color: transparent !important;
+    mix-blend-mode: darken;
 }
 
 .payment-security-info {
@@ -715,19 +715,15 @@
 
     .payment-badges {
         justify-content: center;
-        gap: 1.5rem;
+        gap: 2rem;
     }
 
-    .payment-badges .stripe-badge,
-    .payment-badges .card-badge {
+    .payment-badges img,
+    .payment-badges img[src*="stripe"],
+    .payment-badges img[src*="mastercard"] {
         height: 30px;
     }
     
-    .payment-badges img[src*="mastercard"],
-    .payment-badges img[src*="stripe"] {
-        height: 35px;
-    }
-
     .payment-security-info {
         grid-template-columns: 1fr;
     }
