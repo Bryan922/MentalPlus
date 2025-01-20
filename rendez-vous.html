@@ -148,15 +148,69 @@
                             <label for="notes">Notes ou précisions (facultatif)</label>
                             <textarea id="notes" name="notes" rows="4"></textarea>
                         </div>
-                        <div class="form-group full-width">
-                            <label for="card-element">Informations de paiement *</label>
+                        <div class="form-group full-width payment-section">
+                            <div class="payment-header">
+                                <label for="card-element">
+                                    <i class="fas fa-shield-alt"></i> Paiement sécurisé
+                                </label>
+                                <div class="payment-badges">
+                                    <img src="https://b.stripecdn.com/site-srv/assets/img/v3/home/powered_by_stripe-f140bb1546b9f10a7353efebee32d622973fa3650637760be0a6b46ebf7ad957.png" alt="Powered by Stripe" class="stripe-badge">
+                                    <img src="https://cdn.visa.com/v2/assets/images/logos/visa/blue/logo.png" alt="Visa" class="card-badge">
+                                    <img src="https://www.mastercard.fr/content/dam/public/mastercardcom/eu/fr/images/logo/mc-logo-52.svg" alt="Mastercard" class="card-badge">
+                                </div>
+                            </div>
                             <div id="card-element" class="stripe-element"></div>
                             <div id="card-errors" class="stripe-errors" role="alert"></div>
+                            <div class="payment-security-info">
+                                <div class="security-item">
+                                    <i class="fas fa-lock"></i>
+                                    <span>Paiement 100% sécurisé</span>
+                                </div>
+                                <div class="security-item">
+                                    <i class="fas fa-shield-alt"></i>
+                                    <span>Cryptage SSL 256-bits</span>
+                                </div>
+                                <div class="security-item">
+                                    <i class="fas fa-check-circle"></i>
+                                    <span>Protection contre la fraude</span>
+                                </div>
+                            </div>
                         </div>
                     </div>
+
+                    <!-- Informations importantes -->
+                    <div class="important-info">
+                        <h4><i class="fas fa-info-circle"></i> Informations importantes</h4>
+                        <div class="info-grid">
+                            <div class="info-item">
+                                <i class="fas fa-clock"></i>
+                                <div class="info-content">
+                                    <strong>Ponctualité</strong>
+                                    <p>Merci d'arriver 5 minutes avant votre rendez-vous. En cas de retard, la durée de votre consultation pourrait être réduite.</p>
+                                </div>
+                            </div>
+                            <div class="info-item">
+                                <i class="fas fa-calendar-times"></i>
+                                <div class="info-content">
+                                    <strong>Annulation</strong>
+                                    <p>En cas d'empêchement, merci d'annuler votre rendez-vous au plus tôt en nous contactant à <a href="mailto:contact@mentalserenity.fr">contact@mentalserenity.fr</a> ou via votre espace client.</p>
+                                </div>
+                            </div>
+                            <div class="info-item">
+                                <i class="fas fa-euro-sign"></i>
+                                <div class="info-content">
+                                    <strong>Remboursement</strong>
+                                    <p>En cas d'annulation, le remboursement sera effectué sous 1 à 5 jours ouvrables sur votre carte bancaire.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                     <div class="form-buttons">
                         <button type="button" class="btn-prev" onclick="prevStep()">Précédent</button>
-                        <button type="submit" class="btn-submit">Confirmer et payer</button>
+                        <button type="submit" class="btn-submit">
+                            <i class="fas fa-lock"></i> Confirmer et payer 50€
+                        </button>
                     </div>
                 </div>
             </form>
