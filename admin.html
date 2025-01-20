@@ -288,40 +288,51 @@
                 <div class="table-container">
                     <h2>Prochains rendez-vous</h2>
                     <div class="appointment-tabs">
-                        <button class="tab-btn active" data-tab="regular">Rendez-vous classiques</button>
-                        <button class="tab-btn" data-tab="night">Rendez-vous de nuit</button>
+                        <button class="tab-btn active" data-type="regular">
+                            <i class="fas fa-sun"></i>
+                            Rendez-vous classiques
+                        </button>
+                        <button class="tab-btn" data-type="night">
+                            <i class="fas fa-moon"></i>
+                            Rendez-vous de nuit
+                        </button>
                     </div>
-                    <table class="admin-table" id="regularAppointments">
-                        <thead>
-                            <tr>
-                                <th>Client</th>
-                                <th>Date</th>
-                                <th>Type</th>
-                                <th>Action</th>
-                            </tr>
-                        </thead>
-                        <tbody id="upcomingAppointments">
-                            <tr>
-                                <td colspan="4">Chargement...</td>
-                            </tr>
-                        </tbody>
-                    </table>
 
-                    <table class="admin-table" id="nightAppointments" style="display: none;">
-                        <thead>
-                            <tr>
-                                <th>Client</th>
-                                <th>Date</th>
-                                <th>Type</th>
-                                <th>Action</th>
-                            </tr>
-                        </thead>
-                        <tbody id="upcomingNightAppointments">
-                            <tr>
-                                <td colspan="4">Chargement...</td>
-                            </tr>
-                        </tbody>
-                    </table>
+                    <div id="regularAppointments" class="active">
+                        <table class="admin-table">
+                            <thead>
+                                <tr>
+                                    <th>Client</th>
+                                    <th>Date</th>
+                                    <th>Type</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="upcomingAppointments">
+                                <tr>
+                                    <td colspan="4">Chargement...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div id="nightAppointments">
+                        <table class="admin-table">
+                            <thead>
+                                <tr>
+                                    <th>Client</th>
+                                    <th>Date</th>
+                                    <th>Type</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="upcomingNightAppointments">
+                                <tr>
+                                    <td colspan="4">Chargement...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
