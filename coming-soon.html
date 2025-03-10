@@ -3,59 +3,232 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bientôt disponible - Psycho Help</title>
+    <title>Bientôt disponible - Mental Serenity</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
-        body {
+        * {
             margin: 0;
             padding: 0;
-            font-family: 'Arial', sans-serif;
-            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-            height: 100vh;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            min-height: 100%;
+            width: 100%;
+            overflow-x: hidden;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) fixed;
+            color: #fff;
+            padding: 40px 20px;
+            text-align: center;
             display: flex;
             align-items: center;
             justify-content: center;
-            text-align: center;
+            min-height: 100vh;
         }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI1NiIgaGVpZ2h0PSIxMDAiPgo8cGF0aCBkPSJNMjggNjZMMCA1MEwyOCAzNGw2NiAyNHoiIGZpbGw9IiNmZmYiIGZpbGwtb3BhY2l0eT0iMC4wMyIvPgo8L3N2Zz4=') repeat;
+            pointer-events: none;
+            opacity: 0.4;
+            z-index: 1;
+        }
+
         .container {
-            padding: 2rem;
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: 15px;
-            box-shadow: 0 8px 32px rgba(31, 38, 135, 0.15);
-            max-width: 600px;
-            margin: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 3rem;
+            width: 90%;
+            max-width: 800px;
+            box-shadow: 0 8px 32px rgba(31, 38, 135, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            position: relative;
+            z-index: 2;
+            margin: 40px auto;
         }
+
         h1 {
-            color: #2c3e50;
-            font-size: 2.5rem;
-            margin-bottom: 1rem;
+            font-size: 2.8rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            color: #fff;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+            animation: slideDown 1s ease-out;
         }
-        p {
-            color: #34495e;
-            font-size: 1.2rem;
-            line-height: 1.6;
-            margin-bottom: 2rem;
-        }
-        .loader {
-            width: 50px;
-            height: 50px;
-            border: 5px solid #f3f3f3;
-            border-top: 5px solid #3498db;
+
+        .logo {
+            width: 120px;
+            height: 120px;
+            margin: 0 auto 2rem;
+            background: rgba(255, 255, 255, 0.95);
             border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin: 20px auto;
+            padding: 15px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            animation: pulse 2s infinite;
         }
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+
+        .logo img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        p {
+            font-size: 1.2rem;
+            line-height: 1.8;
+            margin-bottom: 2rem;
+            color: rgba(255, 255, 255, 0.9);
+            animation: slideUp 1s ease-out;
+        }
+
+        .features {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin: 2rem 0;
+            flex-wrap: wrap;
+            animation: fadeIn 1.5s ease-out;
+        }
+
+        .feature {
+            flex: 1;
+            min-width: 200px;
+            padding: 1.5rem;
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 15px;
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
+            transition: transform 0.3s ease;
+        }
+
+        .feature:hover {
+            transform: translateY(-5px);
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .feature h3 {
+            font-size: 1.2rem;
+            margin-bottom: 0.8rem;
+            color: #fff;
+        }
+
+        .feature p {
+            font-size: 1rem;
+            margin-bottom: 0;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .progress-bar {
+            width: 200px;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 3px;
+            margin: 2rem auto;
+            overflow: hidden;
+        }
+
+        .progress {
+            width: 75%;
+            height: 100%;
+            background: #fff;
+            border-radius: 3px;
+            animation: progress 2s ease-out;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideDown {
+            from { transform: translateY(-30px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(30px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        @keyframes progress {
+            from { width: 0; }
+            to { width: 75%; }
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 20px;
+            }
+
+            .container {
+                padding: 2rem;
+                margin: 20px auto;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+
+            p {
+                font-size: 1rem;
+            }
+
+            .features {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .feature {
+                min-width: 100%;
+            }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>Bientôt disponible</h1>
-        <div class="loader"></div>
-        <p>Notre site est en cours de construction. Nous travaillons dur pour vous offrir la meilleure expérience possible.</p>
-        <p>Revenez bientôt pour découvrir nos services d'aide psychologique en ligne.</p>
+        <div class="logo">
+            <img src="assets/logo.png" alt="Mental Serenity Logo" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDEwMCAxMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHBhdGggZD0iTTUwIDEwQzI3LjkwODYgMTAgMTAgMjcuOTA4NiAxMCA1MEMxMCA3Mi4wOTE0IDI3LjkwODYgOTAgNTAgOTBDNzIuMDkxNCA5MCA5MCA3Mi4wOTE0IDkwIDUwQzkwIDI3LjkwODYgNzIuMDkxNCAxMCA1MCAxMFoiIHN0cm9rZT0iIzc2NGJhMiIgc3Ryb2tlLXdpZHRoPSI0Ii8+PHBhdGggZD0iTTUwIDMwQzM4Ljk1NDMgMzAgMzAgMzguOTU0MyAzMCA1MEMzMCA2MS4wNDU3IDM4Ljk1NDMgNzAgNTAgNzBDNjEuMDQ1NyA3MCA3MCA2MS4wNDU3IDcwIDUwQzcwIDM4Ljk1NDMgNjEuMDQ1NyAzMCA1MCAzMFoiIGZpbGw9IiM3NjRiYTIiLz48L3N2Zz4='">
+        </div>
+        <h1>Mental Serenity arrive bientôt</h1>
+        <p>Notre plateforme de soutien psychologique en ligne est en cours de développement. Nous mettons tout en œuvre pour vous offrir un espace sécurisé et bienveillant.</p>
+        
+        <div class="features">
+            <div class="feature">
+                <h3>Consultations en ligne</h3>
+                <p>Des professionnels qualifiés à votre écoute</p>
+            </div>
+            <div class="feature">
+                <h3>Suivi personnalisé</h3>
+                <p>Un accompagnement adapté à vos besoins</p>
+            </div>
+            <div class="feature">
+                <h3>Disponible 24/7</h3>
+                <p>Une assistance quand vous en avez besoin</p>
+            </div>
+        </div>
+
+        <div class="progress-bar">
+            <div class="progress"></div>
+        </div>
+        
+        <p>Nous travaillons activement pour vous accueillir très prochainement. En attendant, prenez soin de vous.</p>
     </div>
 </body>
 </html> 
