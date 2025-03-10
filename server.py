@@ -10,6 +10,11 @@ class CORSRequestHandler(SimpleHTTPRequestHandler):
         self.send_response(200)
         self.end_headers()
 
+    def do_GET(self):
+        if self.path == '/':
+            self.path = '/coming-soon.html'
+        return super().do_GET()
+
 port = 8000
 print(f"Serveur démarré sur http://localhost:{port}")
 print("Pour arrêter le serveur, appuyez sur Ctrl+C")
