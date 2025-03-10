@@ -1,17 +1,5 @@
 {
   "version": 2,
-  "rewrites": [
-    { "source": "/((?!coming-soon.html|assets/|css/|js/|images/).*)", "destination": "/coming-soon.html" }
-  ],
-  "headers": [
-    {
-      "source": "/(.*)",
-      "headers": [
-        {
-          "key": "Cache-Control",
-          "value": "no-store, no-cache, must-revalidate"
-        }
-      ]
-    }
-  ]
+  "cleanUrls": true,
+  "trailingSlash": false
 } 
