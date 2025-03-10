@@ -1,9 +1,17 @@
-# Redirection vers la page Coming Soon
+# Active le moteur de réécriture
 RewriteEngine On
+
+# Forcer HTTPS
+RewriteCond %{HTTPS} off
+RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+# Redirection vers la page Coming Soon
 RewriteCond %{REQUEST_URI} !^/coming-soon\.html$
 RewriteCond %{REQUEST_URI} !^/assets/
 RewriteCond %{REQUEST_URI} !^/css/
-RewriteRule ^(.*)$ /coming-soon.html [L]
+RewriteCond %{REQUEST_URI} !^/js/
+RewriteCond %{REQUEST_URI} !^/images/
+RewriteRule ^(.*)$ /coming-soon.html [R=302,L]
 
 # Protection des fichiers sensibles
 <FilesMatch "^(config\.php|database\.php|\.env|\.htaccess|composer\.(json|lock))$">
@@ -19,11 +27,6 @@ RewriteRule ^(.*)$ /coming-soon.html [L]
 
 # Protection contre l'affichage du contenu des répertoires
 Options -Indexes
-
-# Forcer HTTPS
-RewriteEngine On
-RewriteCond %{HTTPS} off
-RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
 
 # Redirection des erreurs
 ErrorDocument 404 /404.html
