@@ -1,31 +1,17 @@
 {
   "version": 2,
-  "routes": [
+  "rewrites": [
+    { "source": "/((?!coming-soon.html|assets/|css/|js/|images/).*)", "destination": "/coming-soon.html" }
+  ],
+  "headers": [
     {
-      "src": "/assets/(.*)",
-      "dest": "/assets/$1"
-    },
-    {
-      "src": "/css/(.*)",
-      "dest": "/css/$1"
-    },
-    {
-      "src": "/js/(.*)",
-      "dest": "/js/$1"
-    },
-    {
-      "src": "/images/(.*)",
-      "dest": "/images/$1"
-    },
-    {
-      "handle": "filesystem"
-    },
-    {
-      "src": "/(.*)",
-      "status": 307,
-      "headers": {
-        "Location": "/coming-soon.html"
-      }
+      "source": "/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "no-store, no-cache, must-revalidate"
+        }
+      ]
     }
   ]
 } 
