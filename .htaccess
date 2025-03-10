@@ -1,3 +1,10 @@
+# Redirection vers la page Coming Soon
+RewriteEngine On
+RewriteCond %{REQUEST_URI} !^/coming-soon\.html$
+RewriteCond %{REQUEST_URI} !^/assets/
+RewriteCond %{REQUEST_URI} !^/css/
+RewriteRule ^(.*)$ /coming-soon.html [L]
+
 # Protection des fichiers sensibles
 <FilesMatch "^(config\.php|database\.php|\.env|\.htaccess|composer\.(json|lock))$">
     Order allow,deny
