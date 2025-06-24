@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<!-- Version MentalSerenity 2024 - Contact -->
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MentalSerenity - Contact</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <header class="main-header">
+        <nav class="navbar">
+            <div class="nav-brand">
+                <a href="index.html" class="brand-logo">
+                    <img src="Mental Serenity - Logo-Photoroom.png" alt="Mental Serenity" class="logo-img">
+                </a>
+            </div>
+            
+            <div class="nav-menu" id="nav-menu">
+                <ul class="nav-list">
+                    <li class="nav-item">
+                        <a href="index.html" class="nav-link">Accueil</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="services.html" class="nav-link">Services</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="tarifs.html" class="nav-link">Tarifs</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="contact.html" class="nav-link active">Contact</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="auth.html" class="nav-link nav-cta">Connexion</a>
+                    </li>
+                </ul>
+            </div>
+            
+            <div class="nav-toggle" id="nav-toggle">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <section class="hero">
+            <h1>Contactez-nous</h1>
+            <p>Nous sommes là pour vous offrir écoute et accompagnement bienveillant</p>
+
+        </section>
+
+        <section class="contact-section">
+            <div class="contact-container">
+                <div class="contact-info">
+                    <h2>Informations de contact</h2>
+                    
+                    <div class="contact-item">
+                        <i class="fas fa-phone"></i>
+                        <div>
+                            <h3>Téléphone</h3>
+                            <p><a href="tel:0123456789">01 23 45 67 89</a></p>
+                            <small>Lundi au vendredi : 9h - 19h</small>
+                        </div>
+                    </div>
+
+                    <div class="contact-item">
+                        <i class="fas fa-envelope"></i>
+                        <div>
+                            <h3>Email</h3>
+                            <p><a href="mailto:contact@mentalserenity.fr">contact@mentalserenity.fr</a></p>
+                            <small>Réponse sous 24h</small>
+                        </div>
+                    </div>
+
+                    <div class="contact-item">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <div>
+                            <h3>Adresse</h3>
+                            <p>123 Avenue de la Sérénité<br>75001 Paris, France</p>
+                            <small>Métro : Châtelet-Les Halles</small>
+                        </div>
+                    </div>
+
+                    <div class="contact-item emergency">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <div>
+                            <h3>Urgences</h3>
+                            <p>SAMU : <a href="tel:15">15</a></p>
+                            <p>Prévention suicide : <a href="tel:3114">3114</a></p>
+                            <small>Disponible 24h/24</small>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="contact-form">
+                    <h2>Envoyez-nous un message</h2>
+                    <form id="contactForm">
+                        <div class="form-group">
+                            <label for="name">Nom complet *</label>
+                            <input type="text" id="name" name="name" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="email">Email *</label>
+                            <input type="email" id="email" name="email" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="phone">Téléphone</label>
+                            <input type="tel" id="phone" name="phone">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="subject">Sujet *</label>
+                            <select id="subject" name="subject" required>
+                                <option value="">Choisissez un sujet</option>
+                                <option value="rdv">Demande de rendez-vous</option>
+                                <option value="info">Demande d'information</option>
+                                <option value="urgence">Situation d'urgence</option>
+                                <option value="autre">Autre</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="message">Message *</label>
+                            <textarea id="message" name="message" rows="5" required placeholder="Décrivez brièvement votre demande..."></textarea>
+                        </div>
+
+                        <div class="form-group checkbox-group">
+                            <input type="checkbox" id="privacy" name="privacy" required>
+                            <label for="privacy">J'accepte que mes données soient utilisées pour me recontacter dans le cadre de ma demande *</label>
+                        </div>
+
+                        <button type="submit" class="btn-primary">Envoyer le message</button>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+        <section class="contact-hours">
+            <h2>Horaires d'ouverture</h2>
+            <div class="hours-grid">
+                <div class="hours-item">
+                    <h3>Consultations</h3>
+                    <p><strong>Lundi - Vendredi :</strong> 9h00 - 19h00</p>
+                    <p><strong>Samedi :</strong> 9h00 - 17h00</p>
+                    <p><strong>Dimanche :</strong> Fermé</p>
+                </div>
+                <div class="hours-item">
+                    <h3>Urgences</h3>
+                    <p><strong>24h/24 - 7j/7</strong></p>
+                    <p>Service d'urgence disponible</p>
+                    <a href="urgences.html" class="btn-secondary">Accès urgences</a>
+                </div>
+                <div class="hours-item">
+                    <h3>Réception téléphonique</h3>
+                    <p><strong>Lundi - Vendredi :</strong> 8h30 - 19h30</p>
+                    <p><strong>Samedi :</strong> 9h00 - 17h00</p>
+                    <p>Répondeur en dehors des heures</p>
+                </div>
+                <div class="hours-item">
+                    <h3>Consultations de nuit</h3>
+                    <p><strong>Tous les jours :</strong> 20h00 - 06h00</p>
+                    <p>Service spécialisé disponible</p>
+                    <p><em>Tarif : 80€</em></p>
+                </div>
+            </div>
+        </section>
+
+        <section id="cta">
+            <h2>Prêt à prendre rendez-vous ?</h2>
+            <p>Commencez votre parcours vers un mieux-être dès aujourd'hui</p>
+            <a href="rendez-vous.html" class="btn-primary">Prendre rendez-vous</a>
+        </section>
+    </main>
+
+    <div class="important-disclaimer">
+        <p><strong>Information importante :</strong> Ce service d'écoute et d'accompagnement bienveillant ne constitue pas une prise en charge médicale, psychologique ou psychiatrique. En cas de besoin, consultez un professionnel de santé qualifié.</p>
+    </div>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>MentalSerenity</h3>
+                <p>Votre bien-être mental est notre priorité</p>
+            </div>
+            <div class="footer-section">
+                <h3>Contact</h3>
+                <p>Email: contact@mentalserenity.fr</p>
+                <p>Téléphone: 01 23 45 67 89</p>
+            </div>
+            <div class="footer-section">
+                <h3>Urgences</h3>
+                <p>SAMU: 15</p>
+                <p>Prévention suicide: 3114</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2024 MentalSerenity. Tous droits réservés.</p>
+        </div>
+    </footer>
+
+    <script src="js/main.js"></script>
+    <script src="js/navbar.js"></script>
+</body>
+</html>

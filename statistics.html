@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Statistiques - PsychoAide</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/dashboard.css">
+    <link rel="stylesheet" href="css/employee.css">
+    <link rel="stylesheet" href="css/statistics.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="user-info">
+                    <i class="fas fa-user-md"></i>
+                    <div class="user-details">
+                        <h3 id="employeeName">Dr. Martin</h3>
+                        <p id="employeeRole">Psychologue</p>
+                    </div>
+                </div>
+            </div>
+            
+            <nav class="sidebar-nav">
+                <a href="espace-employe.html">
+                    <i class="fas fa-calendar-alt"></i>
+                    Planning
+                </a>
+                <a href="patients.html">
+                    <i class="fas fa-users"></i>
+                    Mes patients
+                </a>
+                <a href="consultations.html">
+                    <i class="fas fa-clipboard"></i>
+                    Consultations
+                </a>
+                <a href="messages.html">
+                    <i class="fas fa-envelope"></i>
+                    Messages
+                    <span class="badge">5</span>
+                </a>
+                <a href="settings.html">
+                    <i class="fas fa-cog"></i>
+                    Paramètres
+                </a>
+            </nav>
+
+            <div class="sidebar-footer">
+                <a href="#help">
+                    <i class="fas fa-question-circle"></i>
+                    Aide
+                </a>
+                <a href="index.html" class="logout">
+                    <i class="fas fa-sign-out-alt"></i>
+                    Déconnexion
+                </a>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="statistics-container">
+                <header class="statistics-header">
+                    <div class="header-left">
+                        <h1>Statistiques</h1>
+                        <div class="period-selector">
+                            <button class="active">Semaine</button>
+                            <button>Mois</button>
+                            <button>Année</button>
+                            <button>Personnalisé</button>
+                        </div>
+                    </div>
+                    <div class="header-right">
+                        <button class="btn-secondary">
+                            <i class="fas fa-download"></i>
+                            Exporter
+                        </button>
+                        <button class="btn-primary">
+                            <i class="fas fa-print"></i>
+                            Imprimer
+                        </button>
+                    </div>
+                </header>
+
+                <!-- Cartes de résumé -->
+                <div class="summary-cards">
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3>Patients actifs</h3>
+                            <p class="stat-value">42</p>
+                            <span class="stat-trend positive">
+                                <i class="fas fa-arrow-up"></i>
+                                8% vs mois dernier
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-calendar-check"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3>Consultations</h3>
+                            <p class="stat-value">156</p>
+                            <span class="stat-trend positive">
+                                <i class="fas fa-arrow-up"></i>
+                                12% vs mois dernier
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-clock"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3>Heures de consultation</h3>
+                            <p class="stat-value">182h</p>
+                            <span class="stat-trend positive">
+                                <i class="fas fa-arrow-up"></i>
+                                5% vs mois dernier
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-euro-sign"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3>Revenus</h3>
+                            <p class="stat-value">9,360€</p>
+                            <span class="stat-trend positive">
+                                <i class="fas fa-arrow-up"></i>
+                                15% vs mois dernier
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Graphiques -->
+                <div class="charts-grid">
+                    <!-- Consultations par jour -->
+                    <div class="chart-card">
+                        <div class="chart-header">
+                            <h3>Consultations par jour</h3>
+                            <div class="chart-actions">
+                                <button class="btn-icon" title="Télécharger">
+                                    <i class="fas fa-download"></i>
+                                </button>
+                                <button class="btn-icon" title="Plus d'options">
+                                    <i class="fas fa-ellipsis-v"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="chart-content">
+                            <canvas id="consultationsChart"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- Répartition des consultations -->
+                    <div class="chart-card">
+                        <div class="chart-header">
+                            <h3>Types de consultation</h3>
+                            <div class="chart-actions">
+                                <button class="btn-icon" title="Télécharger">
+                                    <i class="fas fa-download"></i>
+                                </button>
+                                <button class="btn-icon" title="Plus d'options">
+                                    <i class="fas fa-ellipsis-v"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="chart-content">
+                            <canvas id="consultationTypesChart"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- Revenus mensuels -->
+                    <div class="chart-card">
+                        <div class="chart-header">
+                            <h3>Revenus mensuels</h3>
+                            <div class="chart-actions">
+                                <button class="btn-icon" title="Télécharger">
+                                    <i class="fas fa-download"></i>
+                                </button>
+                                <button class="btn-icon" title="Plus d'options">
+                                    <i class="fas fa-ellipsis-v"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="chart-content">
+                            <canvas id="revenueChart"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- Taux d'occupation -->
+                    <div class="chart-card">
+                        <div class="chart-header">
+                            <h3>Taux d'occupation</h3>
+                            <div class="chart-actions">
+                                <button class="btn-icon" title="Télécharger">
+                                    <i class="fas fa-download"></i>
+                                </button>
+                                <button class="btn-icon" title="Plus d'options">
+                                    <i class="fas fa-ellipsis-v"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="chart-content">
+                            <canvas id="occupancyChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tableau des dernières consultations -->
+                <div class="recent-consultations">
+                    <div class="table-header">
+                        <h3>Dernières consultations</h3>
+                        <button class="btn-text">Voir tout</button>
+                    </div>
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Patient</th>
+                                    <th>Date</th>
+                                    <th>Type</th>
+                                    <th>Durée</th>
+                                    <th>Statut</th>
+                                    <th>Montant</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <div class="patient-cell">
+                                            <img src="https://via.placeholder.com/32" alt="Photo patient">
+                                            <span>Jean Dupont</span>
+                                        </div>
+                                    </td>
+                                    <td>15 Mai 2024 - 14:00</td>
+                                    <td><span class="badge day">Jour</span></td>
+                                    <td>1h</td>
+                                    <td><span class="status completed">Terminée</span></td>
+                                    <td>60€</td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="patient-cell">
+                                            <img src="https://via.placeholder.com/32" alt="Photo patient">
+                                            <span>Sarah Martin</span>
+                                        </div>
+                                    </td>
+                                    <td>15 Mai 2024 - 22:00</td>
+                                    <td><span class="badge night">Nuit</span></td>
+                                    <td>1h</td>
+                                    <td><span class="status pending">En attente</span></td>
+                                    <td>80€</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="js/statistics.js"></script>
+</body>
+</html> 

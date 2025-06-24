@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Authentification - MentalSerenity</title>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        /* Styles spécifiques à la page d'authentification */
+        .auth-container {
+            min-height: calc(100vh - 70px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem;
+            padding-top: 90px;
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+        }
+
+        .auth-box {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 400px;
+            position: relative;
+        }
+
+        .auth-tabs {
+            display: flex;
+            margin-bottom: 2rem;
+            border-bottom: 2px solid #eee;
+        }
+
+        .tab-btn {
+            flex: 1;
+            padding: 1rem;
+            border: none;
+            background: none;
+            font-size: 1rem;
+            font-weight: 600;
+            color: #666;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .tab-btn.active {
+            color: var(--primary-color);
+        }
+
+        .tab-btn.active::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: var(--primary-color);
+        }
+
+        .auth-form {
+            display: none;
+        }
+
+        .auth-form.active {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #666;
+            font-weight: 500;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 0.8rem;
+            border: 2px solid #eee;
+            border-radius: 5px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus {
+            border-color: var(--primary-color);
+            outline: none;
+        }
+
+        .form-group .password-input {
+            position: relative;
+        }
+
+        .form-group .toggle-password {
+            position: absolute;
+            right: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            color: #666;
+            transition: color 0.3s;
+        }
+
+        .form-group .toggle-password:hover {
+            color: var(--primary-color);
+        }
+
+        .remember-me {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .remember-me input[type="checkbox"] {
+            width: auto;
+        }
+
+        .btn-submit {
+            width: 100%;
+            padding: 1rem;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .btn-submit:hover {
+            background: var(--secondary-color);
+        }
+
+        .forgot-password {
+            text-align: center;
+            margin-top: 1rem;
+        }
+
+        .forgot-password a {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.3s;
+        }
+
+        .forgot-password a:hover {
+            color: var(--secondary-color);
+        }
+
+        .error-message {
+            background: #ffe6e6;
+            color: #d63031;
+            padding: 0.8rem;
+            border-radius: 5px;
+            margin-bottom: 1rem;
+            display: none;
+        }
+
+        .success-message {
+            background: #e6ffe6;
+            color: #27ae60;
+            padding: 0.8rem;
+            border-radius: 5px;
+            margin-bottom: 1rem;
+            display: none;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 480px) {
+            .auth-box {
+                padding: 1.5rem;
+            }
+
+            .tab-btn {
+                padding: 0.8rem;
+                font-size: 0.9rem;
+            }
+
+            .form-group input {
+                padding: 0.7rem;
+            }
+
+            .btn-submit {
+                padding: 0.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Menu de navigation -->
+    <header class="main-header">
+        <nav class="navbar">
+            <div class="nav-brand">
+                <a href="index.html" class="brand-logo">
+                    <img src="Mental Serenity - Logo-Photoroom.png" alt="Mental Serenity" class="logo-img">
+                </a>
+            </div>
+            
+            <div class="nav-menu" id="nav-menu">
+                <ul class="nav-list">
+                    <li class="nav-item">
+                        <a href="index.html" class="nav-link">Accueil</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="services.html" class="nav-link">Services</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="tarifs.html" class="nav-link">Tarifs</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="contact.html" class="nav-link">Contact</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="auth.html" class="nav-link nav-cta active">Connexion</a>
+                    </li>
+                </ul>
+            </div>
+            
+            <div class="nav-toggle" id="nav-toggle">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </div>
+        </nav>
+    </header>
+
+    <div class="auth-container">
+        <div class="auth-box">
+            <div class="auth-tabs">
+                <button class="tab-btn active" data-tab="login">Connexion</button>
+                <button class="tab-btn" data-tab="register">Créer un compte</button>
+                <button class="tab-btn" data-tab="admin">Espace Admin</button>
+            </div>
+
+            <!-- Messages -->
+            <div class="error-message"></div>
+            <div class="success-message"></div>
+
+            <!-- Formulaire de connexion -->
+            <form id="loginForm" class="auth-form active">
+                <div class="form-group">
+                    <label for="loginEmail">Email</label>
+                    <input type="email" id="loginEmail" required>
+                </div>
+                <div class="form-group">
+                    <label for="loginPassword">Mot de passe</label>
+                    <div class="password-input">
+                        <input type="password" id="loginPassword" required>
+                        <span class="toggle-password">👁️</span>
+                    </div>
+                </div>
+                <div class="remember-me">
+                    <input type="checkbox" id="rememberMe">
+                    <label for="rememberMe">Se souvenir de moi</label>
+                </div>
+                <button type="submit" class="btn-submit">Se connecter</button>
+                <div class="forgot-password">
+                    <a href="#" id="forgotPassword">Mot de passe oublié ?</a>
+                </div>
+            </form>
+
+            <!-- Formulaire d'inscription -->
+            <form id="registerForm" class="auth-form">
+                <div class="form-group">
+                    <label for="registerName">Nom complet</label>
+                    <input type="text" id="registerName" required>
+                </div>
+                <div class="form-group">
+                    <label for="registerEmail">Email</label>
+                    <input type="email" id="registerEmail" required>
+                </div>
+                <div class="form-group">
+                    <label for="registerPassword">Mot de passe</label>
+                    <div class="password-input">
+                        <input type="password" id="registerPassword" required>
+                        <span class="toggle-password">👁️</span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="confirmPassword">Confirmer le mot de passe</label>
+                    <div class="password-input">
+                        <input type="password" id="confirmPassword" required>
+                        <span class="toggle-password">👁️</span>
+                    </div>
+                </div>
+                <button type="submit" class="btn-submit">Créer un compte</button>
+            </form>
+
+            <!-- Formulaire admin -->
+            <form id="adminForm" class="auth-form">
+                <div class="form-group">
+                    <label for="adminEmail">Email administrateur</label>
+                    <input type="email" id="adminEmail" required>
+                </div>
+                <div class="form-group">
+                    <label for="adminPassword">Mot de passe administrateur</label>
+                    <div class="password-input">
+                        <input type="password" id="adminPassword" required>
+                        <span class="toggle-password">👁️</span>
+                    </div>
+                </div>
+                <button type="submit" class="btn-submit">Connexion administrateur</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="js/main.js"></script>
+    <script src="js/auth.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Gestion des onglets
+            const tabBtns = document.querySelectorAll('.tab-btn');
+            const authForms = document.querySelectorAll('.auth-form');
+            const errorMessage = document.querySelector('.error-message');
+            const successMessage = document.querySelector('.success-message');
+
+            tabBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    // Retire la classe active de tous les boutons et formulaires
+                    tabBtns.forEach(b => b.classList.remove('active'));
+                    authForms.forEach(f => f.classList.remove('active'));
+
+                    // Ajoute la classe active au bouton cliqué et au formulaire correspondant
+                    btn.classList.add('active');
+                    document.querySelector(`#${btn.dataset.tab}Form`).classList.add('active');
+
+                    // Cache les messages d'erreur/succès lors du changement d'onglet
+                    errorMessage.style.display = 'none';
+                    successMessage.style.display = 'none';
+                });
+            });
+
+            // Gestion de la visibilité du mot de passe
+            const togglePasswordBtns = document.querySelectorAll('.toggle-password');
+            togglePasswordBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const input = this.previousElementSibling;
+                    if (input.type === 'password') {
+                        input.type = 'text';
+                        this.textContent = '🔒';
+                    } else {
+                        input.type = 'password';
+                        this.textContent = '👁️';
+                    }
+                });
+            });
+        });
+    </script>
+    <script src="js/navbar.js"></script>
+</body>
+</html>

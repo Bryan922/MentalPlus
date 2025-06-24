@@ -1,0 +1,193 @@
+/* Variables pour le mode nuit */
+.night-mode {
+    --bg-dark: #1a1a2e;
+    --bg-darker: #16213e;
+    --bg-light: #1f1f3a;
+    --text-primary: #e6e6fa;
+    --text-secondary: #b8b8d4;
+    --accent-color: #4b6bff;
+    --border-color: #2a2a4a;
+}
+
+/* Styles généraux du mode nuit */
+.night-mode {
+    background-color: var(--bg-dark);
+    color: var(--text-primary);
+}
+
+.night-mode .sidebar {
+    background-color: var(--bg-darker);
+    border-right: 1px solid var(--border-color);
+}
+
+.night-mode .sidebar-nav a {
+    color: var(--text-secondary);
+}
+
+.night-mode .sidebar-nav a:hover,
+.night-mode .sidebar-nav a.active {
+    background-color: var(--bg-light);
+    color: var(--text-primary);
+}
+
+.night-mode .badge {
+    background-color: var(--accent-color);
+}
+
+/* Header et navigation */
+.night-mode .content-header {
+    border-bottom: 1px solid var(--border-color);
+}
+
+.night-shift-info {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    background-color: var(--bg-light);
+    border-radius: 5px;
+    color: var(--accent-color);
+    font-weight: 500;
+}
+
+.night-shift-info i {
+    color: #ffd700;
+}
+
+/* Planning de nuit */
+.night-schedule {
+    background-color: var(--bg-light);
+}
+
+.night-mode .time-slot {
+    color: var(--text-secondary);
+    border-color: var(--border-color);
+}
+
+.night-mode .schedule-sidebar {
+    border-right: 1px solid var(--border-color);
+}
+
+/* Rendez-vous de nuit */
+.night-mode .appointment {
+    background-color: var(--bg-darker);
+    border-left: 4px solid var(--accent-color);
+}
+
+.night-mode .appointment.urgent {
+    border-left-color: #ff4b6b;
+}
+
+.night-mode .appointment-header .time {
+    color: var(--text-secondary);
+}
+
+.night-mode .patient-name {
+    color: var(--text-primary);
+}
+
+.night-mode .appointment-type {
+    color: var(--text-secondary);
+}
+
+.night-mode .break-indicator {
+    background-color: var(--bg-light);
+    border: 1px dashed var(--border-color);
+    color: var(--text-secondary);
+}
+
+.night-mode .break-indicator span {
+    background-color: var(--bg-light);
+}
+
+/* Cartes du tableau de bord */
+.night-mode .dashboard-card {
+    background-color: var(--bg-light);
+    border: 1px solid var(--border-color);
+}
+
+.night-mode .stat-item {
+    background-color: var(--bg-darker);
+}
+
+.night-mode .stat-item i {
+    color: var(--accent-color);
+}
+
+.night-mode .stat-value {
+    color: var(--text-primary);
+}
+
+.night-mode .stat-label {
+    color: var(--text-secondary);
+}
+
+/* Liste des rendez-vous à venir */
+.night-mode .upcoming-item {
+    background-color: var(--bg-darker);
+}
+
+.night-mode .time-badge {
+    background-color: var(--accent-color);
+}
+
+.night-mode .upcoming-details h3 {
+    color: var(--text-primary);
+}
+
+.night-mode .upcoming-details p {
+    color: var(--text-secondary);
+}
+
+/* Notes rapides */
+.night-mode .notes-container textarea {
+    background-color: var(--bg-darker);
+    border: 1px solid var(--border-color);
+    color: var(--text-primary);
+}
+
+.night-mode .notes-container textarea:focus {
+    border-color: var(--accent-color);
+}
+
+.night-mode .note-item {
+    background-color: var(--bg-darker);
+    border-left: 3px solid var(--accent-color);
+}
+
+.night-mode .note-item p {
+    color: var(--text-primary);
+}
+
+.night-mode .note-time {
+    color: var(--text-secondary);
+}
+
+/* Boutons et actions */
+.night-mode .btn-primary {
+    background-color: var(--accent-color);
+    color: white;
+}
+
+.night-mode .btn-secondary {
+    background-color: var(--bg-darker);
+    color: var(--text-primary);
+    border: 1px solid var(--border-color);
+}
+
+.night-mode .btn-icon {
+    color: var(--text-secondary);
+    background-color: transparent;
+}
+
+.night-mode .btn-icon:hover {
+    color: var(--text-primary);
+    background-color: var(--bg-darker);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .night-shift-info {
+        display: none;
+    }
+} 

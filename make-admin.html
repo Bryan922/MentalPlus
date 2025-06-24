@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Création Admin - MentalSerenity</title>
+</head>
+<body>
+    <h1>Création du compte administrateur</h1>
+    <p>1. Créez d'abord un compte avec l'email : admin@mentalserenity.fr</p>
+    <p>2. Puis cliquez sur le bouton ci-dessous pour le transformer en administrateur</p>
+    <button id="adminButton">Créer l'administrateur</button>
+
+    <script type="module">
+        import { makeAdmin } from './js/create-admin.js';
+        document.getElementById('adminButton').addEventListener('click', makeAdmin);
+    </script>
+</body>
+</html> 

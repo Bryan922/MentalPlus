@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<!-- Version MentalSerenity 2024 - Force nouveau déploiement - Clear Cache -->
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MentalSerenity - Accueil</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <script type="module">
+    // La configuration de l'authentification sera mise à jour avec PlanetScale
+    </script>
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">MentalSerenity</div>
+            <div class="burger-menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+            <ul>
+                <li><a href="index.html">Accueil</a></li>
+                <li><a href="services.html">Services</a></li>
+                <li><a href="tarifs.html">Tarifs</a></li>
+                <li><a href="contact.html">Contact</a></li>
+                <li id="auth-link">
+                    <a href="auth.html" class="btn-connexion">Connexion</a>
+                </li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section class="hero">
+            <h1>Votre bien-être mental est notre priorité</h1>
+            <p>Une équipe de professionnels à votre écoute pour vous accompagner vers un mieux-être</p>
+            <div class="emergency-banner">
+                <div class="emergency-left">
+                    <strong><i class="fas fa-phone-alt"></i>En cas d'urgence</strong>
+                    SAMU : <a href="tel:15">15</a> | Prévention suicide : <a href="tel:3114">3114</a>
+                </div>
+                <a href="rendez-vous.html" class="btn-primary">Prendre rendez-vous</a>
+            </div>
+        </section>
+
+        <section id="services">
+            <h2 class="section-title">Nos domaines d'intervention</h2>
+            <div class="services-grid">
+                <div class="service-card">
+                    <i class="fas fa-heart-broken"></i>
+                    <h3>Ruptures sentimentales</h3>
+                    <p>Accompagnement dans les périodes difficiles</p>
+                </div>
+                <div class="service-card">
+                    <i class="fas fa-cloud-rain"></i>
+                    <h3>Dépression</h3>
+                    <p>Soutien et thérapie adaptée</p>
+                </div>
+                <div class="service-card">
+                    <i class="fas fa-users"></i>
+                    <h3>Problèmes familiaux</h3>
+                    <p>Médiation et résolution de conflits</p>
+                </div>
+                <div class="service-card">
+                    <i class="fas fa-user-friends"></i>
+                    <h3>Relations sociales</h3>
+                    <p>Amélioration des interactions</p>
+                </div>
+                <div class="service-card">
+                    <i class="fas fa-feather-alt"></i>
+                    <h3>Hypersensibilité</h3>
+                    <p>Gestion de la sensibilité émotionnelle</p>
+                </div>
+                <div class="service-card">
+                    <i class="fas fa-balance-scale"></i>
+                    <h3>Gestion des émotions</h3>
+                    <p>Techniques de régulation émotionnelle</p>
+                </div>
+                <div class="service-card">
+                    <i class="fas fa-briefcase"></i>
+                    <h3>Stress professionnel</h3>
+                    <p>Équilibre vie pro/perso</p>
+                </div>
+                <div class="service-card">
+                    <i class="fas fa-brain"></i>
+                    <h3>Anxiété</h3>
+                    <p>Outils de gestion de l'anxiété</p>
+                </div>
+                <div class="service-card">
+                    <i class="fas fa-moon"></i>
+                    <h3>Troubles du sommeil</h3>
+                    <p>Amélioration de la qualité du sommeil</p>
+                </div>
+                <div class="service-card">
+                    <i class="fas fa-heart"></i>
+                    <h3>Problèmes sexuels</h3>
+                    <p>Accompagnement et conseils personnalisés</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="pourquoi-nous">
+            <h2 class="section-title">Pourquoi nous choisir</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <i class="fas fa-user-md"></i>
+                    <h3>Professionnels qualifiés</h3>
+                    <p>Une équipe de psychologues expérimentés et certifiés</p>
+                </div>
+                <div class="feature-card">
+                    <i class="fas fa-clock"></i>
+                    <h3>Disponibilité étendue</h3>
+                    <p>Consultations du lundi au samedi, horaires flexibles</p>
+                </div>
+                <div class="feature-card">
+                    <i class="fas fa-comments"></i>
+                    <h3>Approche personnalisée</h3>
+                    <p>Thérapie adaptée à vos besoins spécifiques</p>
+                </div>
+                <div class="feature-card">
+                    <i class="fas fa-heart"></i>
+                    <h3>Environnement bienveillant</h3>
+                    <p>Un cadre sécurisant pour votre bien-être</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section Témoignages -->
+        <section id="testimonials" class="testimonials-section">
+            <h2 class="section-title">Ce qu'ils disent de nous</h2>
+            <div class="testimonials-grid">
+                <div class="testimonial-card">
+                    <div class="quote-icon"><i class="fas fa-quote-left"></i></div>
+                    <p class="testimonial-text">Grâce à l'accompagnement reçu, j'ai pu surmonter une période difficile de ma vie. L'écoute et le professionnalisme ont fait toute la différence.</p>
+                    <div class="testimonial-author">
+                        <div class="author-info">
+                            <strong>Marie L.</strong>
+                            <span>Cliente depuis 6 mois</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-card">
+                    <div class="quote-icon"><i class="fas fa-quote-left"></i></div>
+                    <p class="testimonial-text">Les consultations nocturnes ont été d'une grande aide dans mes moments d'anxiété. Je me sens enfin compris et soutenu.</p>
+                    <div class="testimonial-author">
+                        <div class="author-info">
+                            <strong>Thomas R.</strong>
+                            <span>Client depuis 3 mois</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-card">
+                    <div class="quote-icon"><i class="fas fa-quote-left"></i></div>
+                    <p class="testimonial-text">Un accompagnement professionnel et bienveillant qui m'a permis de retrouver confiance en moi. Je recommande vivement.</p>
+                    <div class="testimonial-author">
+                        <div class="author-info">
+                            <strong>Sophie M.</strong>
+                            <span>Cliente depuis 1 an</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="tarifs">
+            <h2 class="section-title">Nos tarifs</h2>
+            <div class="pricing-grid">
+                <div class="pricing-card">
+                    <h3>Consultation standard</h3>
+                    <div class="price">60€</div>
+                    <p>Séance de 1 heure</p>
+                    <ul>
+                        <li><i class="fas fa-check"></i> Évaluation personnalisée</li>
+                        <li><i class="fas fa-check"></i> Suivi régulier</li>
+                        <li><i class="fas fa-check"></i> Outils pratiques</li>
+                    </ul>
+                    <a href="rendez-vous.html" class="btn-primary">Réserver</a>
+                </div>
+                <div class="pricing-card featured">
+                    <h3>Consultation nocturne</h3>
+                    <div class="price">80€</div>
+                    <p>Séance de 1 heure</p>
+                    <ul>
+                        <li><i class="fas fa-check"></i> Disponibilité 20h-6h</li>
+                        <li><i class="fas fa-check"></i> Équipe de nuit dédiée</li>
+                        <li><i class="fas fa-check"></i> Suivi personnalisé</li>
+                    </ul>
+                    <a href="rendez-vous.html" class="btn-primary">Réserver</a>
+                </div>
+            </div>
+        </section>
+
+        <section id="contact" class="contact-section">
+            <h2>Contactez-nous</h2>
+            <div class="contact-grid">
+                <div class="contact-info">
+                    <h3>Nos coordonnées</h3>
+                    <p><i class="fas fa-phone"></i> 01 23 45 67 89</p>
+                    <p><i class="fas fa-envelope"></i> mentalplussos@gmail.com</p>
+                    <p><i class="fas fa-map-marker-alt"></i> 123 rue de la Santé, Paris</p>
+                </div>
+                <div class="contact-hours">
+                    <h3>Horaires d'ouverture</h3>
+                    <p>Lundi - Vendredi : 10h - 18h</p>
+                    <p>Samedi : 10h - 16h</p>
+                    <p>Dimanche : Fermé</p>
+                    <p>Service nocturne : 20h - 6h (tous les jours sauf dimanche)</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>MentalSerenity</h3>
+                <p>Votre partenaire pour une meilleure santé mentale</p>
+            </div>
+            <div class="footer-section">
+                <h3>Liens rapides</h3>
+                <ul>
+                    <li><a href="#services">Services</a></li>
+                    <li><a href="#tarifs">Tarifs</a></li>
+                    <li><a href="rendez-vous.html">Rendez-vous</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                    <li><a href="auth.html">Espace client</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>Urgences</h3>
+                <p>En cas d'urgence :</p>
+                <p>SAMU : 15</p>
+                <p>SOS Psychiatrie : 01 47 07 24 24</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2024 MentalSerenity. Tous droits réservés.</p>
+        </div>
+    </footer>
+    <script src="js/main.js"></script>
+</body>
+</html> 

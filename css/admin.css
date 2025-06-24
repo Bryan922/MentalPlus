@@ -1,0 +1,941 @@
+:root {
+    --primary-color: #4361ee;
+    --secondary-color: #3f37c9;
+    --success-color: #4cc9f0;
+    --danger-color: #f72585;
+    --warning-color: #f9c74f;
+    --text-color: #2b2d42;
+    --light-gray: #f8f9fa;
+    --border-color: #e9ecef;
+    --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    --card-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+}
+
+.admin-container {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    padding: 1.5rem;
+    margin-top: 60px;
+    min-height: calc(100vh - 60px);
+    background: var(--light-gray);
+}
+
+/* Dashboard Stats */
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.stat-card {
+    background: white;
+    border-radius: 12px;
+    padding: 1.5rem;
+    box-shadow: var(--card-shadow);
+    transition: transform 0.2s ease;
+}
+
+.stat-card:hover {
+    transform: translateY(-5px);
+}
+
+.stat-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.stat-header i {
+    font-size: 1.5rem;
+    color: var(--primary-color);
+}
+
+.stat-value {
+    font-size: 2rem;
+    font-weight: bold;
+    color: var(--text-color);
+    margin-bottom: 0.5rem;
+}
+
+.stat-label {
+    color: #666;
+    font-size: 0.9rem;
+}
+
+/* Rendez-vous du jour */
+.today-appointments {
+    background: white;
+    border-radius: 12px;
+    padding: 1.5rem;
+    box-shadow: var(--card-shadow);
+    margin-bottom: 2rem;
+}
+
+.today-appointments h3 {
+    color: var(--text-color);
+    margin-bottom: 1.5rem;
+    font-size: 1.2rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.appointment-card {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    gap: 1.5rem;
+    align-items: center;
+    padding: 1rem;
+    border-radius: 8px;
+    background: var(--light-gray);
+    margin-bottom: 1rem;
+    transition: all 0.2s ease;
+}
+
+.appointment-card:hover {
+    transform: translateX(5px);
+    box-shadow: var(--shadow);
+}
+
+.appointment-time {
+    font-weight: bold;
+    color: var(--primary-color);
+    background: rgba(67, 97, 238, 0.1);
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+}
+
+.appointment-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+}
+
+.appointment-info h4 {
+    margin: 0;
+    color: var(--text-color);
+}
+
+.appointment-info p {
+    margin: 0;
+    color: #666;
+    font-size: 0.9rem;
+}
+
+.appointment-actions {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.btn-action {
+    padding: 0.5rem;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+}
+
+.btn-action i {
+    font-size: 1rem;
+}
+
+.btn-edit {
+    background: rgba(67, 97, 238, 0.1);
+    color: var(--primary-color);
+}
+
+.btn-edit:hover {
+    background: var(--primary-color);
+    color: white;
+}
+
+.btn-cancel {
+    background: rgba(247, 37, 133, 0.1);
+    color: var(--danger-color);
+}
+
+.btn-cancel:hover {
+    background: var(--danger-color);
+    color: white;
+}
+
+/* Calendrier */
+.calendar-container {
+    background: white;
+    border-radius: 12px;
+    padding: 1.5rem;
+    box-shadow: var(--card-shadow);
+}
+
+.calendar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+}
+
+.calendar-nav {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.calendar-nav button {
+    background: var(--light-gray);
+    border: none;
+    border-radius: 6px;
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.calendar-nav button:hover {
+    background: var(--primary-color);
+    color: white;
+}
+
+.calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 0.5rem;
+}
+
+.calendar-day {
+    aspect-ratio: 1;
+    padding: 0.5rem;
+    border-radius: 8px;
+    background: var(--light-gray);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    position: relative;
+}
+
+.calendar-day:hover {
+    background: rgba(67, 97, 238, 0.1);
+}
+
+.calendar-day.today {
+    background: var(--primary-color);
+    color: white;
+}
+
+.calendar-day.has-appointments::after {
+    content: '';
+    position: absolute;
+    bottom: 4px;
+    width: 4px;
+    height: 4px;
+    background: var(--primary-color);
+    border-radius: 50%;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+    .admin-container {
+        grid-template-columns: 1fr;
+    }
+
+    .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+    .stats-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .appointment-card {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+
+    .appointment-actions {
+        justify-content: flex-end;
+    }
+}
+
+/* Ajout des styles pour le menu de navigation */
+.admin-nav {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 2rem;
+    background: white;
+    padding: 1rem;
+    border-radius: 12px;
+    box-shadow: var(--card-shadow);
+}
+
+.nav-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.8rem 1.2rem;
+    border: none;
+    border-radius: 8px;
+    background: transparent;
+    color: var(--text-color);
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.nav-item i {
+    font-size: 1.2rem;
+}
+
+.nav-item:hover {
+    background: var(--light-gray);
+    color: var(--primary-color);
+}
+
+.nav-item.active {
+    background: var(--primary-color);
+    color: white;
+}
+
+/* Styles pour les sections */
+.admin-section {
+    display: none;
+}
+
+.admin-section.active {
+    display: block;
+}
+
+/* Styles pour la section administrateurs */
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+}
+
+.section-header h2 {
+    font-size: 1.5rem;
+    color: var(--text-color);
+    margin: 0;
+}
+
+.admins-list {
+    display: grid;
+    gap: 1rem;
+}
+
+.admin-card {
+    background: white;
+    border-radius: 12px;
+    padding: 1.5rem;
+    box-shadow: var(--card-shadow);
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    gap: 1.5rem;
+    align-items: center;
+}
+
+.admin-avatar {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: var(--light-gray);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--primary-color);
+    font-size: 1.5rem;
+}
+
+.admin-info h4 {
+    margin: 0 0 0.5rem 0;
+    color: var(--text-color);
+}
+
+.admin-info p {
+    margin: 0;
+    color: #666;
+    font-size: 0.9rem;
+}
+
+.admin-permissions {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+}
+
+.permission-badge {
+    background: rgba(67, 97, 238, 0.1);
+    color: var(--primary-color);
+    padding: 0.3rem 0.6rem;
+    border-radius: 12px;
+    font-size: 0.8rem;
+}
+
+.admin-actions {
+    display: flex;
+    gap: 0.5rem;
+}
+
+/* Styles pour le modal d'ajout d'administrateur */
+.permissions-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+    margin-top: 0.5rem;
+}
+
+.permission-item {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    padding: 0.8rem;
+    border-radius: 8px;
+    background: var(--light-gray);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border: 2px solid transparent;
+}
+
+.permission-item:hover {
+    background: rgba(67, 97, 238, 0.1);
+    border-color: var(--primary-color);
+}
+
+.permission-item input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    border-radius: 4px;
+    border: 2px solid var(--primary-color);
+    cursor: pointer;
+    accent-color: var(--primary-color);
+}
+
+.permission-item span {
+    font-size: 0.95rem;
+    color: var(--text-color);
+    font-weight: 500;
+}
+
+.modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+    margin-top: 2rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--border-color);
+}
+
+.modal-actions button {
+    padding: 0.8rem 1.5rem;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.btn-cancel {
+    background: var(--light-gray);
+    color: var(--text-color);
+}
+
+.btn-cancel:hover {
+    background: #e9ecef;
+}
+
+.btn-action {
+    background: var(--primary-color);
+    color: white;
+}
+
+.btn-action:hover {
+    background: var(--secondary-color);
+    transform: translateY(-1px);
+}
+
+/* Liste des utilisateurs */
+.users-section {
+    background: white;
+    border-radius: 12px;
+    padding: 1.5rem;
+    box-shadow: var(--card-shadow);
+    margin-top: 2rem;
+}
+
+.users-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+}
+
+.users-header h3 {
+    color: var(--text-color);
+    font-size: 1.2rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.users-list {
+    display: grid;
+    gap: 1rem;
+}
+
+.user-card {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    gap: 1.5rem;
+    align-items: center;
+    padding: 1.2rem;
+    background: var(--light-gray);
+    border-radius: 8px;
+    transition: all 0.2s ease;
+}
+
+.user-card:hover {
+    transform: translateX(5px);
+    box-shadow: var(--shadow);
+}
+
+.user-avatar {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--primary-color);
+    font-size: 1.5rem;
+}
+
+.user-info h4 {
+    margin: 0 0 0.3rem 0;
+    color: var(--text-color);
+}
+
+.user-info p {
+    margin: 0;
+    color: #666;
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.user-role {
+    display: inline-block;
+    padding: 0.3rem 0.8rem;
+    border-radius: 12px;
+    font-size: 0.8rem;
+    font-weight: 500;
+    margin-top: 0.5rem;
+}
+
+.role-client {
+    background: rgba(76, 201, 240, 0.1);
+    color: var(--success-color);
+}
+
+.role-admin {
+    background: rgba(67, 97, 238, 0.1);
+    color: var(--primary-color);
+}
+
+/* Modal */
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.modal-content {
+    background: white;
+    border-radius: 12px;
+    padding: 2rem;
+    width: 100%;
+    max-width: 600px;
+    box-shadow: var(--card-shadow);
+    margin: 1rem;
+}
+
+.modal-content h3 {
+    color: var(--text-color);
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.modal-content h3 i {
+    color: var(--primary-color);
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-group label {
+    display: block;
+    color: var(--text-color);
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+}
+
+.form-group input[type="text"],
+.form-group input[type="email"],
+.form-group input[type="password"] {
+    width: 100%;
+    padding: 0.8rem;
+    border: 2px solid var(--border-color);
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: all 0.2s ease;
+}
+
+.form-group input:focus {
+    border-color: var(--primary-color);
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.1);
+}
+
+.permissions-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+    margin-top: 0.5rem;
+}
+
+.permission-item {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    padding: 0.8rem;
+    border-radius: 8px;
+    background: var(--light-gray);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border: 2px solid transparent;
+}
+
+.permission-item:hover {
+    background: rgba(67, 97, 238, 0.1);
+    border-color: var(--primary-color);
+}
+
+.permission-item input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    border-radius: 4px;
+    border: 2px solid var(--primary-color);
+    cursor: pointer;
+    accent-color: var(--primary-color);
+}
+
+.permission-item span {
+    font-size: 0.95rem;
+    color: var(--text-color);
+    font-weight: 500;
+}
+
+.modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+    margin-top: 2rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--border-color);
+}
+
+.modal-actions button {
+    padding: 0.8rem 1.5rem;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.btn-cancel {
+    background: var(--light-gray);
+    color: var(--text-color);
+}
+
+.btn-cancel:hover {
+    background: #e9ecef;
+}
+
+.btn-action {
+    background: var(--primary-color);
+    color: white;
+}
+
+.btn-action:hover {
+    background: var(--secondary-color);
+    transform: translateY(-1px);
+}
+
+/* Liste des utilisateurs */
+.users-section {
+    background: white;
+    border-radius: 12px;
+    padding: 1.5rem;
+    box-shadow: var(--card-shadow);
+    margin-top: 2rem;
+}
+
+.users-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+}
+
+.users-header h3 {
+    color: var(--text-color);
+    font-size: 1.2rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.users-list {
+    display: grid;
+    gap: 1rem;
+}
+
+.user-card {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    gap: 1.5rem;
+    align-items: center;
+    padding: 1.2rem;
+    background: var(--light-gray);
+    border-radius: 8px;
+    transition: all 0.2s ease;
+}
+
+.user-card:hover {
+    transform: translateX(5px);
+    box-shadow: var(--shadow);
+}
+
+.user-avatar {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--primary-color);
+    font-size: 1.5rem;
+}
+
+.user-info h4 {
+    margin: 0 0 0.3rem 0;
+    color: var(--text-color);
+}
+
+.user-info p {
+    margin: 0;
+    color: #666;
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.user-role {
+    display: inline-block;
+    padding: 0.3rem 0.8rem;
+    border-radius: 12px;
+    font-size: 0.8rem;
+    font-weight: 500;
+    margin-top: 0.5rem;
+}
+
+.role-client {
+    background: rgba(76, 201, 240, 0.1);
+    color: var(--success-color);
+}
+
+.role-admin {
+    background: rgba(67, 97, 238, 0.1);
+    color: var(--primary-color);
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+    .admin-nav {
+        flex-wrap: wrap;
+    }
+
+    .nav-item {
+        flex: 1;
+        justify-content: center;
+    }
+
+    .admin-card {
+        grid-template-columns: 1fr;
+        text-align: center;
+    }
+
+    .admin-avatar {
+        margin: 0 auto;
+    }
+
+    .admin-permissions {
+        justify-content: center;
+    }
+
+    .admin-actions {
+        justify-content: center;
+    }
+}
+
+@media (max-width: 768px) {
+    .permissions-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .section-header {
+        flex-direction: column;
+        gap: 1rem;
+        text-align: center;
+    }
+}
+
+.appointment-tabs {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 2rem;
+    background: #ffffff;
+    border-radius: 12px;
+    padding: 0.5rem;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    border: 1px solid #e0e0e0;
+}
+
+.tab-btn {
+    padding: 1rem 2rem;
+    border: none;
+    border-radius: 8px;
+    background: #f8f9fa;
+    color: #4f4f4f;
+    font-weight: 600;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    min-width: 200px;
+    justify-content: center;
+}
+
+.tab-btn i {
+    font-size: 1.2rem;
+}
+
+.tab-btn.active {
+    background: var(--primary-color);
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 6px rgba(67, 97, 238, 0.2);
+}
+
+.tab-btn:hover:not(.active) {
+    background: #e9ecef;
+    transform: translateY(-1px);
+}
+
+/* Style spécifique pour le bouton de nuit */
+.tab-btn[data-type="night"] {
+    background: #f8f9fa;
+    color: #2c3e50;
+}
+
+.tab-btn[data-type="night"] i {
+    color: #f1c40f;
+}
+
+.tab-btn[data-type="night"].active {
+    background: #2c3e50;
+    color: white;
+    box-shadow: 0 4px 6px rgba(44, 62, 80, 0.2);
+}
+
+.tab-btn[data-type="night"].active i {
+    color: #f1c40f;
+}
+
+.tab-btn[data-type="night"]:hover:not(.active) {
+    background: #34495e;
+    color: white;
+}
+
+/* Gestion de l'affichage des tables */
+#regularAppointments, #nightAppointments {
+    display: none;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+#regularAppointments.active, #nightAppointments.active {
+    display: block;
+    opacity: 1;
+}
+
+@media (max-width: 768px) {
+    .appointment-tabs {
+        flex-direction: column;
+        width: 100%;
+        padding: 0.75rem;
+    }
+    
+    .tab-btn {
+        width: 100%;
+        padding: 0.875rem 1.5rem;
+        min-width: unset;
+    }
+}
+
+#nightAppointments .time-slot {
+    background: #1a1a1a;
+    color: white;
+}
+
+#nightAppointments .time-slot:hover {
+    background: #2a2a2a;
+    border-color: var(--accent-color);
+} 

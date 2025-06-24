@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Espace Client - PsychoAide</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/dashboard.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="user-info">
+                    <i class="fas fa-user-circle"></i>
+                    <div class="user-details">
+                        <h3 id="userName">Chargement...</h3>
+                        <p id="userEmail">Chargement...</p>
+                    </div>
+                </div>
+            </div>
+            
+            <nav class="sidebar-nav">
+                <a href="#dashboard" class="active">
+                    <i class="fas fa-home"></i>
+                    Tableau de bord
+                </a>
+                <a href="#appointments">
+                    <i class="fas fa-calendar-alt"></i>
+                    Mes rendez-vous
+                </a>
+                <a href="#documents">
+                    <i class="fas fa-file-alt"></i>
+                    Mes documents
+                </a>
+                <a href="#profile">
+                    <i class="fas fa-user-cog"></i>
+                    Mon profil
+                </a>
+                <a href="#messages">
+                    <i class="fas fa-envelope"></i>
+                    Messages
+                    <span class="badge">2</span>
+                </a>
+            </nav>
+
+            <div class="sidebar-footer">
+                <a href="#help">
+                    <i class="fas fa-question-circle"></i>
+                    Aide
+                </a>
+                <a href="index.html" class="logout">
+                    <i class="fas fa-sign-out-alt"></i>
+                    Déconnexion
+                </a>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="content-header">
+                <h1>Tableau de bord</h1>
+                <div class="header-actions">
+                    <button class="btn-primary">
+                        <i class="fas fa-plus"></i>
+                        Nouveau rendez-vous
+                    </button>
+                    <button class="notification-btn">
+                        <i class="fas fa-bell"></i>
+                        <span class="notification-badge">3</span>
+                    </button>
+                </div>
+            </header>
+
+            <div class="dashboard-grid">
+                <!-- Prochain rendez-vous -->
+                <section class="dashboard-card next-appointment">
+                    <h2>Prochain rendez-vous</h2>
+                    <div class="appointment-info">
+                        <div class="date-badge">
+                            <span class="day">15</span>
+                            <span class="month">Mai</span>
+                        </div>
+                        <div class="appointment-details">
+                            <p class="time"><i class="fas fa-clock"></i> 14:00</p>
+                            <p class="type">Consultation standard</p>
+                        </div>
+                    </div>
+                    <div class="appointment-actions">
+                        <button class="btn-secondary">Modifier</button>
+                        <button class="btn-danger">Annuler</button>
+                    </div>
+                </section>
+
+                <!-- Historique des rendez-vous -->
+                <section class="dashboard-card appointment-history">
+                    <h2>Historique des rendez-vous</h2>
+                    <div class="appointment-list">
+                        <div class="appointment-item completed">
+                            <div class="appointment-status"></div>
+                            <p class="date">10 Mai 2024</p>
+                            <p class="time">11:00</p>
+                            <span class="status">Terminé</span>
+                        </div>
+                        <div class="appointment-item cancelled">
+                            <div class="appointment-status"></div>
+                            <p class="date">3 Mai 2024</p>
+                            <p class="time">15:00</p>
+                            <span class="status">Annulé</span>
+                        </div>
+                        <div class="appointment-item completed">
+                            <div class="appointment-status"></div>
+                            <p class="date">25 Avril 2024</p>
+                            <p class="time">10:00</p>
+                            <span class="status">Terminé</span>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Documents récents -->
+                <section class="dashboard-card recent-documents">
+                    <h2>Documents récents</h2>
+                    <div class="document-list">
+                        <div class="document-item">
+                            <i class="fas fa-file-pdf"></i>
+                            <div class="document-info">
+                                <p class="document-name">Compte-rendu - 10 Mai</p>
+                                <p class="document-date">11 Mai 2024</p>
+                            </div>
+                            <button class="btn-icon">
+                                <i class="fas fa-download"></i>
+                            </button>
+                        </div>
+                        <div class="document-item">
+                            <i class="fas fa-file-invoice"></i>
+                            <div class="document-info">
+                                <p class="document-name">Facture #2024-05</p>
+                                <p class="document-date">10 Mai 2024</p>
+                            </div>
+                            <button class="btn-icon">
+                                <i class="fas fa-download"></i>
+                            </button>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Messages récents -->
+                <section class="dashboard-card recent-messages">
+                    <h2>Messages récents</h2>
+                    <div class="message-list">
+                        <div class="message-item unread">
+                            <div class="message-avatar">
+                                <i class="fas fa-user"></i>
+                            </div>
+                            <div class="message-content">
+                                <p class="message-sender">Dr. Martin</p>
+                                <p class="message-preview">Confirmation de votre prochain rendez-vous...</p>
+                            </div>
+                            <p class="message-time">Il y a 2h</p>
+                        </div>
+                        <div class="message-item">
+                            <div class="message-avatar">
+                                <i class="fas fa-user"></i>
+                            </div>
+                            <div class="message-content">
+                                <p class="message-sender">Secrétariat</p>
+                                <p class="message-preview">Votre facture est disponible...</p>
+                            </div>
+                            <p class="message-time">Hier</p>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <script src="js/dashboard.js"></script>
+</body>
+</html> 

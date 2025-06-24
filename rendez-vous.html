@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prendre RDV - MentalSerenity</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/rendez-vous.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://js.stripe.com/v3/"></script>
+
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">MentalSerenity</div>
+            <div class="burger-menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+            <ul>
+                <li><a href="index.html">Accueil</a></li>
+                <li><a href="index.html#services">Nos Services</a></li>
+                <li><a href="#" class="active">Prendre RDV</a></li>
+                <li><a href="#tarifs">Tarifs</a></li>
+                <li id="auth-link">
+                    <a href="auth.html" class="btn-connexion">Connexion</a>
+                </li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <div class="rdv-container">
+            <h1>Prendre rendez-vous</h1>
+            
+            <div class="rdv-steps">
+                <div class="step active" data-step="1">
+                    <span class="step-number">1</span>
+                    <span class="step-text">Motif</span>
+                </div>
+                <div class="step" data-step="2">
+                    <span class="step-number">2</span>
+                    <span class="step-text">Date & Heure</span>
+                </div>
+                <div class="step" data-step="3">
+                    <span class="step-number">3</span>
+                    <span class="step-text">Informations</span>
+                </div>
+            </div>
+
+            <form id="rdv-form" class="rdv-form">
+                <!-- Étape 1: Sélection du domaine d'intervention -->
+                <div class="form-step active" id="step1">
+                    <h2>Choisissez le domaine d'intervention</h2>
+                    
+
+                    <div class="appointment-type-selector">
+                        <div class="type-toggle">
+                            <button class="type-btn active" data-type="regular">
+                                <i class="fas fa-sun"></i>
+                                Consultation classique
+                            </button>
+                            <button class="type-btn" data-type="night">
+                                <i class="fas fa-moon"></i>
+                                Consultation de nuit
+                            </button>
+                        </div>
+                    </div>
+                    <div class="domaines-grid">
+                        <div class="domaine-card" data-domaine="ruptures">
+                            <i class="fas fa-heart-broken"></i>
+                            <h3>Ruptures sentimentales</h3>
+                            <p>Accompagnement dans les périodes difficiles</p>
+                        </div>
+                        <div class="domaine-card" data-domaine="depression">
+                            <i class="fas fa-cloud-rain"></i>
+                            <h3>Dépression</h3>
+                            <p>Soutien et thérapie adaptée</p>
+                        </div>
+                        <div class="domaine-card" data-domaine="famille">
+                            <i class="fas fa-users"></i>
+                            <h3>Problèmes familiaux</h3>
+                            <p>Médiation et résolution de conflits</p>
+                        </div>
+                        <div class="domaine-card" data-domaine="social">
+                            <i class="fas fa-user-friends"></i>
+                            <h3>Relations sociales</h3>
+                            <p>Amélioration des interactions</p>
+                        </div>
+                        <div class="domaine-card" data-domaine="hypersensibilite">
+                            <i class="fas fa-feather-alt"></i>
+                            <h3>Hypersensibilité</h3>
+                            <p>Gestion de la sensibilité émotionnelle</p>
+                        </div>
+                        <div class="domaine-card" data-domaine="emotions">
+                            <i class="fas fa-balance-scale"></i>
+                            <h3>Gestion des émotions</h3>
+                            <p>Techniques de régulation émotionnelle</p>
+                        </div>
+                        <div class="domaine-card" data-domaine="stress">
+                            <i class="fas fa-briefcase"></i>
+                            <h3>Stress professionnel</h3>
+                            <p>Équilibre vie pro/perso</p>
+                        </div>
+                        <div class="domaine-card" data-domaine="anxiete">
+                            <i class="fas fa-brain"></i>
+                            <h3>Anxiété</h3>
+                            <p>Outils de gestion de l'anxiété</p>
+                        </div>
+                        <div class="domaine-card" data-domaine="sommeil">
+                            <i class="fas fa-moon"></i>
+                            <h3>Troubles du sommeil</h3>
+                            <p>Amélioration de la qualité du sommeil</p>
+                        </div>
+                        <div class="domaine-card" data-domaine="sexuel">
+                            <i class="fas fa-heart"></i>
+                            <h3>Problèmes sexuels</h3>
+                            <p>Accompagnement et conseils personnalisés</p>
+                        </div>
+                    </div>
+                    <div class="form-buttons">
+                        <button type="button" class="btn-next" onclick="nextStep()">Suivant</button>
+                    </div>
+                </div>
+
+                <!-- Étape 2: Sélection de la date et de l'heure -->
+                <div class="form-step" id="step2">
+                    <h2>Choisissez la date et l'heure</h2>
+                    <div class="calendar-container">
+                        <div id="calendar"></div>
+                        <div id="time-slots" class="time-slots">
+                            <h3>Créneaux disponibles</h3>
+                            <div class="slots-grid"></div>
+                        </div>
+                    </div>
+                    <div class="form-buttons">
+                        <button type="button" class="btn-prev" onclick="prevStep()">Précédent</button>
+                        <button type="button" class="btn-next" onclick="nextStep()">Suivant</button>
+                    </div>
+                </div>
+
+                <!-- Étape 3: Informations personnelles -->
+                <div class="form-step" id="step3">
+                    <h2>Vos informations</h2>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="nom">Nom *</label>
+                            <input type="text" id="nom" name="nom" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="prenom">Prénom *</label>
+                            <input type="text" id="prenom" name="prenom" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email *</label>
+                            <input type="email" id="email" name="email" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="telephone">Téléphone *</label>
+                            <input type="tel" id="telephone" name="telephone" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="adresse">Adresse *</label>
+                            <input type="text" id="adresse" name="adresse" placeholder="Numéro et nom de rue" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="ville">Ville *</label>
+                            <input type="text" id="ville" name="ville" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="code_postal">Code postal *</label>
+                            <input type="text" id="code_postal" name="code_postal" pattern="[0-9]{5}" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="pays">Pays *</label>
+                            <select id="pays" name="pays" required>
+                                <option value="">Sélectionnez un pays</option>
+                                <option value="France" selected>France</option>
+                                <option value="Belgique">Belgique</option>
+                                <option value="Suisse">Suisse</option>
+                                <option value="Canada">Canada</option>
+                                <option value="Autre">Autre</option>
+                            </select>
+                        </div>
+                        <div class="form-group full-width">
+                            <label for="notes">Notes ou précisions (facultatif)</label>
+                            <textarea id="notes" name="notes" rows="4"></textarea>
+                        </div>
+                        <div class="form-group full-width payment-section">
+                            <div class="payment-header">
+                                <label for="card-element">
+                                    <i class="fas fa-shield-alt"></i> Paiement sécurisé
+                                </label>
+                                <div class="payment-badges">
+                                    <img src="assets/hd-stripe-official-logo-png-701751694777755j0aa3puxte.png" alt="Powered by Stripe" class="stripe-badge">
+                                    <img src="https://cdn.visa.com/v2/assets/images/logos/visa/blue/logo.png" alt="Visa" class="card-badge">
+                                    <img src="assets/png-clipart-logo-mastercard-pentagram-flat-design-brand-mastercard-text-trademark.png" alt="Mastercard" class="card-badge">
+                                </div>
+                            </div>
+                            <div id="card-element" class="stripe-element"></div>
+                            <div id="card-errors" class="stripe-errors" role="alert"></div>
+                            <div class="payment-security-info">
+                                <div class="security-item">
+                                    <i class="fas fa-lock"></i>
+                                    <span>Paiement 100% sécurisé</span>
+                                </div>
+                                <div class="security-item">
+                                    <i class="fas fa-shield-alt"></i>
+                                    <span>Cryptage SSL 256-bits</span>
+                                </div>
+                                <div class="security-item">
+                                    <i class="fas fa-check-circle"></i>
+                                    <span>Protection contre la fraude</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Urgences psychologiques -->
+                    <div class="emergency-alert">
+                        <div class="emergency-content">
+                            <i class="fas fa-exclamation-triangle"></i>
+                            <div class="emergency-text">
+                                <h4>Besoin d'aide immédiate ?</h4>
+                                <p>Si vous traversez une crise ou avez des pensées suicidaires, des services d'urgence spécialisés sont disponibles 24h/24.</p>
+                            </div>
+                            <a href="urgences.html" class="emergency-button">
+                                <i class="fas fa-phone"></i>
+                                Urgences Psychologiques
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Informations importantes -->
+                    <div class="important-info">
+                        <h4><i class="fas fa-info-circle"></i> Informations importantes</h4>
+                        <div class="info-grid">
+                            <div class="info-item">
+                                <i class="fas fa-clock"></i>
+                                <div class="info-content">
+                                    <strong>Ponctualité</strong>
+                                    <p>Merci d'arriver 5 minutes avant votre rendez-vous. En cas de retard, la durée de votre consultation pourrait être réduite.</p>
+                                </div>
+                            </div>
+                            <div class="info-item">
+                                <i class="fas fa-calendar-times"></i>
+                                <div class="info-content">
+                                    <strong>Annulation</strong>
+                                    <p>En cas d'empêchement, merci d'annuler votre rendez-vous au plus tôt en nous contactant à <a href="mailto:mentalplussos@gmail.com">mentalplussos@gmail.com</a> ou via votre espace client.</p>
+                                </div>
+                            </div>
+                            <div class="info-item">
+                                <i class="fas fa-euro-sign"></i>
+                                <div class="info-content">
+                                    <strong>Remboursement</strong>
+                                    <p>En cas d'annulation, le remboursement sera effectué sous 1 à 5 jours ouvrables sur votre carte bancaire.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-buttons">
+                        <button type="button" class="btn-prev" onclick="prevStep()">Précédent</button>
+                        <button type="submit" class="btn-submit">
+                            <i class="fas fa-lock"></i> Confirmer et payer 1€
+                        </button>
+                    </div>
+                </div>
+            </form>
+
+            <!-- Résumé de la réservation -->
+            <div class="booking-summary">
+                <h3>Résumé de votre rendez-vous</h3>
+                <div class="summary-content">
+                    <p><i class="fas fa-bookmark"></i> <span id="summary-domaine">-</span></p>
+                    <p><i class="fas fa-calendar-alt"></i> <span id="summary-date">-</span></p>
+                    <p><i class="fas fa-clock"></i> <span id="summary-time">-</span></p>
+                    <p><i class="fas fa-euro-sign"></i> <span id="summary-price">60€</span></p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="js/stripe-config.js" type="module"></script>
+    <script src="js/rendez-vous.js" type="module"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>

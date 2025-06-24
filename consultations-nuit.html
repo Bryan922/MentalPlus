@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Consultations de Nuit - PsychoAide</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/dashboard.css">
+    <link rel="stylesheet" href="css/employee.css">
+    <link rel="stylesheet" href="css/night-shift.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body class="night-mode">
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="user-info">
+                    <i class="fas fa-moon"></i>
+                    <div class="user-details">
+                        <h3 id="employeeName">Dr. Laurent</h3>
+                        <p id="employeeRole">Psychologue de nuit</p>
+                    </div>
+                </div>
+            </div>
+            
+            <nav class="sidebar-nav">
+                <a href="#planning" class="active">
+                    <i class="fas fa-calendar-alt"></i>
+                    Planning de nuit
+                </a>
+                <a href="#patients">
+                    <i class="fas fa-users"></i>
+                    Patients nocturnes
+                </a>
+                <a href="#consultations">
+                    <i class="fas fa-clipboard"></i>
+                    Consultations
+                </a>
+                <a href="#messages">
+                    <i class="fas fa-envelope"></i>
+                    Messages
+                    <span class="badge">2</span>
+                </a>
+                <a href="#settings">
+                    <i class="fas fa-cog"></i>
+                    Paramètres
+                </a>
+            </nav>
+
+            <div class="sidebar-footer">
+                <a href="#help">
+                    <i class="fas fa-question-circle"></i>
+                    Aide
+                </a>
+                <a href="index.html" class="logout">
+                    <i class="fas fa-sign-out-alt"></i>
+                    Déconnexion
+                </a>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="content-header">
+                <div class="header-left">
+                    <h1>Planning de Nuit</h1>
+                    <div class="date-navigation">
+                        <button id="prevDay"><i class="fas fa-chevron-left"></i></button>
+                        <h2 id="currentDate">15 Mai 2024</h2>
+                        <button id="nextDay"><i class="fas fa-chevron-right"></i></button>
+                    </div>
+                </div>
+                <div class="header-actions">
+                    <div class="night-shift-info">
+                        <i class="fas fa-moon"></i>
+                        <span>Tarif nuit : 80€/heure</span>
+                    </div>
+                    <button class="btn-secondary">
+                        <i class="fas fa-filter"></i>
+                        Filtres
+                    </button>
+                    <button class="btn-primary">
+                        <i class="fas fa-plus"></i>
+                        Nouveau RDV
+                    </button>
+                    <button class="notification-btn">
+                        <i class="fas fa-bell"></i>
+                        <span class="notification-badge">2</span>
+                    </button>
+                </div>
+            </header>
+
+            <div class="schedule-container night-schedule">
+                <div class="schedule-sidebar">
+                    <div class="time-slots">
+                        <!-- Les créneaux seront générés en JS -->
+                    </div>
+                </div>
+
+                <div class="schedule-content">
+                    <!-- Les rendez-vous seront générés en JS -->
+                </div>
+            </div>
+
+            <div class="dashboard-grid">
+                <!-- Statistiques de nuit -->
+                <section class="dashboard-card stats">
+                    <h2>Statistiques de la nuit</h2>
+                    <div class="stats-grid">
+                        <div class="stat-item">
+                            <i class="fas fa-moon"></i>
+                            <div class="stat-content">
+                                <span class="stat-value">4</span>
+                                <span class="stat-label">Consultations</span>
+                            </div>
+                        </div>
+                        <div class="stat-item">
+                            <i class="fas fa-clock"></i>
+                            <div class="stat-content">
+                                <span class="stat-value">320€</span>
+                                <span class="stat-label">Revenus</span>
+                            </div>
+                        </div>
+                        <div class="stat-item">
+                            <i class="fas fa-user-plus"></i>
+                            <div class="stat-content">
+                                <span class="stat-value">2</span>
+                                <span class="stat-label">Nouveaux patients</span>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Prochains rendez-vous -->
+                <section class="dashboard-card upcoming">
+                    <h2>Prochains rendez-vous</h2>
+                    <div class="upcoming-list">
+                        <div class="upcoming-item">
+                            <div class="time-badge">22:00</div>
+                            <div class="upcoming-details">
+                                <h3>Thomas Bernard</h3>
+                                <p>Insomnie chronique</p>
+                            </div>
+                            <button class="btn-icon"><i class="fas fa-chevron-right"></i></button>
+                        </div>
+                        <div class="upcoming-item">
+                            <div class="time-badge">23:30</div>
+                            <div class="upcoming-details">
+                                <h3>Sarah Martin</h3>
+                                <p>Anxiété nocturne</p>
+                            </div>
+                            <button class="btn-icon"><i class="fas fa-chevron-right"></i></button>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Notes rapides -->
+                <section class="dashboard-card quick-notes">
+                    <h2>Notes rapides</h2>
+                    <div class="notes-container">
+                        <textarea placeholder="Ajouter une note..."></textarea>
+                        <div class="notes-list">
+                            <div class="note-item">
+                                <p>Patient en progrès sur son cycle de sommeil</p>
+                                <span class="note-time">Il y a 1h</span>
+                            </div>
+                            <div class="note-item">
+                                <p>Prévoir suivi particulier pour cas d'insomnie</p>
+                                <span class="note-time">Il y a 2h</span>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <script src="js/night-shift.js"></script>
+</body>
+</html> 

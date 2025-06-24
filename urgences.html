@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Urgences - PsychoAide</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/urgences.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">MentalSerenity</div>
+            <div class="burger-menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+            <ul>
+                <li><a href="index.html">Accueil</a></li>
+                <li><a href="services.html">Services</a></li>
+                <li><a href="tarifs.html">Tarifs</a></li>
+                <li><a href="contact.html">Contact</a></li>
+                <li id="auth-link">
+                    <a href="auth.html" class="btn-connexion">Connexion</a>
+                </li>
+            </ul>
+        </nav>
+    </header>
+    
+    <div class="emergency-container">
+        <nav class="emergency-nav">
+            <a href="index.html" class="back-link">
+                <i class="fas fa-arrow-left"></i>
+                Retour à l'accueil
+            </a>
+        </nav>
+        <header class="emergency-header">
+            <h1><i class="fas fa-exclamation-triangle"></i> Urgences Psychologiques</h1>
+            <p class="important-notice">Si vous avez des pensées suicidaires ou si vous êtes en situation de crise, contactez immédiatement les services d'urgence spécialisés ci-dessous.</p>
+        </header>
+
+        <main class="emergency-content">
+            <section class="emergency-numbers">
+                <h2>Numéros d'Urgence</h2>
+                <div class="numbers-grid">
+                    <div class="emergency-card">
+                        <i class="fas fa-phone"></i>
+                        <div class="number-info">
+                            <h3>3114</h3>
+                            <p>Numéro national de prévention du suicide</p>
+                            <span class="availability">24h/24 - 7j/7 - Gratuit</span>
+                        </div>
+                        <a href="tel:3114" class="call-button">Appeler</a>
+                    </div>
+
+                    <div class="emergency-card">
+                        <i class="fas fa-ambulance"></i>
+                        <div class="number-info">
+                            <h3>15</h3>
+                            <p>SAMU - Urgences médicales</p>
+                            <span class="availability">24h/24 - 7j/7 - Gratuit</span>
+                        </div>
+                        <a href="tel:15" class="call-button">Appeler</a>
+                    </div>
+
+                    <div class="emergency-card">
+                        <i class="fas fa-hospital"></i>
+                        <div class="number-info">
+                            <h3>SOS Psychiatrie</h3>
+                            <p>01 47 07 24 24</p>
+                            <span class="availability">24h/24 - 7j/7</span>
+                        </div>
+                        <a href="tel:0147072424" class="call-button">Appeler</a>
+                    </div>
+                </div>
+            </section>
+
+            <section class="scope-notice">
+                <h2>Notre Périmètre d'Intervention</h2>
+                <div class="scope-content">
+                    <div class="scope-included">
+                        <h3><i class="fas fa-check-circle"></i> Nous Accompagnons</h3>
+                        <ul>
+                            <li>Soutien psychologique</li>
+                            <li>Anxiété et stress</li>
+                            <li>Dépression légère à modérée</li>
+                            <li>Problèmes relationnels</li>
+                            <li>Difficultés professionnelles</li>
+                            <li>Accompagnement au changement</li>
+                        </ul>
+                    </div>
+
+                    <div class="scope-excluded">
+                        <h3><i class="fas fa-exclamation-circle"></i> Cas Nécessitant une Prise en Charge Spécialisée</h3>
+                        <ul>
+                            <li>Tentatives de suicide</li>
+                            <li>Idées suicidaires</li>
+                            <li>Crises psychotiques</li>
+                            <li>Urgences psychiatriques</li>
+                            <li>Situations de danger immédiat</li>
+                        </ul>
+                        <p class="redirect-notice">Ces situations nécessitent une intervention immédiate des services d'urgence spécialisés listés ci-dessus.</p>
+                    </div>
+                </div>
+            </section>
+
+            <section class="resources">
+                <h2>Ressources Additionnelles</h2>
+                <div class="resources-grid">
+                    <a href="https://www.suicide-ecoute.fr/" target="_blank" class="resource-card">
+                        <i class="fas fa-headset"></i>
+                        <h3>Suicide Écoute</h3>
+                        <p>Service d'écoute 24h/24</p>
+                    </a>
+
+                    <a href="https://www.sos-amitie.org/" target="_blank" class="resource-card">
+                        <i class="fas fa-heart"></i>
+                        <h3>SOS Amitié</h3>
+                        <p>Écoute par téléphone et internet</p>
+                    </a>
+
+                    <a href="https://www.psycom.org/" target="_blank" class="resource-card">
+                        <i class="fas fa-book-medical"></i>
+                        <h3>Psycom</h3>
+                        <p>Information en santé mentale</p>
+                    </a>
+                </div>
+            </section>
+        </main>
+
+        <div class="important-disclaimer">
+            <p><strong>Information importante :</strong> Ce service d'écoute et d'accompagnement bienveillant ne constitue pas une prise en charge médicale, psychologique ou psychiatrique.</p>
+        </div>
+
+        <footer class="emergency-footer">
+            <p>En cas de danger immédiat, n'hésitez pas à contacter le 15 (SAMU) ou le 112 (numéro d'urgence européen)</p>
+            <a href="index.html" class="return-home">
+                <i class="fas fa-arrow-left"></i>
+                Retour à l'accueil
+            </a>
+        </footer>
+    </div>
+    
+    <script src="js/main.js"></script>
+</body>
+</html>

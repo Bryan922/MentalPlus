@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Messagerie - MentalSerenity</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/messaging.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">MentalSerenity</div>
+            <ul>
+                <li><a href="index.html">Accueil</a></li>
+                <li><a href="rendez-vous.html">Prendre RDV</a></li>
+                <li><a href="profile.html">Mon Profil</a></li>
+                <li><a href="#" class="active">Messages</a></li>
+                <li><a href="#" id="logout-btn">Déconnexion</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="messaging-container">
+        <!-- Liste des conversations -->
+        <aside class="conversations-list">
+            <div class="conversations-header">
+                <h2>Messages</h2>
+                <button class="new-message-btn">
+                    <i class="fas fa-pen"></i>
+                </button>
+            </div>
+            <div class="search-bar">
+                <i class="fas fa-search"></i>
+                <input type="text" placeholder="Rechercher une conversation...">
+            </div>
+            <div class="conversations">
+                <!-- Les conversations seront ajoutées dynamiquement ici -->
+            </div>
+        </aside>
+
+        <!-- Zone de chat -->
+        <section class="chat-area">
+            <!-- En-tête du chat -->
+            <div class="chat-header">
+                <div class="chat-contact">
+                    <img src="images/default-avatar.png" alt="Contact" class="contact-avatar">
+                    <div class="contact-info">
+                        <h3>Dr. Smith</h3>
+                        <span class="status online">En ligne</span>
+                    </div>
+                </div>
+                <div class="chat-actions">
+                    <button title="Appeler">
+                        <i class="fas fa-phone"></i>
+                    </button>
+                    <button title="Vidéo">
+                        <i class="fas fa-video"></i>
+                    </button>
+                    <button title="Plus d'options">
+                        <i class="fas fa-ellipsis-v"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Messages -->
+            <div class="chat-messages">
+                <!-- Les messages seront ajoutés dynamiquement ici -->
+            </div>
+
+            <!-- Zone de saisie -->
+            <div class="chat-input">
+                <button class="attach-btn" title="Joindre un fichier">
+                    <i class="fas fa-paperclip"></i>
+                </button>
+                <div class="message-input">
+                    <textarea placeholder="Écrivez votre message..." rows="1"></textarea>
+                    <div class="input-actions">
+                        <button title="Emoji">
+                            <i class="far fa-smile"></i>
+                        </button>
+                        <button title="Envoyer">
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Détails du contact -->
+        <aside class="contact-details">
+            <div class="contact-profile">
+                <img src="images/default-avatar.png" alt="Contact" class="large-avatar">
+                <h3>Dr. Smith</h3>
+                <p>Psychologue</p>
+            </div>
+            <div class="contact-actions">
+                <button>
+                    <i class="fas fa-calendar-alt"></i>
+                    Prendre RDV
+                </button>
+                <button>
+                    <i class="fas fa-file-alt"></i>
+                    Documents partagés
+                </button>
+            </div>
+            <div class="shared-media">
+                <h4>Médias partagés</h4>
+                <div class="media-grid">
+                    <!-- Les médias seront ajoutés dynamiquement ici -->
+                </div>
+            </div>
+        </aside>
+    </main>
+
+    <script src="js/messaging.js"></script>
+</body>
+</html> 

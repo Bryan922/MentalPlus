@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Erreur serveur - MentalSerenity</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <style>
+        .error-container {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 2rem;
+            background: linear-gradient(135deg, #34495e 0%, #2c3e50 100%);
+            color: white;
+        }
+
+        .error-code {
+            font-size: 8rem;
+            font-weight: bold;
+            margin: 0;
+            line-height: 1;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        .error-message {
+            font-size: 1.5rem;
+            margin: 1rem 0 2rem;
+            opacity: 0.9;
+        }
+
+        .error-description {
+            font-size: 1.1rem;
+            max-width: 600px;
+            margin-bottom: 2rem;
+            line-height: 1.6;
+        }
+
+        .btn-home {
+            display: inline-block;
+            padding: 1rem 2rem;
+            background: white;
+            color: #34495e;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .btn-home:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+            background: rgba(255,255,255,0.9);
+        }
+
+        .retry-later {
+            margin-top: 1rem;
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+        }
+
+        @media (max-width: 480px) {
+            .error-code {
+                font-size: 6rem;
+            }
+
+            .error-message {
+                font-size: 1.2rem;
+            }
+
+            .error-description {
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="error-container">
+        <h1 class="error-code">500</h1>
+        <h2 class="error-message">Erreur serveur</h2>
+        <p class="error-description">
+            Désolé, une erreur inattendue s'est produite sur notre serveur.
+            Notre équipe technique a été notifiée et travaille à résoudre le problème.
+        </p>
+        <a href="/" class="btn-home">Retour à l'accueil</a>
+        <p class="retry-later">
+            Veuillez réessayer dans quelques instants.
+        </p>
+    </div>
+</body>
+</html> 

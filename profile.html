@@ -1,0 +1,872 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mon Profil - MentalSerenity</title>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .profile-container {
+            padding-top: 90px;
+            min-height: calc(100vh - 70px);
+            background: var(--background-color);
+        }
+
+        .profile-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            gap: 2rem;
+        }
+
+        .profile-sidebar {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            height: fit-content;
+        }
+
+        .profile-picture {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            margin: 0 auto 1.5rem;
+            display: block;
+            background: var(--primary-color);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            font-weight: bold;
+        }
+
+        .profile-name {
+            text-align: center;
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .profile-email {
+            text-align: center;
+            color: var(--accent-color);
+            margin-bottom: 1.5rem;
+        }
+
+        .profile-menu {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .profile-menu li {
+            margin-bottom: 0.5rem;
+        }
+
+        .profile-menu a {
+            display: block;
+            padding: 0.75rem 1rem;
+            text-decoration: none;
+            color: var(--text-color);
+            border-radius: 5px;
+            transition: all 0.3s;
+        }
+
+        .profile-menu a:hover,
+        .profile-menu a.active {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .profile-section {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .section-title {
+            color: var(--primary-color);
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--primary-color);
+        }
+
+        .appointments-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .appointment-card {
+            background: var(--background-color);
+            padding: 1.5rem;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .appointment-date {
+            font-weight: bold;
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .appointment-type {
+            color: var(--accent-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .appointment-status {
+            display: inline-block;
+            padding: 0.25rem 0.5rem;
+            border-radius: 3px;
+            font-size: 0.8rem;
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .documents-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .document-item {
+            display: flex;
+            align-items: center;
+            padding: 1rem;
+            border-bottom: 1px solid #eee;
+        }
+
+        .document-item:last-child {
+            border-bottom: none;
+        }
+
+        .document-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--primary-color);
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            margin-right: 1rem;
+        }
+
+        .document-info {
+            flex: 1;
+        }
+
+        .document-name {
+            font-weight: bold;
+            color: var(--text-color);
+            margin-bottom: 0.25rem;
+        }
+
+        .document-date {
+            font-size: 0.8rem;
+            color: var(--accent-color);
+        }
+
+        .document-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .btn-download {
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            text-decoration: none;
+            color: white;
+            background: var(--primary-color);
+            transition: background 0.3s;
+        }
+
+        .btn-download:hover {
+            background: var(--secondary-color);
+        }
+
+        @media (max-width: 768px) {
+            .profile-content {
+                grid-template-columns: 1fr;
+            }
+
+            .profile-sidebar {
+                position: sticky;
+                top: 90px;
+            }
+
+            .profile-picture {
+                width: 100px;
+                height: 100px;
+                font-size: 2rem;
+            }
+
+            .profile-section {
+                padding: 1rem;
+            }
+        }
+
+        .settings-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .form-group {
+            margin-bottom: 0;
+        }
+
+        .form-group.full-width {
+            grid-column: 1 / -1;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--primary-color);
+            font-weight: 500;
+        }
+
+        .input-wrapper {
+            position: relative;
+        }
+
+        .settings-input {
+            width: 100%;
+            padding: 0.8rem;
+            padding-left: 2.5rem;
+            border: 2px solid #eee;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .settings-input:focus {
+            border-color: var(--primary-color);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(var(--primary-color-rgb), 0.1);
+        }
+
+        .input-icon {
+            position: absolute;
+            left: 0.8rem;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 1.2rem;
+        }
+
+        textarea.settings-input {
+            padding-top: 2.5rem;
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        textarea.settings-input + .input-icon {
+            top: 1.2rem;
+            transform: none;
+        }
+
+        .checkbox-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+        }
+
+        .checkbox-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            cursor: pointer;
+        }
+
+        .checkbox-wrapper input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+        }
+
+        .checkbox-label {
+            color: var(--text-color);
+            user-select: none;
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: flex-end;
+            margin-top: 2rem;
+        }
+
+        .btn-secondary {
+            padding: 0.8rem 1.5rem;
+            border: 2px solid var(--primary-color);
+            background: white;
+            color: var(--primary-color);
+            border-radius: 5px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-secondary:hover {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        @media (max-width: 768px) {
+            .settings-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .form-actions {
+                flex-direction: column;
+            }
+
+            .btn-action, .btn-secondary {
+                width: 100%;
+            }
+        }
+
+        .appointment-info {
+            margin-top: 1rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+        }
+
+        .appointment-actions {
+            display: flex;
+            gap: 0.8rem;
+            margin-top: 1rem;
+        }
+
+        .btn-action.btn-cancel,
+        .btn-action.btn-reschedule {
+            padding: 0.6rem 1.2rem;
+            border-radius: 8px;
+            font-weight: 500;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            min-width: 120px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn-action.btn-cancel {
+            background: #fff;
+            color: #e74c3c;
+            border: 2px solid #e74c3c;
+        }
+
+        .btn-action.btn-reschedule {
+            background: #fff;
+            color: #3498db;
+            border: 2px solid #3498db;
+        }
+
+        .btn-action.btn-cancel:hover {
+            background: #e74c3c;
+            color: white;
+            box-shadow: 0 4px 8px rgba(231, 76, 60, 0.2);
+            transform: translateY(-1px);
+        }
+
+        .btn-action.btn-reschedule:hover {
+            background: #3498db;
+            color: white;
+            box-shadow: 0 4px 8px rgba(52, 152, 219, 0.2);
+            transform: translateY(-1px);
+        }
+
+        .btn-action.btn-cancel:active,
+        .btn-action.btn-reschedule:active {
+            transform: translateY(0);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn-action.btn-cancel:before {
+            content: "✕";
+            margin-right: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .btn-action.btn-reschedule:before {
+            content: "🗓";
+            margin-right: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 768px) {
+            .appointment-actions {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+
+            .btn-action.btn-cancel,
+            .btn-action.btn-reschedule {
+                width: 100%;
+                padding: 0.8rem;
+            }
+        }
+
+        .appointment-status {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 15px;
+            font-size: 0.9rem;
+        }
+
+        .status-confirmed {
+            background: #27ae60;
+            color: white;
+        }
+
+        .status-pending {
+            background: #f1c40f;
+            color: #2c3e50;
+        }
+
+        .status-cancelled {
+            background: #e74c3c;
+            color: white;
+        }
+
+        .status-rescheduled {
+            background: #3498db;
+            color: white;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 500px;
+            position: relative;
+        }
+
+        .close-modal {
+            position: absolute;
+            right: 1rem;
+            top: 1rem;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #666;
+        }
+
+        @media (max-width: 768px) {
+            .appointment-actions {
+                flex-direction: column;
+            }
+
+            .btn-action {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <a href="index.html" class="logo">MentalSerenity</a>
+            <div class="burger-menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+            <ul>
+                <li><a href="index.html">Accueil</a></li>
+                <li><a href="services.html">Services</a></li>
+                <li><a href="tarifs.html">Tarifs</a></li>
+                <li><a href="contact.html">Contact</a></li>
+                <li><a href="#" class="btn-connexion" id="btnLogout">Déconnexion</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="profile-container">
+        <div class="profile-content">
+            <aside class="profile-sidebar">
+                <div class="profile-picture" id="profileInitials">JS</div>
+                <h2 class="profile-name" id="profileName">John Smith</h2>
+                <p class="profile-email" id="profileEmail">john@example.com</p>
+                <ul class="profile-menu">
+                    <li><a href="#appointments" class="active">Mes rendez-vous</a></li>
+                    <li><a href="#documents">Mes documents</a></li>
+                    <li><a href="#settings">Paramètres</a></li>
+                </ul>
+            </aside>
+
+            <main class="profile-section">
+                <section id="appointments">
+                    <h2 class="section-title">Mes rendez-vous</h2>
+                    <div class="appointments-grid">
+                        <div class="appointment-card">
+                            <div class="appointment-date">02 Mars 2024 - 14:00</div>
+                            <div class="appointment-type">Consultation initiale</div>
+                            <div class="appointment-info">
+                                <span class="appointment-status status-confirmed">Confirmé</span>
+                                <div class="appointment-actions">
+                                    <button class="btn-action btn-cancel" onclick="updateAppointmentStatus(1, 'cancelled')">Annuler</button>
+                                    <button class="btn-action btn-reschedule" onclick="showRescheduleModal(1)">Reprogrammer</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="appointment-card">
+                            <div class="appointment-date">15 Mars 2024 - 15:30</div>
+                            <div class="appointment-type">Suivi mensuel</div>
+                            <div class="appointment-info">
+                                <span class="appointment-status status-pending">En attente</span>
+                                <div class="appointment-actions">
+                                    <button class="btn-action btn-cancel" onclick="updateAppointmentStatus(2, 'cancelled')">Annuler</button>
+                                    <button class="btn-action btn-reschedule" onclick="showRescheduleModal(2)">Reprogrammer</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Modal de reprogrammation -->
+                <div id="rescheduleModal" class="modal">
+                    <div class="modal-content">
+                        <span class="close-modal" onclick="closeRescheduleModal()">&times;</span>
+                        <h2>Reprogrammer le rendez-vous</h2>
+                        <form id="rescheduleForm">
+                            <input type="hidden" id="appointmentId">
+                            <div class="form-group">
+                                <label for="newDate">Nouvelle date</label>
+                                <div class="input-wrapper">
+                                    <input type="date" id="newDate" class="settings-input" required min="">
+                                    <span class="input-icon">📅</span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="newTime">Nouvel horaire</label>
+                                <div class="input-wrapper">
+                                    <input type="time" id="newTime" class="settings-input" required>
+                                    <span class="input-icon">🕒</span>
+                                </div>
+                            </div>
+                            <div class="form-actions">
+                                <button type="submit" class="btn-action">Confirmer</button>
+                                <button type="button" class="btn-secondary" onclick="closeRescheduleModal()">Annuler</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <section id="documents" style="display: none;">
+                    <h2 class="section-title">Mes documents</h2>
+                    <ul class="documents-list">
+                        <li class="document-item">
+                            <div class="document-icon">PDF</div>
+                            <div class="document-info">
+                                <div class="document-name">Rapport de consultation - Février 2024</div>
+                                <div class="document-date">Ajouté le 28/02/2024</div>
+                            </div>
+                            <div class="document-actions">
+                                <a href="#" class="btn-download">Télécharger</a>
+                            </div>
+                        </li>
+                        <li class="document-item">
+                            <div class="document-icon">PDF</div>
+                            <div class="document-info">
+                                <div class="document-name">Ordonnance - Janvier 2024</div>
+                                <div class="document-date">Ajouté le 15/01/2024</div>
+                            </div>
+                            <div class="document-actions">
+                                <a href="#" class="btn-download">Télécharger</a>
+                            </div>
+                        </li>
+                    </ul>
+                </section>
+
+                <section id="settings" style="display: none;">
+                    <h2 class="section-title">Paramètres du compte</h2>
+                    <form id="settingsForm">
+                        <div class="settings-grid">
+                            <div class="form-group">
+                                <label for="name">Nom complet</label>
+                                <div class="input-wrapper">
+                                    <input type="text" id="name" value="John Smith" class="settings-input">
+                                    <span class="input-icon">👤</span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="email">Email</label>
+                                <div class="input-wrapper">
+                                    <input type="email" id="email" value="john@example.com" class="settings-input">
+                                    <span class="input-icon">✉️</span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="phone">Téléphone</label>
+                                <div class="input-wrapper">
+                                    <input type="tel" id="phone" value="+33 6 12 34 56 78" class="settings-input">
+                                    <span class="input-icon">📱</span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="address">Adresse</label>
+                                <div class="input-wrapper">
+                                    <textarea id="address" class="settings-input" rows="3">123 rue Example, 75000 Paris</textarea>
+                                    <span class="input-icon">📍</span>
+                                </div>
+                            </div>
+                            <div class="form-group full-width">
+                                <label for="notifications">Préférences de notification</label>
+                                <div class="checkbox-group">
+                                    <label class="checkbox-wrapper">
+                                        <input type="checkbox" id="notif_email" checked>
+                                        <span class="checkbox-label">Notifications par email</span>
+                                    </label>
+                                    <label class="checkbox-wrapper">
+                                        <input type="checkbox" id="notif_sms" checked>
+                                        <span class="checkbox-label">Notifications par SMS</span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-actions">
+                            <button type="submit" class="btn-action">Enregistrer les modifications</button>
+                            <button type="button" class="btn-secondary" onclick="resetForm()">Annuler</button>
+                        </div>
+                    </form>
+                </section>
+
+                <script>
+                    // Gestion du formulaire de paramètres
+                    const settingsForm = document.getElementById('settingsForm');
+                    const originalFormData = new FormData(settingsForm);
+
+                    settingsForm.addEventListener('submit', function(e) {
+                        e.preventDefault();
+                        
+                        // Simulation de sauvegarde
+                        const loadingBtn = this.querySelector('.btn-action');
+                        const originalText = loadingBtn.textContent;
+                        
+                        loadingBtn.textContent = 'Enregistrement...';
+                        loadingBtn.disabled = true;
+
+                        setTimeout(() => {
+                            loadingBtn.textContent = 'Modifications enregistrées !';
+                            loadingBtn.style.background = '#27ae60';
+
+                            setTimeout(() => {
+                                loadingBtn.textContent = originalText;
+                                loadingBtn.style.background = '';
+                                loadingBtn.disabled = false;
+                            }, 2000);
+                        }, 1500);
+                    });
+
+                    function resetForm() {
+                        settingsForm.reset();
+                        // Restaurer les valeurs originales
+                        for (let [key, value] of originalFormData.entries()) {
+                            const input = settingsForm.querySelector(`[name="${key}"]`);
+                            if (input) input.value = value;
+                        }
+                    }
+
+                    // Gestion des téléchargements
+                    document.querySelectorAll('.btn-download').forEach(btn => {
+                        btn.addEventListener('click', function(e) {
+                            e.preventDefault();
+                            const fileName = this.closest('.document-item').querySelector('.document-name').textContent;
+                            
+                            // Simulation de téléchargement
+                            const originalText = this.textContent;
+                            this.textContent = 'Téléchargement...';
+                            this.disabled = true;
+
+                            setTimeout(() => {
+                                this.textContent = 'Téléchargé !';
+                                setTimeout(() => {
+                                    this.textContent = originalText;
+                                    this.disabled = false;
+                                    alert(`Le fichier "${fileName}" a été téléchargé avec succès.`);
+                                }, 1000);
+                            }, 1500);
+                        });
+                    });
+
+                    // Gestion des rendez-vous
+                    let appointments = [
+                        { id: 1, date: '2024-03-02', time: '14:00', type: 'Consultation initiale', status: 'confirmed' },
+                        { id: 2, date: '2024-03-15', time: '15:30', type: 'Suivi mensuel', status: 'pending' }
+                    ];
+
+                    function updateAppointmentStatus(appointmentId, newStatus) {
+                        // Simulation de mise à jour vers l'API
+                        const appointment = appointments.find(apt => apt.id === appointmentId);
+                        if (!appointment) return;
+
+                        const statusMessages = {
+                            'cancelled': 'Rendez-vous annulé',
+                            'rescheduled': 'Rendez-vous reprogrammé',
+                            'confirmed': 'Rendez-vous confirmé'
+                        };
+
+                        // Mise à jour locale
+                        appointment.status = newStatus;
+
+                        // Mise à jour de l'affichage
+                        const card = document.querySelector(`[data-appointment-id="${appointmentId}"]`);
+                        if (card) {
+                            const statusBadge = card.querySelector('.appointment-status');
+                            statusBadge.className = `appointment-status status-${newStatus}`;
+                            statusBadge.textContent = statusMessages[newStatus];
+                        }
+
+                        // Notification de l'admin (simulation)
+                        console.log(`Admin notifié: Rendez-vous ${appointmentId} ${statusMessages[newStatus].toLowerCase()}`);
+
+                        // Feedback utilisateur
+                        alert(statusMessages[newStatus]);
+
+                        // Si le rendez-vous est annulé, on désactive les boutons
+                        if (newStatus === 'cancelled') {
+                            const actions = card.querySelector('.appointment-actions');
+                            actions.innerHTML = '<span class="text-muted">Rendez-vous annulé</span>';
+                        }
+                    }
+
+                    function showRescheduleModal(appointmentId) {
+                        const modal = document.getElementById('rescheduleModal');
+                        const appointmentIdInput = document.getElementById('appointmentId');
+                        const dateInput = document.getElementById('newDate');
+                        
+                        // Configuration de la date minimale (aujourd'hui)
+                        const today = new Date().toISOString().split('T')[0];
+                        dateInput.min = today;
+                        
+                        appointmentIdInput.value = appointmentId;
+                        modal.style.display = 'flex';
+                    }
+
+                    function closeRescheduleModal() {
+                        document.getElementById('rescheduleModal').style.display = 'none';
+                    }
+
+                    // Gestion du formulaire de reprogrammation
+                    document.getElementById('rescheduleForm').addEventListener('submit', function(e) {
+                        e.preventDefault();
+                        
+                        const appointmentId = parseInt(document.getElementById('appointmentId').value);
+                        const newDate = document.getElementById('newDate').value;
+                        const newTime = document.getElementById('newTime').value;
+
+                        // Simulation de mise à jour vers l'API
+                        const appointment = appointments.find(apt => apt.id === appointmentId);
+                        if (appointment) {
+                            appointment.date = newDate;
+                            appointment.time = newTime;
+                            appointment.status = 'rescheduled';
+
+                            // Mise à jour de l'affichage
+                            updateAppointmentStatus(appointmentId, 'rescheduled');
+                            
+                            // Fermeture du modal
+                            closeRescheduleModal();
+                        }
+                    });
+
+                    // Fermeture du modal en cliquant en dehors
+                    window.onclick = function(event) {
+                        const modal = document.getElementById('rescheduleModal');
+                        if (event.target === modal) {
+                            closeRescheduleModal();
+                        }
+                    }
+                </script>
+            </main>
+        </div>
+    </div>
+
+    <script src="js/main.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Vérification de l'authentification
+            const token = localStorage.getItem('token');
+            if (!token) {
+                window.location.href = 'auth.html';
+                return;
+            }
+
+            // Déconnexion
+            document.getElementById('btnLogout').addEventListener('click', function(e) {
+                e.preventDefault();
+                localStorage.removeItem('token');
+                window.location.href = 'auth.html';
+            });
+
+            // Navigation dans le profil
+            const menuLinks = document.querySelectorAll('.profile-menu a');
+            const sections = document.querySelectorAll('main section');
+
+            menuLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const targetId = this.getAttribute('href').substring(1);
+
+                    // Mise à jour des classes actives
+                    menuLinks.forEach(l => l.classList.remove('active'));
+                    this.classList.add('active');
+
+                    // Affichage de la section correspondante
+                    sections.forEach(section => {
+                        section.style.display = section.id === targetId ? 'block' : 'none';
+                    });
+                });
+            });
+
+            // TODO: Charger les données de l'utilisateur depuis l'API
+            // Pour l'instant, on utilise des données de test
+            const userData = {
+                name: 'John Smith',
+                email: 'john@example.com'
+            };
+
+            // Mise à jour des informations de profil
+            document.getElementById('profileName').textContent = userData.name;
+            document.getElementById('profileEmail').textContent = userData.email;
+            document.getElementById('profileInitials').textContent = userData.name
+                .split(' ')
+                .map(n => n[0])
+                .join('');
+
+            // Gestion du formulaire de paramètres
+            document.getElementById('settingsForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                // TODO: Envoyer les modifications à l'API
+                alert('Modifications enregistrées avec succès !');
+            });
+        });
+    </script>
+</body>
+</html> 

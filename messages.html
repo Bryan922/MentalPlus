@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Messages - PsychoAide</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/dashboard.css">
+    <link rel="stylesheet" href="css/employee.css">
+    <link rel="stylesheet" href="css/messages.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="user-info">
+                    <i class="fas fa-user-md"></i>
+                    <div class="user-details">
+                        <h3 id="employeeName">Dr. Martin</h3>
+                        <p id="employeeRole">Psychologue</p>
+                    </div>
+                </div>
+            </div>
+            
+            <nav class="sidebar-nav">
+                <a href="espace-employe.html">
+                    <i class="fas fa-calendar-alt"></i>
+                    Planning
+                </a>
+                <a href="patients.html">
+                    <i class="fas fa-users"></i>
+                    Mes patients
+                </a>
+                <a href="consultations.html">
+                    <i class="fas fa-clipboard"></i>
+                    Consultations
+                </a>
+                <a href="#messages" class="active">
+                    <i class="fas fa-envelope"></i>
+                    Messages
+                    <span class="badge">5</span>
+                </a>
+                <a href="#settings">
+                    <i class="fas fa-cog"></i>
+                    Paramètres
+                </a>
+            </nav>
+
+            <div class="sidebar-footer">
+                <a href="#help">
+                    <i class="fas fa-question-circle"></i>
+                    Aide
+                </a>
+                <a href="index.html" class="logout">
+                    <i class="fas fa-sign-out-alt"></i>
+                    Déconnexion
+                </a>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="messages-container">
+                <!-- Liste des conversations -->
+                <section class="conversations-list">
+                    <div class="conversations-header">
+                        <h2>Messages</h2>
+                        <div class="search-bar">
+                            <input type="text" placeholder="Rechercher une conversation...">
+                            <i class="fas fa-search"></i>
+                        </div>
+                    </div>
+
+                    <div class="conversations">
+                        <div class="conversation-item active unread">
+                            <img src="https://via.placeholder.com/40" alt="Photo patient" class="conversation-avatar">
+                            <div class="conversation-info">
+                                <div class="conversation-header">
+                                    <h3>Jean Dupont</h3>
+                                    <span class="conversation-time">14:30</span>
+                                </div>
+                                <p class="conversation-preview">Je confirme mon rendez-vous de demain à 15h.</p>
+                            </div>
+                        </div>
+
+                        <div class="conversation-item">
+                            <img src="https://via.placeholder.com/40" alt="Photo patient" class="conversation-avatar">
+                            <div class="conversation-info">
+                                <div class="conversation-header">
+                                    <h3>Sarah Martin</h3>
+                                    <span class="conversation-time">Hier</span>
+                                </div>
+                                <p class="conversation-preview">Merci pour la séance d'aujourd'hui...</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Zone de chat -->
+                <section class="chat-area">
+                    <div class="chat-header">
+                        <div class="chat-contact">
+                            <img src="https://via.placeholder.com/40" alt="Photo patient" class="contact-avatar">
+                            <div class="contact-info">
+                                <h3>Jean Dupont</h3>
+                                <p>En ligne</p>
+                            </div>
+                        </div>
+                        <div class="chat-actions">
+                            <button class="btn-icon" title="Appeler">
+                                <i class="fas fa-phone"></i>
+                            </button>
+                            <button class="btn-icon" title="Vidéo">
+                                <i class="fas fa-video"></i>
+                            </button>
+                            <button class="btn-icon" title="Plus d'options">
+                                <i class="fas fa-ellipsis-v"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="chat-messages">
+                        <div class="message-date">Aujourd'hui</div>
+                        
+                        <div class="message received">
+                            <div class="message-content">
+                                <p>Bonjour Dr. Martin, je voulais confirmer mon rendez-vous de demain à 15h.</p>
+                                <span class="message-time">14:30</span>
+                            </div>
+                        </div>
+
+                        <div class="message sent">
+                            <div class="message-content">
+                                <p>Bonjour M. Dupont, je vous confirme votre rendez-vous pour demain à 15h. N'oubliez pas d'apporter votre carnet de suivi.</p>
+                                <span class="message-time">14:35</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="chat-input">
+                        <button class="btn-icon" title="Joindre un fichier">
+                            <i class="fas fa-paperclip"></i>
+                        </button>
+                        <textarea placeholder="Écrivez votre message..."></textarea>
+                        <button class="btn-icon send-message" title="Envoyer">
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </div>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <script src="js/messages.js"></script>
+</body>
+</html> 

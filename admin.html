@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Administration - MentalSerenity</title>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .admin-container {
+            padding-top: 90px;
+            min-height: calc(100vh - 70px);
+            background: var(--background-color);
+        }
+
+        .admin-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .admin-header {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .admin-header h1 {
+            color: var(--primary-color);
+            margin: 0;
+        }
+
+        .admin-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .stat-card h3 {
+            color: var(--accent-color);
+            font-size: 1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-card .number {
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+
+        .admin-tables {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .table-container {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .table-container h2 {
+            color: var(--accent-color);
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--primary-color);
+        }
+
+        .admin-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .admin-table th,
+        .admin-table td {
+            padding: 0.75rem;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+
+        .admin-table th {
+            font-weight: 600;
+            color: var(--accent-color);
+        }
+
+        .btn-action {
+            padding: 0.25rem 0.5rem;
+            border-radius: 3px;
+            font-size: 0.8rem;
+            text-decoration: none;
+            color: white;
+            background: var(--primary-color);
+            transition: background 0.3s;
+        }
+
+        .btn-action:hover {
+            background: var(--secondary-color);
+        }
+
+        @media (max-width: 768px) {
+            .admin-content {
+                padding: 1rem;
+            }
+
+            .admin-header {
+                flex-direction: column;
+                text-align: center;
+                gap: 1rem;
+            }
+
+            .table-container {
+                overflow-x: auto;
+            }
+        }
+
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 600px;
+            position: relative;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .close-modal {
+            position: absolute;
+            right: 1rem;
+            top: 1rem;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #666;
+        }
+
+        .detail-group {
+            margin-bottom: 1rem;
+        }
+
+        .detail-group label {
+            font-weight: bold;
+            color: var(--primary-color);
+            margin-right: 0.5rem;
+        }
+
+        .modal-actions {
+            margin-top: 2rem;
+            display: flex;
+            gap: 1rem;
+            justify-content: flex-end;
+        }
+
+        .btn-action {
+            padding: 0.5rem 1rem;
+        }
+
+        small {
+            display: block;
+            color: #666;
+            font-size: 0.8rem;
+            margin-top: 0.5rem;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 15px;
+            background: #e6ffe6;
+            color: #27ae60;
+            font-size: 0.9rem;
+        }
+
+        .user-appointments-list {
+            list-style: none;
+            padding: 0;
+            margin: 0.5rem 0;
+        }
+
+        .user-appointments-list li {
+            padding: 0.5rem;
+            border-bottom: 1px solid #eee;
+            color: var(--text-color);
+        }
+
+        .user-appointments-list li:last-child {
+            border-bottom: none;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <a href="index.html" class="logo">MentalSerenity</a>
+            <div class="burger-menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+            <ul>
+                <li><a href="index.html">Accueil</a></li>
+                <li><a href="services.html">Services</a></li>
+                <li><a href="tarifs.html">Tarifs</a></li>
+                <li><a href="contact.html">Contact</a></li>
+                <li><a href="#" class="btn-connexion" id="btnLogout">Déconnexion</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="admin-container">
+        <div class="admin-content">
+            <div class="admin-header">
+                <h1>Tableau de bord administrateur</h1>
+                <p>Dernière mise à jour : <span id="lastUpdate">Chargement...</span></p>
+            </div>
+
+            <div class="admin-stats">
+                <div class="stat-card">
+                    <h3>Utilisateurs actifs</h3>
+                    <div class="number" id="activeUsers">0</div>
+                    <small>(Données de test)</small>
+                </div>
+                <div class="stat-card">
+                    <h3>Rendez-vous aujourd'hui</h3>
+                    <div class="number" id="todayAppointments">0</div>
+                    <small>(Données de test)</small>
+                </div>
+                <div class="stat-card">
+                    <h3>Messages non lus</h3>
+                    <div class="number" id="unreadMessages">0</div>
+                    <small>(Données de test)</small>
+                </div>
+                <div class="stat-card">
+                    <h3>Documents en attente</h3>
+                    <div class="number" id="pendingDocuments">0</div>
+                    <small>(Données de test)</small>
+                </div>
+            </div>
+
+            <div class="admin-tables">
+                <div class="table-container">
+                    <h2>Derniers utilisateurs inscrits</h2>
+                    <table class="admin-table">
+                        <thead>
+                            <tr>
+                                <th>Nom</th>
+                                <th>Email</th>
+                                <th>Date</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="recentUsers">
+                            <tr>
+                                <td colspan="4">Chargement...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="table-container">
+                    <h2>Prochains rendez-vous</h2>
+                    <div class="appointment-tabs">
+                        <button class="tab-btn active" data-type="regular">
+                            <i class="fas fa-sun"></i>
+                            Rendez-vous classiques
+                        </button>
+                        <button class="tab-btn" data-type="night">
+                            <i class="fas fa-moon"></i>
+                            Rendez-vous de nuit
+                        </button>
+                    </div>
+
+                    <div id="regularAppointments" class="active">
+                        <table class="admin-table">
+                            <thead>
+                                <tr>
+                                    <th>Client</th>
+                                    <th>Date</th>
+                                    <th>Type</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="upcomingAppointments">
+                                <tr>
+                                    <td colspan="4">Chargement...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div id="nightAppointments">
+                        <table class="admin-table">
+                            <thead>
+                                <tr>
+                                    <th>Client</th>
+                                    <th>Date</th>
+                                    <th>Type</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="upcomingNightAppointments">
+                                <tr>
+                                    <td colspan="4">Chargement...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal pour les détails du rendez-vous -->
+        <div id="appointmentModal" class="modal" style="display: none;">
+            <div class="modal-content">
+                <span class="close-modal">&times;</span>
+                <h2>Détails du rendez-vous</h2>
+                <div class="appointment-details">
+                    <div class="detail-group">
+                        <label>Client :</label>
+                        <span id="modalClientName"></span>
+                    </div>
+                    <div class="detail-group">
+                        <label>Date :</label>
+                        <span id="modalDate"></span>
+                    </div>
+                    <div class="detail-group">
+                        <label>Type :</label>
+                        <span id="modalType"></span>
+                    </div>
+                    <div class="detail-group">
+                        <label>Téléphone :</label>
+                        <span id="modalPhone"></span>
+                    </div>
+                    <div class="detail-group">
+                        <label>Email :</label>
+                        <span id="modalEmail"></span>
+                    </div>
+                    <div class="detail-group">
+                        <label>Notes :</label>
+                        <p id="modalNotes"></p>
+                    </div>
+                    <div class="modal-actions">
+                        <button class="btn-action" onclick="updateAppointmentStatus('confirmed')">Confirmer</button>
+                        <button class="btn-action" onclick="updateAppointmentStatus('cancelled')">Annuler</button>
+                        <button class="btn-action" onclick="updateAppointmentStatus('rescheduled')">Reprogrammer</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal pour les détails utilisateur -->
+        <div id="userModal" class="modal" style="display: none;">
+            <div class="modal-content">
+                <span class="close-modal" onclick="closeUserModal()">&times;</span>
+                <h2>Détails de l'utilisateur</h2>
+                <div class="user-details">
+                    <div class="detail-group">
+                        <label>Nom :</label>
+                        <span id="userModalName"></span>
+                    </div>
+                    <div class="detail-group">
+                        <label>Email :</label>
+                        <span id="userModalEmail"></span>
+                    </div>
+                    <div class="detail-group">
+                        <label>Date d'inscription :</label>
+                        <span id="userModalDate"></span>
+                    </div>
+                    <div class="detail-group">
+                        <label>Statut :</label>
+                        <span id="userModalStatus" class="status-badge">Actif</span>
+                    </div>
+                    <div class="detail-group">
+                        <label>Dernière connexion :</label>
+                        <span id="userModalLastLogin">Aujourd'hui à 14:30</span>
+                    </div>
+                    <div class="detail-group">
+                        <label>Rendez-vous planifiés :</label>
+                        <ul id="userModalAppointments" class="user-appointments-list">
+                            <li>02/03/2024 14:00 - Consultation initiale</li>
+                            <li>15/03/2024 15:30 - Suivi mensuel</li>
+                        </ul>
+                    </div>
+                    <div class="modal-actions">
+                        <button class="btn-action" onclick="updateUserStatus('blocked')">Bloquer</button>
+                        <button class="btn-action" onclick="updateUserStatus('reset_password')">Réinitialiser mot de passe</button>
+                        <button class="btn-action" onclick="updateUserStatus('delete')">Supprimer</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/main.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Vérification de l'authentification admin
+            const token = localStorage.getItem('token');
+            const isAdmin = localStorage.getItem('isAdmin');
+            
+            if (!token || !isAdmin) {
+                window.location.href = 'auth.html';
+                return;
+            }
+
+            // Déconnexion
+            document.getElementById('btnLogout').addEventListener('click', function(e) {
+                e.preventDefault();
+                localStorage.removeItem('token');
+                localStorage.removeItem('isAdmin');
+                window.location.href = 'auth.html';
+            });
+
+            // Données de test pour la démo
+            const testData = {
+                appointments: [
+                    {
+                        id: 1,
+                        client: 'Sophie Bernard',
+                        date: '02/03/2024 14:00',
+                        type: 'Consultation',
+                        phone: '+33 6 12 34 56 78',
+                        email: 'sophie@example.com',
+                        notes: 'Première consultation - Suivi anxiété'
+                    },
+                    {
+                        id: 2,
+                        client: 'Pierre Dubois',
+                        date: '02/03/2024 15:30',
+                        type: 'Suivi',
+                        phone: '+33 6 98 76 54 32',
+                        email: 'pierre@example.com',
+                        notes: 'Suivi mensuel - Progrès notables'
+                    }
+                ],
+                users: [
+                    {
+                        name: 'Marie Dupont',
+                        email: 'marie@example.com',
+                        date: '01/03/2024'
+                    },
+                    {
+                        name: 'Jean Martin',
+                        email: 'jean@example.com',
+                        date: '29/02/2024'
+                    }
+                ]
+            };
+
+            // Mise à jour des statistiques
+            document.getElementById('lastUpdate').textContent = new Date().toLocaleString();
+            document.getElementById('activeUsers').textContent = '42';
+            document.getElementById('todayAppointments').textContent = '8';
+            document.getElementById('unreadMessages').textContent = '5';
+            document.getElementById('pendingDocuments').textContent = '3';
+
+            // Affichage des utilisateurs récents
+            document.getElementById('recentUsers').innerHTML = testData.users.map(user => `
+                <tr>
+                    <td>${user.name}</td>
+                    <td>${user.email}</td>
+                    <td>${user.date}</td>
+                    <td><a href="#" class="btn-action" onclick="showUserDetails('${user.email}')">Voir</a></td>
+                </tr>
+            `).join('');
+
+            // Affichage des rendez-vous
+            document.getElementById('upcomingAppointments').innerHTML = testData.appointments.map(apt => `
+                <tr>
+                    <td>${apt.client}</td>
+                    <td>${apt.date}</td>
+                    <td>${apt.type}</td>
+                    <td><a href="#" class="btn-action" onclick="showAppointmentDetails(${apt.id})">Gérer</a></td>
+                </tr>
+            `).join('');
+
+            // Gestion des modals
+            const appointmentModal = document.getElementById('appointmentModal');
+            const userModal = document.getElementById('userModal');
+            const closeBtns = document.querySelectorAll('.close-modal');
+
+            closeBtns.forEach(btn => {
+                btn.onclick = function() {
+                    appointmentModal.style.display = "none";
+                    userModal.style.display = "none";
+                }
+            });
+
+            window.onclick = function(event) {
+                if (event.target == appointmentModal || event.target == userModal) {
+                    appointmentModal.style.display = "none";
+                    userModal.style.display = "none";
+                }
+            }
+
+            // Rendre les données de test disponibles globalement
+            window.testData = testData;
+        });
+
+        function showAppointmentDetails(appointmentId) {
+            const appointment = testData.appointments.find(apt => apt.id === appointmentId);
+            if (!appointment) return;
+
+            // Mise à jour du contenu du modal
+            document.getElementById('modalClientName').textContent = appointment.client;
+            document.getElementById('modalDate').textContent = appointment.date;
+            document.getElementById('modalType').textContent = appointment.type;
+            document.getElementById('modalPhone').textContent = appointment.phone;
+            document.getElementById('modalEmail').textContent = appointment.email;
+            document.getElementById('modalNotes').textContent = appointment.notes;
+
+            // Affichage du modal
+            document.getElementById('appointmentModal').style.display = "flex";
+        }
+
+        function showUserDetails(email) {
+            const user = testData.users.find(u => u.email === email);
+            if (!user) return;
+
+            // Mise à jour du contenu du modal
+            document.getElementById('userModalName').textContent = user.name;
+            document.getElementById('userModalEmail').textContent = user.email;
+            document.getElementById('userModalDate').textContent = user.date;
+
+            // Affichage du modal
+            document.getElementById('userModal').style.display = "flex";
+        }
+
+        function closeUserModal() {
+            document.getElementById('userModal').style.display = "none";
+        }
+
+        function updateUserStatus(action) {
+            let message;
+            switch(action) {
+                case 'blocked':
+                    message = 'Utilisateur bloqué';
+                    break;
+                case 'reset_password':
+                    message = 'Email de réinitialisation envoyé';
+                    break;
+                case 'delete':
+                    message = 'Utilisateur supprimé';
+                    break;
+            }
+            alert(message);
+            closeUserModal();
+        }
+
+        function updateAppointmentStatus(status) {
+            // Simulation de mise à jour du statut
+            alert(`Statut du rendez-vous mis à jour : ${status}`);
+            document.getElementById('appointmentModal').style.display = "none";
+        }
+    </script>
+</body>
+</html> 

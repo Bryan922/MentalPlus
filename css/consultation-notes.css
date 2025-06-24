@@ -1,0 +1,706 @@
+.notes-container {
+    max-width: 1600px;
+    margin: 2rem auto;
+    padding: 0 1rem;
+    display: grid;
+    grid-template-columns: 300px 1fr 300px;
+    gap: 2rem;
+}
+
+/* Patient Info */
+.patient-info {
+    background: white;
+    border-radius: 15px;
+    padding: 1.5rem;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    height: fit-content;
+}
+
+.patient-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.patient-avatar {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.patient-header h2 {
+    margin: 0;
+    color: var(--accent-color);
+}
+
+.patient-header p {
+    margin: 0.5rem 0 0;
+    color: #666;
+}
+
+.consultation-history h3 {
+    color: var(--accent-color);
+    margin-bottom: 1rem;
+}
+
+.history-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.history-list li {
+    padding: 1rem;
+    border-radius: 8px;
+    margin-bottom: 0.5rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.history-list li:hover {
+    background: #f8f9fa;
+}
+
+.history-list li.active {
+    background: var(--primary-color);
+    color: white;
+}
+
+.history-list .date {
+    display: block;
+    font-weight: bold;
+}
+
+.history-list .type {
+    font-size: 0.9rem;
+    opacity: 0.8;
+}
+
+/* Notes Section */
+.notes-section {
+    background: white;
+    border-radius: 15px;
+    padding: 2rem;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.notes-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+}
+
+.notes-header h2 {
+    margin: 0;
+    color: var(--accent-color);
+}
+
+.header-actions {
+    display: flex;
+    gap: 1rem;
+}
+
+.header-actions button {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.8rem 1.2rem;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.save-btn {
+    background: var(--primary-color);
+    color: white;
+}
+
+.save-btn:hover {
+    background: var(--secondary-color);
+}
+
+.print-btn {
+    background: #f8f9fa;
+    color: #666;
+}
+
+.print-btn:hover {
+    background: #e9ecef;
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: #666;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+    width: 100%;
+    padding: 0.8rem;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-family: inherit;
+}
+
+.form-group input:read-only {
+    background: #f8f9fa;
+}
+
+.form-group textarea {
+    resize: vertical;
+    min-height: 100px;
+}
+
+.form-group select:focus,
+.form-group textarea:focus {
+    outline: none;
+    border-color: var(--primary-color);
+}
+
+/* Quick Stats */
+.quick-stats {
+    background: white;
+    border-radius: 15px;
+    padding: 1.5rem;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    height: fit-content;
+}
+
+.quick-stats h3 {
+    color: var(--accent-color);
+    margin-bottom: 1rem;
+}
+
+.stats-grid {
+    display: grid;
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.stat-card {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem;
+    background: #f8f9fa;
+    border-radius: 8px;
+}
+
+.stat-card i {
+    font-size: 1.5rem;
+    color: var(--primary-color);
+}
+
+.stat-card h4 {
+    margin: 0;
+    font-size: 0.9rem;
+    color: #666;
+}
+
+.stat-card p {
+    margin: 0.2rem 0 0;
+    font-weight: bold;
+    color: var(--accent-color);
+}
+
+.reminders ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.reminders li {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.8rem 0;
+    border-bottom: 1px solid #eee;
+    color: #666;
+}
+
+.reminders li:last-child {
+    border-bottom: none;
+}
+
+.reminders i {
+    color: var(--primary-color);
+}
+
+/* Evolution Charts */
+.evolution-charts {
+    margin-top: 2rem;
+    padding-top: 2rem;
+    border-top: 1px solid #eee;
+}
+
+.evolution-charts h3 {
+    color: var(--accent-color);
+    margin-bottom: 1rem;
+}
+
+.chart-container {
+    background: white;
+    border-radius: 8px;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    height: 200px;
+}
+
+/* Reminders */
+.reminders-controls {
+    margin-bottom: 1rem;
+}
+
+.add-reminder-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.8rem 1.2rem;
+    background: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.add-reminder-btn:hover {
+    background: var(--secondary-color);
+}
+
+.reminders li {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem;
+    background: #f8f9fa;
+    border-radius: 8px;
+    margin-bottom: 0.5rem;
+    transition: all 0.3s ease;
+}
+
+.reminders li:hover {
+    background: #f0f0f0;
+}
+
+.reminder-actions {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.reminder-actions button {
+    background: none;
+    border: none;
+    padding: 0.5rem;
+    cursor: pointer;
+    color: #666;
+    transition: all 0.3s ease;
+}
+
+.edit-reminder:hover {
+    color: var(--primary-color);
+}
+
+.delete-reminder:hover {
+    color: #dc3545;
+}
+
+/* Modal */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.5);
+    z-index: 1000;
+}
+
+.modal.active {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal-content {
+    background: white;
+    padding: 2rem;
+    border-radius: 15px;
+    width: 90%;
+    max-width: 500px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.modal-content h3 {
+    color: var(--accent-color);
+    margin-bottom: 1.5rem;
+}
+
+.form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+    margin-top: 2rem;
+}
+
+.cancel-btn {
+    padding: 0.8rem 1.2rem;
+    background: #f8f9fa;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.cancel-btn:hover {
+    background: #e9ecef;
+}
+
+/* Responsive */
+@media (max-width: 1200px) {
+    .notes-container {
+        grid-template-columns: 1fr;
+    }
+
+    .patient-info,
+    .quick-stats {
+        max-width: 600px;
+        margin: 0 auto;
+    }
+
+    .chart-container {
+        height: 250px;
+    }
+    
+    .modal-content {
+        width: 95%;
+        margin: 1rem;
+        padding: 1.5rem;
+    }
+} 
+
+/* Documents Section */
+.documents-section {
+    margin-top: 2rem;
+    padding-top: 2rem;
+    border-top: 1px solid #eee;
+}
+
+.documents-controls {
+    margin-bottom: 1rem;
+}
+
+.upload-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.8rem 1.2rem;
+    background: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.upload-btn:hover {
+    background: var(--secondary-color);
+}
+
+.document-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem;
+    background: #f8f9fa;
+    border-radius: 8px;
+    margin-bottom: 0.5rem;
+    transition: all 0.3s ease;
+}
+
+.document-item:hover {
+    background: #f0f0f0;
+}
+
+.document-item i {
+    font-size: 1.5rem;
+    color: var(--primary-color);
+}
+
+.document-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+}
+
+.document-name {
+    font-weight: 500;
+}
+
+.document-date {
+    font-size: 0.8rem;
+    color: #666;
+}
+
+.document-actions {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.document-actions button {
+    background: none;
+    border: none;
+    padding: 0.5rem;
+    cursor: pointer;
+    color: #666;
+    transition: all 0.3s ease;
+}
+
+.view-doc:hover {
+    color: var(--primary-color);
+}
+
+.download-doc:hover {
+    color: var(--accent-color);
+}
+
+.delete-doc:hover {
+    color: #dc3545;
+}
+
+/* Long Term Goals */
+.long-term-goals {
+    margin-top: 2rem;
+    padding-top: 2rem;
+    border-top: 1px solid #eee;
+}
+
+.goals-controls {
+    margin-bottom: 1rem;
+}
+
+.add-goal-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.8rem 1.2rem;
+    background: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.add-goal-btn:hover {
+    background: var(--secondary-color);
+}
+
+.goal-item {
+    background: #f8f9fa;
+    border-radius: 8px;
+    padding: 1rem;
+    margin-bottom: 1rem;
+}
+
+.goal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.5rem;
+}
+
+.goal-header h4 {
+    margin: 0;
+    color: var(--accent-color);
+}
+
+.goal-progress {
+    font-weight: 500;
+    color: var(--primary-color);
+}
+
+.progress-bar {
+    height: 8px;
+    background: #e9ecef;
+    border-radius: 4px;
+    overflow: hidden;
+    margin-bottom: 0.8rem;
+}
+
+.progress {
+    height: 100%;
+    background: var(--primary-color);
+    border-radius: 4px;
+    transition: width 0.3s ease;
+}
+
+.goal-description {
+    margin: 0.5rem 0;
+    color: #666;
+}
+
+.goal-details {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.8rem;
+    color: #666;
+    margin: 0.5rem 0;
+}
+
+.goal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+}
+
+.goal-actions button {
+    background: none;
+    border: none;
+    padding: 0.5rem;
+    cursor: pointer;
+    color: #666;
+    transition: all 0.3s ease;
+}
+
+.edit-goal:hover {
+    color: var(--primary-color);
+}
+
+.delete-goal:hover {
+    color: #dc3545;
+}
+
+/* Modal Adjustments */
+.modal-content {
+    max-height: 90vh;
+    overflow-y: auto;
+}
+
+.modal-content::-webkit-scrollbar {
+    width: 8px;
+}
+
+.modal-content::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 4px;
+}
+
+.modal-content::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 4px;
+}
+
+.modal-content::-webkit-scrollbar-thumb:hover {
+    background: #666;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .document-item,
+    .goal-item {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .document-actions,
+    .goal-actions {
+        width: 100%;
+        justify-content: flex-start;
+        margin-top: 1rem;
+    }
+
+    .goal-details {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+} 
+
+/* Export Button */
+.export-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.8rem 1.2rem;
+    background: var(--accent-color);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-bottom: 1.5rem;
+}
+
+.export-btn:hover {
+    background: var(--secondary-color);
+}
+
+/* Document Tags */
+.document-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+}
+
+.document-tag {
+    background: #e9ecef;
+    color: #666;
+    padding: 0.2rem 0.5rem;
+    border-radius: 4px;
+    font-size: 0.8rem;
+}
+
+.document-tag i {
+    margin-left: 0.3rem;
+    cursor: pointer;
+}
+
+.document-tag i:hover {
+    color: #dc3545;
+}
+
+/* Goal Reminders */
+.reminder-toggle {
+    background: none;
+    border: none;
+    padding: 0.5rem;
+    cursor: pointer;
+    color: #666;
+    transition: all 0.3s ease;
+}
+
+.reminder-toggle.active {
+    color: var(--primary-color);
+}
+
+.reminder-toggle:hover {
+    color: var(--accent-color);
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .export-btn {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .document-tags {
+        margin-top: 0.8rem;
+    }
+} 

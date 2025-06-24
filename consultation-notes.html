@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notes de Consultation - MentalSerenity</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/consultation-notes.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">MentalSerenity</div>
+            <ul>
+                <li><a href="index.html">Accueil</a></li>
+                <li><a href="rendez-vous.html">Prendre RDV</a></li>
+                <li><a href="profile.html">Mon Profil</a></li>
+                <li><a href="messaging.html">Messages</a></li>
+                <li><a href="#" id="logout-btn">Déconnexion</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="notes-container">
+        <aside class="patient-info">
+            <div class="patient-header">
+                <img src="images/default-avatar.png" alt="Photo du patient" class="patient-avatar">
+                <div>
+                    <h2>Jean Dupont</h2>
+                    <p>Patient depuis: Janvier 2024</p>
+                </div>
+            </div>
+            <div class="consultation-history">
+                <h3>Historique des consultations</h3>
+                <ul class="history-list">
+                    <li class="active">
+                        <span class="date">15 Jan 2024</span>
+                        <span class="type">Consultation standard</span>
+                    </li>
+                    <li>
+                        <span class="date">8 Jan 2024</span>
+                        <span class="type">Première consultation</span>
+                    </li>
+                </ul>
+            </div>
+        </aside>
+
+        <section class="notes-section">
+            <div class="notes-header">
+                <h2>Notes de consultation</h2>
+                <div class="header-actions">
+                    <button class="save-btn">
+                        <i class="fas fa-save"></i>
+                        Sauvegarder
+                    </button>
+                    <button class="print-btn">
+                        <i class="fas fa-print"></i>
+                        Imprimer
+                    </button>
+                </div>
+            </div>
+
+            <form id="notes-form">
+                <div class="form-group">
+                    <label>Date de consultation</label>
+                    <input type="text" value="15 janvier 2024" readonly>
+                </div>
+
+                <div class="form-group">
+                    <label>Type de consultation</label>
+                    <input type="text" value="Consultation standard" readonly>
+                </div>
+
+                <div class="form-group">
+                    <label>État émotionnel du patient</label>
+                    <select required>
+                        <option value="">Sélectionner</option>
+                        <option value="stable">Stable</option>
+                        <option value="anxieux">Anxieux</option>
+                        <option value="depressif">Dépressif</option>
+                        <option value="agite">Agité</option>
+                        <option value="calme">Calme</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Observations principales</label>
+                    <textarea rows="4" placeholder="Notez vos observations principales..." required></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label>Progrès observés</label>
+                    <textarea rows="4" placeholder="Décrivez les progrès observés..."></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label>Plan d'action</label>
+                    <textarea rows="4" placeholder="Définissez le plan d'action..." required></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label>Recommandations</label>
+                    <textarea rows="4" placeholder="Ajoutez vos recommandations..."></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label>Notes confidentielles</label>
+                    <textarea rows="4" placeholder="Notes privées (visibles uniquement par vous)..."></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label>Prochains objectifs</label>
+                    <textarea rows="4" placeholder="Définissez les objectifs pour la prochaine séance..."></textarea>
+                </div>
+            </form>
+        </section>
+
+        <aside class="quick-stats">
+            <h3>Statistiques rapides</h3>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <i class="fas fa-calendar-check"></i>
+                    <div>
+                        <h4>Consultations</h4>
+                        <p>12 séances</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <i class="fas fa-clock"></i>
+                    <div>
+                        <h4>Durée moyenne</h4>
+                        <p>55 minutes</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <i class="fas fa-chart-line"></i>
+                    <div>
+                        <h4>Progrès</h4>
+                        <p>Positif</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="evolution-charts">
+                <h3>Évolution du patient</h3>
+                <div class="chart-container">
+                    <canvas id="progressChart"></canvas>
+                </div>
+                <div class="chart-container">
+                    <canvas id="emotionalStateChart"></canvas>
+                </div>
+            </div>
+
+            <div class="reminders">
+                <h3>Rappels</h3>
+                <div class="reminders-controls">
+                    <button class="add-reminder-btn">
+                        <i class="fas fa-plus"></i>
+                        Ajouter un rappel
+                    </button>
+                </div>
+                <ul id="remindersList">
+                    <li>
+                        <i class="fas fa-bell"></i>
+                        <span>Prochain RDV: 22 janvier 2024</span>
+                        <div class="reminder-actions">
+                            <button class="edit-reminder" title="Modifier">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button class="delete-reminder" title="Supprimer">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </li>
+                    <li>
+                        <i class="fas fa-tasks"></i>
+                        <span>Exercices à vérifier</span>
+                        <div class="reminder-actions">
+                            <button class="edit-reminder" title="Modifier">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button class="delete-reminder" title="Supprimer">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="documents-section">
+                <h3>Documents partagés</h3>
+                <div class="documents-controls">
+                    <button class="upload-btn">
+                        <i class="fas fa-upload"></i>
+                        Ajouter un document
+                    </button>
+                </div>
+                <div class="documents-list">
+                    <div class="document-item">
+                        <i class="fas fa-file-pdf"></i>
+                        <div class="document-info">
+                            <span class="document-name">Bilan initial.pdf</span>
+                            <span class="document-date">15 Jan 2024</span>
+                        </div>
+                        <div class="document-actions">
+                            <button class="view-doc" title="Voir">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                            <button class="download-doc" title="Télécharger">
+                                <i class="fas fa-download"></i>
+                            </button>
+                            <button class="delete-doc" title="Supprimer">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="long-term-goals">
+                <h3>Objectifs à long terme</h3>
+                <div class="goals-controls">
+                    <button class="add-goal-btn">
+                        <i class="fas fa-plus"></i>
+                        Ajouter un objectif
+                    </button>
+                </div>
+                <div class="goals-list">
+                    <div class="goal-item">
+                        <div class="goal-header">
+                            <h4>Gestion du stress</h4>
+                            <span class="goal-progress">60%</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress" style="width: 60%"></div>
+                        </div>
+                        <p class="goal-description">Développer des techniques de relaxation efficaces</p>
+                        <div class="goal-details">
+                            <span class="goal-date">Début: 8 Jan 2024</span>
+                            <span class="goal-deadline">Objectif: 8 Avr 2024</span>
+                        </div>
+                        <div class="goal-actions">
+                            <button class="edit-goal" title="Modifier">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button class="delete-goal" title="Supprimer">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Modal pour ajouter/modifier un rappel -->
+            <div id="reminderModal" class="modal">
+                <div class="modal-content">
+                    <h3>Gérer le rappel</h3>
+                    <form id="reminderForm">
+                        <div class="form-group">
+                            <label>Type de rappel</label>
+                            <select name="reminderType" required>
+                                <option value="appointment">Rendez-vous</option>
+                                <option value="task">Tâche</option>
+                                <option value="followup">Suivi</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Description</label>
+                            <input type="text" name="description" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Date</label>
+                            <input type="datetime-local" name="date" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Priorité</label>
+                            <select name="priority">
+                                <option value="low">Basse</option>
+                                <option value="medium">Moyenne</option>
+                                <option value="high">Haute</option>
+                            </select>
+                        </div>
+                        <div class="form-actions">
+                            <button type="button" class="cancel-btn">Annuler</button>
+                            <button type="submit" class="save-btn">Enregistrer</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Modal pour ajouter/modifier un objectif -->
+            <div id="goalModal" class="modal">
+                <div class="modal-content">
+                    <h3>Gérer l'objectif</h3>
+                    <form id="goalForm">
+                        <div class="form-group">
+                            <label>Titre de l'objectif</label>
+                            <input type="text" name="goalTitle" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Description</label>
+                            <textarea name="goalDescription" required></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>Date de début</label>
+                            <input type="date" name="startDate" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Date objectif</label>
+                            <input type="date" name="endDate" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Progression (%)</label>
+                            <input type="range" name="progress" min="0" max="100" value="0">
+                            <span class="progress-value">0%</span>
+                        </div>
+                        <div class="form-actions">
+                            <button type="button" class="cancel-btn">Annuler</button>
+                            <button type="submit" class="save-btn">Enregistrer</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Modal pour le téléchargement de documents -->
+            <div id="uploadModal" class="modal">
+                <div class="modal-content">
+                    <h3>Ajouter un document</h3>
+                    <form id="uploadForm">
+                        <div class="form-group">
+                            <label>Type de document</label>
+                            <select name="documentType" required>
+                                <option value="report">Rapport</option>
+                                <option value="assessment">Évaluation</option>
+                                <option value="exercise">Exercice</option>
+                                <option value="other">Autre</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Description</label>
+                            <input type="text" name="documentDescription" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Fichier</label>
+                            <input type="file" name="documentFile" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Visibilité</label>
+                            <select name="visibility" required>
+                                <option value="private">Privé</option>
+                                <option value="shared">Partagé avec le patient</option>
+                            </select>
+                        </div>
+                        <div class="form-actions">
+                            <button type="button" class="cancel-btn">Annuler</button>
+                            <button type="submit" class="save-btn">Télécharger</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </aside>
+    </main>
+
+    <script src="js/consultation-notes.js"></script>
+</body>
+</html> 
