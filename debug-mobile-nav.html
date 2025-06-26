@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Debug Mobile Navigation</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: Arial, sans-serif;
+            background: #f0f0f0;
+        }
+        
+        .mobile-menu-toggle {
+            display: none;
+            position: fixed;
+            top: 1rem;
+            left: 1rem;
+            z-index: 1001;
+            background: #059669;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 0.75rem;
+            font-size: 1.2rem;
+            cursor: pointer;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        }
+        
+        .sidebar {
+            width: 280px;
+            background: linear-gradient(135deg, #059669, #2c5aa0);
+            color: white;
+            height: 100vh;
+            position: fixed;
+            left: 0;
+            top: 0;
+            overflow-y: auto;
+            z-index: 1000;
+            transition: transform 0.3s ease;
+        }
+        
+        .mobile-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .mobile-overlay.active {
+            display: block;
+            opacity: 1;
+        }
+        
+        .nav-link {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem 1.5rem;
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            border: none;
+            background: none;
+            width: 100%;
+            text-align: left;
+            cursor: pointer;
+        }
+        
+        .nav-link:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+        }
+        
+        .nav-link.active {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+        }
+        
+        .main-content {
+            margin-left: 280px;
+            min-height: 100vh;
+            background: #f8f9fa;
+            padding: 2rem;
+        }
+        
+        .content-section {
+            display: none;
+        }
+        
+        .content-section.active {
+            display: block;
+        }
+        
+        .debug-info {
+            background: #fff;
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 8px;
+            border-left: 4px solid #059669;
+        }
+        
+        @media (max-width: 768px) {
+            .mobile-menu-toggle {
+                display: block;
+            }
+            
+            .sidebar {
+                transform: translateX(-100%);
+            }
+            
+            .sidebar.mobile-open {
+                transform: translateX(0);
+            }
+            
+            .main-content {
+                margin-left: 0;
+                width: 100%;
+                padding-top: 4rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Mobile Menu Toggle -->
+    <button class="mobile-menu-toggle" id="mobileMenuToggle">
+        <i class="fas fa-bars">☰</i>
+    </button>
+    
+    <!-- Mobile Overlay -->
+    <div class="mobile-overlay" id="mobileOverlay"></div>
+    
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+        <div style="padding: 1.5rem; border-bottom: 1px solid rgba(255,255,255,0.1);">
+            <h3>Menu Debug</h3>
+        </div>
+        
+        <nav style="padding: 1rem 0;">
+            <a href="#dashboard" class="nav-link active" data-section="dashboard">
+                📊 Tableau de bord
+            </a>
+            <a href="#appointments" class="nav-link" data-section="appointments">
+                📅 Rendez-vous
+            </a>
+            <a href="#clients" class="nav-link" data-section="clients">
+                👥 Dossiers clients
+            </a>
+        </nav>
+    </aside>
+    
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="debug-info">
+            <h2>🔍 Debug Navigation Mobile</h2>
+            <p>Largeur écran: <span id="screenWidth"></span>px</p>
+            <p>État menu: <span id="menuState">fermé</span></p>
+            <p>Dernière action: <span id="lastAction">aucune</span></p>
+        </div>
+        
+        <section id="dashboard-section" class="content-section active">
+            <h1>📊 Tableau de bord</h1>
+            <p>Section tableau de bord active</p>
+        </section>
+        
+        <section id="appointments-section" class="content-section">
+            <h1>📅 Rendez-vous</h1>
+            <p>Section rendez-vous active</p>
+        </section>
+        
+        <section id="clients-section" class="content-section">
+            <h1>👥 Dossiers clients</h1>
+            <p>Section clients active</p>
+        </section>
+    </main>
+    
+    <script>
+        console.log('🚀 Debug script started');
+        
+        // Éléments
+        const mobileMenuToggle = document.getElementById('mobileMenuToggle');
+        const sidebar = document.getElementById('sidebar');
+        const mobileOverlay = document.getElementById('mobileOverlay');
+        const navLinks = document.querySelectorAll('.nav-link');
+        const screenWidthSpan = document.getElementById('screenWidth');
+        const menuStateSpan = document.getElementById('menuState');
+        const lastActionSpan = document.getElementById('lastAction');
+        
+        // Debug info
+        function updateDebugInfo() {
+            screenWidthSpan.textContent = window.innerWidth;
+            console.log('📱 Screen width:', window.innerWidth);
+        }
+        
+        function logAction(action) {
+            lastActionSpan.textContent = action;
+            console.log('🎯 Action:', action);
+        }
+        
+        // Vérification des éléments
+        console.log('🔍 Elements found:');
+        console.log('- Mobile toggle:', !!mobileMenuToggle);
+        console.log('- Sidebar:', !!sidebar);
+        console.log('- Overlay:', !!mobileOverlay);
+        console.log('- Nav links:', navLinks.length);
+        
+        // Menu mobile
+        if (mobileMenuToggle && sidebar && mobileOverlay) {
+            console.log('✅ All mobile menu elements found');
+            
+            mobileMenuToggle.addEventListener('click', function(e) {
+                e.preventDefault();
+                console.log('🖱️ Mobile menu button clicked!');
+                logAction('Bouton menu cliqué');
+                
+                sidebar.classList.toggle('mobile-open');
+                mobileOverlay.classList.toggle('active');
+                
+                const isOpen = sidebar.classList.contains('mobile-open');
+                menuStateSpan.textContent = isOpen ? 'ouvert' : 'fermé';
+                console.log('📱 Menu state:', isOpen ? 'open' : 'closed');
+            });
+            
+            mobileOverlay.addEventListener('click', function() {
+                console.log('🖱️ Overlay clicked');
+                logAction('Overlay cliqué');
+                sidebar.classList.remove('mobile-open');
+                mobileOverlay.classList.remove('active');
+                menuStateSpan.textContent = 'fermé';
+            });
+        } else {
+            console.error('❌ Missing mobile menu elements');
+        }
+        
+        // Navigation
+        navLinks.forEach((link, index) => {
+            const section = link.getAttribute('data-section');
+            console.log(`🔗 Setting up nav link ${index + 1}: ${section}`);
+            
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                console.log('🖱️ Nav link clicked:', section);
+                logAction(`Navigation vers ${section}`);
+                
+                // Fermer le menu mobile
+                if (window.innerWidth <= 768) {
+                    sidebar.classList.remove('mobile-open');
+                    mobileOverlay.classList.remove('active');
+                    menuStateSpan.textContent = 'fermé';
+                }
+                
+                // Changer de section
+                document.querySelectorAll('.content-section').forEach(s => {
+                    s.classList.remove('active');
+                });
+                
+                const targetSection = document.getElementById(section + '-section');
+                if (targetSection) {
+                    targetSection.classList.add('active');
+                    console.log('✅ Section changed to:', section);
+                }
+                
+                // Mettre à jour nav active
+                navLinks.forEach(l => l.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+        
+        // Mise à jour de la largeur d'écran
+        updateDebugInfo();
+        window.addEventListener('resize', updateDebugInfo);
+        
+        console.log('✅ Debug script initialized');
+    </script>
+</body>
+</html>

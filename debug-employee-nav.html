@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Debug Navigation Employé</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background: #f5f5f5;
+        }
+        .debug-panel {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .test-nav {
+            background: #059669;
+            color: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        .nav-link {
+            display: block;
+            color: white;
+            text-decoration: none;
+            padding: 10px 15px;
+            margin: 5px 0;
+            background: rgba(255,255,255,0.1);
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .nav-link:hover {
+            background: rgba(255,255,255,0.2);
+        }
+        .content-section {
+            display: none;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 10px 0;
+        }
+        .content-section.active {
+            display: block;
+        }
+        .log {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 4px;
+            font-family: monospace;
+            font-size: 12px;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        .btn {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        .btn:hover {
+            background: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="debug-panel">
+        <h1>🔧 Debug Navigation Employé</h1>
+        <p>Test des boutons de navigation pour diagnostiquer le problème</p>
+        <button class="btn" onclick="clearLog()">Effacer les logs</button>
+        <button class="btn" onclick="testNavigation()">Test Navigation</button>
+    </div>
+
+    <div class="test-nav">
+        <h3>Navigation Test</h3>
+        <a href="#dashboard" class="nav-link" data-section="dashboard">
+            📊 Tableau de bord
+        </a>
+        <a href="#appointments" class="nav-link" data-section="appointments">
+            📅 Rendez-vous
+        </a>
+        <a href="#clients" class="nav-link" data-section="clients">
+            👥 Dossiers clients
+        </a>
+        <a href="#consultations" class="nav-link" data-section="consultations">
+            📋 Consultations
+        </a>
+        <a href="#statistics" class="nav-link" data-section="statistics">
+            📈 Statistiques
+        </a>
+        <a href="#messages" class="nav-link" data-section="messages">
+            ✉️ Messages
+        </a>
+    </div>
+
+    <div class="debug-panel">
+        <h3>Sections de contenu</h3>
+        <div id="dashboard-section" class="content-section active">
+            <h4>📊 Tableau de bord</h4>
+            <p>Section tableau de bord active</p>
+        </div>
+        <div id="appointments-section" class="content-section">
+            <h4>📅 Rendez-vous</h4>
+            <p>Section rendez-vous</p>
+        </div>
+        <div id="clients-section" class="content-section">
+            <h4>👥 Dossiers clients</h4>
+            <p>Section dossiers clients</p>
+        </div>
+        <div id="consultations-section" class="content-section">
+            <h4>📋 Consultations</h4>
+            <p>Section consultations</p>
+        </div>
+        <div id="statistics-section" class="content-section">
+            <h4>📈 Statistiques</h4>
+            <p>Section statistiques</p>
+        </div>
+        <div id="messages-section" class="content-section">
+            <h4>✉️ Messages</h4>
+            <p>Section messages</p>
+        </div>
+    </div>
+
+    <div class="debug-panel">
+        <h3>📝 Logs de debug</h3>
+        <div id="debugLog" class="log"></div>
+    </div>
+
+    <script>
+        let logCount = 0;
+        
+        function log(message) {
+            const logDiv = document.getElementById('debugLog');
+            const timestamp = new Date().toLocaleTimeString();
+            logDiv.innerHTML += `[${timestamp}] ${message}<br>`;
+            logDiv.scrollTop = logDiv.scrollHeight;
+            console.log(message);
+        }
+        
+        function clearLog() {
+            document.getElementById('debugLog').innerHTML = '';
+            logCount = 0;
+            log('🧹 Logs effacés');
+        }
+        
+        function showSection(sectionName) {
+            log(`🔄 Changement vers la section: ${sectionName}`);
+            
+            // Masquer toutes les sections
+            const allSections = document.querySelectorAll('.content-section');
+            log(`📋 Sections trouvées: ${allSections.length}`);
+            
+            allSections.forEach(section => {
+                section.classList.remove('active');
+                section.style.display = 'none';
+            });
+            
+            // Afficher la section demandée
+            const targetSection = document.getElementById(sectionName + '-section');
+            log(`🎯 Section cible: ${targetSection ? 'trouvée' : 'NON TROUVÉE'}`);
+            
+            if (targetSection) {
+                targetSection.style.display = 'block';
+                targetSection.classList.add('active');
+                log(`✅ Section ${sectionName} activée`);
+            } else {
+                log(`❌ Section ${sectionName}-section introuvable`);
+                return;
+            }
+            
+            // Mettre à jour la navigation
+            const allNavLinks = document.querySelectorAll('.nav-link');
+            allNavLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('data-section') === sectionName) {
+                    link.classList.add('active');
+                    log(`🔗 Lien de navigation ${sectionName} marqué comme actif`);
+                }
+            });
+        }
+        
+        function testNavigation() {
+            log('🧪 Test de navigation démarré');
+            const sections = ['dashboard', 'appointments', 'clients', 'consultations', 'statistics', 'messages'];
+            let index = 0;
+            
+            function testNext() {
+                if (index < sections.length) {
+                    showSection(sections[index]);
+                    index++;
+                    setTimeout(testNext, 1000);
+                } else {
+                    log('✅ Test de navigation terminé');
+                }
+            }
+            
+            testNext();
+        }
+        
+        // Initialisation
+        document.addEventListener('DOMContentLoaded', function() {
+            log('🚀 Page chargée, initialisation...');
+            
+            // Configurer les événements de navigation
+            const navLinks = document.querySelectorAll('.nav-link');
+            log(`🔍 Liens de navigation trouvés: ${navLinks.length}`);
+            
+            navLinks.forEach((link, index) => {
+                const section = link.getAttribute('data-section');
+                log(`🔗 Configuration du lien ${index + 1}: ${section}`);
+                
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    log(`🖱️ Clic sur le lien: ${section}`);
+                    showSection(section);
+                });
+                
+                link.addEventListener('mouseenter', function() {
+                    log(`🖱️ Survol du lien: ${section}`);
+                });
+            });
+            
+            log('✅ Initialisation terminée');
+        });
+    </script>
+</body>
+</html>

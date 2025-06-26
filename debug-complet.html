@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Debug Complet - MentalPlus</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background: #f5f5f5;
+        }
+        .debug-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .debug-section {
+            background: white;
+            margin: 20px 0;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .debug-title {
+            color: #2c5aa0;
+            border-bottom: 2px solid #2c5aa0;
+            padding-bottom: 10px;
+            margin-bottom: 15px;
+        }
+        .status-ok {
+            color: #28a745;
+            font-weight: bold;
+        }
+        .status-error {
+            color: #dc3545;
+            font-weight: bold;
+        }
+        .status-warning {
+            color: #ffc107;
+            font-weight: bold;
+        }
+        .code-block {
+            background: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 4px;
+            padding: 10px;
+            margin: 10px 0;
+            font-family: monospace;
+            white-space: pre-wrap;
+        }
+        .test-button {
+            background: #2c5aa0;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        .test-button:hover {
+            background: #1e3d72;
+        }
+        .mobile-menu-toggle {
+            display: none;
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 1001;
+            background: #2c5aa0;
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .mobile-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+        }
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 280px;
+            height: 100vh;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            z-index: 1000;
+            transition: transform 0.3s ease;
+        }
+        @media (max-width: 768px) {
+            .mobile-menu-toggle {
+                display: block;
+            }
+            .sidebar {
+                transform: translateX(-100%);
+            }
+            .sidebar.active {
+                transform: translateX(0);
+            }
+            .mobile-overlay.active {
+                display: block;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="debug-container">
+        <h1>🔍 Debug Complet du Site MentalPlus</h1>
+        
+        <!-- Test Elements -->
+        <button class="mobile-menu-toggle" id="mobileMenuToggle">☰</button>
+        <div class="mobile-overlay" id="mobileOverlay"></div>
+        <div class="sidebar" id="sidebar">
+            <h3>Menu Test</h3>
+            <a href="#" class="nav-link" data-section="test">Test Link</a>
+        </div>
+        
+        <div class="debug-section">
+            <h2 class="debug-title">📋 1. Analyse de la Structure</h2>
+            <div id="structure-analysis"></div>
+            <button class="test-button" onclick="analyzeStructure()">Analyser la Structure</button>
+        </div>
+        
+        <div class="debug-section">
+            <h2 class="debug-title">🔧 2. Test des Scripts JavaScript</h2>
+            <div id="script-analysis"></div>
+            <button class="test-button" onclick="analyzeScripts()">Tester les Scripts</button>
+        </div>
+        
+        <div class="debug-section">
+            <h2 class="debug-title">📱 3. Test de Compatibilité Mobile</h2>
+            <div id="mobile-analysis"></div>
+            <button class="test-button" onclick="analyzeMobile()">Tester Mobile</button>
+        </div>
+        
+        <div class="debug-section">
+            <h2 class="debug-title">🎯 4. Test des Événements DOM</h2>
+            <div id="dom-analysis"></div>
+            <button class="test-button" onclick="analyzeDOMEvents()">Tester les Événements</button>
+        </div>
+        
+        <div class="debug-section">
+            <h2 class="debug-title">🌐 5. Test des Requêtes Réseau</h2>
+            <div id="network-analysis"></div>
+            <button class="test-button" onclick="analyzeNetwork()">Tester le Réseau</button>
+        </div>
+        
+        <div class="debug-section">
+            <h2 class="debug-title">📊 6. Console et Erreurs</h2>
+            <div id="console-analysis"></div>
+            <button class="test-button" onclick="analyzeConsole()">Analyser la Console</button>
+        </div>
+        
+        <div class="debug-section">
+            <h2 class="debug-title">🔄 7. Test Complet</h2>
+            <div id="complete-test"></div>
+            <button class="test-button" onclick="runCompleteTest()">Lancer Test Complet</button>
+        </div>
+    </div>
+    
+    <script>
+        console.log('🚀 Debug Script Chargé');
+        
+        // Variables globales pour le debug
+        let debugResults = {
+            structure: {},
+            scripts: {},
+            mobile: {},
+            dom: {},
+            network: {},
+            console: {},
+            errors: []
+        };
+        
+        // Capture des erreurs
+        window.addEventListener('error', function(e) {
+            debugResults.errors.push({
+                type: 'JavaScript Error',
+                message: e.message,
+                filename: e.filename,
+                line: e.lineno,
+                column: e.colno,
+                timestamp: new Date().toISOString()
+            });
+            console.error('Erreur capturée:', e);
+        });
+        
+        // 1. Analyse de la structure
+        function analyzeStructure() {
+            const results = document.getElementById('structure-analysis');
+            let html = '<h3>Résultats de l\'analyse structurelle:</h3>';
+            
+            // Vérification des fichiers CSS
+            const cssFiles = [
+                'css/style.css',
+                'css/dashboard.css', 
+                'css/employee.css'
+            ];
+            
+            html += '<h4>📄 Fichiers CSS:</h4>';
+            cssFiles.forEach(file => {
+                const link = document.querySelector(`link[href="${file}"]`);
+                if (link) {
+                    html += `<div class="status-ok">✅ ${file} - Chargé</div>`;
+                } else {
+                    html += `<div class="status-error">❌ ${file} - Non trouvé</div>`;
+                }
+            });
+            
+            // Vérification des éléments critiques
+            html += '<h4>🎯 Éléments Critiques:</h4>';
+            const criticalElements = [
+                { selector: '.mobile-menu-toggle', name: 'Bouton Menu Mobile' },
+                { selector: '.mobile-overlay', name: 'Overlay Mobile' },
+                { selector: '.sidebar', name: 'Sidebar' },
+                { selector: '.main-content', name: 'Contenu Principal' },
+                { selector: '.nav-link', name: 'Liens Navigation' }
+            ];
+            
+            criticalElements.forEach(element => {
+                const found = document.querySelector(element.selector);
+                if (found) {
+                    html += `<div class="status-ok">✅ ${element.name} - Trouvé</div>`;
+                } else {
+                    html += `<div class="status-error">❌ ${element.name} - Non trouvé</div>`;
+                }
+            });
+            
+            results.innerHTML = html;
+        }
+        
+        // 2. Analyse des scripts
+        function analyzeScripts() {
+            const results = document.getElementById('script-analysis');
+            let html = '<h3>Résultats de l\'analyse des scripts:</h3>';
+            
+            // Vérification des scripts chargés
+            const scripts = document.querySelectorAll('script[src]');
+            html += '<h4>📜 Scripts Chargés:</h4>';
+            scripts.forEach(script => {
+                html += `<div class="status-ok">✅ ${script.src}</div>`;
+            });
+            
+            // Test des fonctions globales
+            html += '<h4>🔧 Fonctions Globales:</h4>';
+            const globalFunctions = [
+                'initializeApp',
+                'initializeMobileMenu',
+                'showSection',
+                'initializeEventListeners'
+            ];
+            
+            globalFunctions.forEach(func => {
+                if (typeof window[func] === 'function') {
+                    html += `<div class="status-ok">✅ ${func} - Disponible</div>`;
+                } else {
+                    html += `<div class="status-error">❌ ${func} - Non disponible</div>`;
+                }
+            });
+            
+            results.innerHTML = html;
+        }
+        
+        // 3. Analyse mobile
+        function analyzeMobile() {
+            const results = document.getElementById('mobile-analysis');
+            let html = '<h3>Résultats de l\'analyse mobile:</h3>';
+            
+            // Vérification du viewport
+            const viewport = document.querySelector('meta[name="viewport"]');
+            if (viewport) {
+                html += `<div class="status-ok">✅ Viewport configuré: ${viewport.content}</div>`;
+            } else {
+                html += `<div class="status-error">❌ Viewport non configuré</div>`;
+            }
+            
+            // Test des media queries
+            html += '<h4>📱 Media Queries:</h4>';
+            const isMobile = window.innerWidth <= 768;
+            html += `<div>Largeur actuelle: ${window.innerWidth}px</div>`;
+            html += `<div>Mode: ${isMobile ? 'Mobile' : 'Desktop'}</div>`;
+            
+            // Test du menu mobile
+            const mobileToggle = document.getElementById('mobileMenuToggle');
+            const mobileOverlay = document.getElementById('mobileOverlay');
+            const sidebar = document.getElementById('sidebar');
+            
+            if (mobileToggle && mobileOverlay && sidebar) {
+                html += `<div class="status-ok">✅ Éléments menu mobile présents</div>`;
+                
+                // Test de fonctionnalité
+                try {
+                    mobileToggle.click();
+                    const isActive = sidebar.classList.contains('active');
+                    html += `<div class="${isActive ? 'status-ok' : 'status-error'}">${isActive ? '✅' : '❌'} Test clic menu mobile</div>`;
+                    
+                    // Remettre à l'état initial
+                    sidebar.classList.remove('active');
+                    mobileOverlay.classList.remove('active');
+                } catch (e) {
+                    html += `<div class="status-error">❌ Erreur test menu mobile: ${e.message}</div>`;
+                }
+            } else {
+                html += `<div class="status-error">❌ Éléments menu mobile manquants</div>`;
+            }
+            
+            results.innerHTML = html;
+        }
+        
+        // 4. Analyse des événements DOM
+        function analyzeDOMEvents() {
+            const results = document.getElementById('dom-analysis');
+            let html = '<h3>Résultats de l\'analyse des événements DOM:</h3>';
+            
+            // Test du DOMContentLoaded
+            html += `<div class="status-ok">✅ DOM chargé (readyState: ${document.readyState})</div>`;
+            
+            // Test des event listeners
+            const testElements = [
+                { id: 'mobileMenuToggle', name: 'Bouton Menu Mobile' },
+                { id: 'mobileOverlay', name: 'Overlay Mobile' }
+            ];
+            
+            testElements.forEach(element => {
+                const el = document.getElementById(element.id);
+                if (el) {
+                    // Vérifier si l'élément a des event listeners
+                    const hasListeners = el.onclick !== null || el.addEventListener !== undefined;
+                    html += `<div class="${hasListeners ? 'status-ok' : 'status-warning'}">✅ ${element.name} - Élément trouvé</div>`;
+                } else {
+                    html += `<div class="status-error">❌ ${element.name} - Élément non trouvé</div>`;
+                }
+            });
+            
+            results.innerHTML = html;
+        }
+        
+        // 5. Analyse réseau
+        function analyzeNetwork() {
+            const results = document.getElementById('network-analysis');
+            let html = '<h3>Résultats de l\'analyse réseau:</h3>';
+            
+            // Test de connectivité
+            html += `<div class="status-ok">✅ Navigateur en ligne: ${navigator.onLine}</div>`;
+            
+            // Test des ressources
+            const resources = performance.getEntriesByType('resource');
+            html += `<div>📊 Ressources chargées: ${resources.length}</div>`;
+            
+            // Ressources avec erreurs
+            const failedResources = resources.filter(r => r.transferSize === 0 && r.decodedBodySize === 0);
+            if (failedResources.length > 0) {
+                html += `<div class="status-warning">⚠️ Ressources potentiellement échouées: ${failedResources.length}</div>`;
+                failedResources.forEach(r => {
+                    html += `<div class="code-block">${r.name}</div>`;
+                });
+            } else {
+                html += `<div class="status-ok">✅ Toutes les ressources chargées avec succès</div>`;
+            }
+            
+            results.innerHTML = html;
+        }
+        
+        // 6. Analyse console
+        function analyzeConsole() {
+            const results = document.getElementById('console-analysis');
+            let html = '<h3>Résultats de l\'analyse console:</h3>';
+            
+            // Erreurs capturées
+            if (debugResults.errors.length > 0) {
+                html += `<div class="status-error">❌ Erreurs détectées: ${debugResults.errors.length}</div>`;
+                debugResults.errors.forEach(error => {
+                    html += `<div class="code-block">${error.type}: ${error.message}\nFichier: ${error.filename}:${error.line}:${error.column}</div>`;
+                });
+            } else {
+                html += `<div class="status-ok">✅ Aucune erreur JavaScript détectée</div>`;
+            }
+            
+            // Test des logs console
+            console.log('🧪 Test de log pour debug');
+            console.warn('🧪 Test de warning pour debug');
+            
+            results.innerHTML = html;
+        }
+        
+        // 7. Test complet
+        function runCompleteTest() {
+            const results = document.getElementById('complete-test');
+            let html = '<h3>🔄 Test Complet en Cours...</h3>';
+            results.innerHTML = html;
+            
+            setTimeout(() => {
+                analyzeStructure();
+                analyzeScripts();
+                analyzeMobile();
+                analyzeDOMEvents();
+                analyzeNetwork();
+                analyzeConsole();
+                
+                html = '<h3>✅ Test Complet Terminé</h3>';
+                html += '<p>Consultez chaque section ci-dessus pour les détails.</p>';
+                
+                // Résumé global
+                const totalErrors = debugResults.errors.length;
+                const mobileToggle = document.getElementById('mobileMenuToggle');
+                const hasCSS = document.querySelector('link[href="css/employee.css"]');
+                
+                html += '<h4>📊 Résumé Global:</h4>';
+                html += `<div class="${totalErrors === 0 ? 'status-ok' : 'status-error'}">${totalErrors === 0 ? '✅' : '❌'} Erreurs JavaScript: ${totalErrors}</div>`;
+                html += `<div class="${hasCSS ? 'status-ok' : 'status-error'}">${hasCSS ? '✅' : '❌'} CSS chargé</div>`;
+                html += `<div class="${mobileToggle ? 'status-ok' : 'status-error'}">${mobileToggle ? '✅' : '❌'} Menu mobile présent</div>`;
+                
+                results.innerHTML = html;
+            }, 1000);
+        }
+        
+        // Initialisation automatique
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🔍 Debug page chargée');
+            
+            // Test automatique du menu mobile
+            const mobileToggle = document.getElementById('mobileMenuToggle');
+            const mobileOverlay = document.getElementById('mobileOverlay');
+            const sidebar = document.getElementById('sidebar');
+            
+            if (mobileToggle && mobileOverlay && sidebar) {
+                mobileToggle.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    console.log('🧪 Test clic menu mobile');
+                    sidebar.classList.toggle('active');
+                    mobileOverlay.classList.toggle('active');
+                });
+                
+                mobileOverlay.addEventListener('click', function() {
+                    console.log('🧪 Test clic overlay');
+                    sidebar.classList.remove('active');
+                    mobileOverlay.classList.remove('active');
+                });
+            }
+        });
+    </script>
+</body>
+</html>

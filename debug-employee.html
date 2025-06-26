@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Debug Employé - MentalPlus</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            font-family: Arial, sans-serif;
+            background: #f0f0f0;
+        }
+        .debug-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .test-section {
+            margin-bottom: 30px;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+        }
+        .test-section h2 {
+            color: #059669;
+            margin-bottom: 15px;
+        }
+        .status {
+            padding: 10px;
+            border-radius: 4px;
+            margin: 10px 0;
+        }
+        .status.success { background: #d4edda; color: #155724; }
+        .status.error { background: #f8d7da; color: #721c24; }
+        .status.warning { background: #fff3cd; color: #856404; }
+        .modal-test {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            display: none;
+            z-index: 1000;
+        }
+        .modal-test.show {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .modal-content-test {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            max-width: 500px;
+            width: 90%;
+        }
+        .overlay-test {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: white;
+            z-index: 999;
+            display: none;
+        }
+        .overlay-test.active {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="debug-container">
+        <h1>🔍 Diagnostic Overlay Blanc - Espace Employé</h1>
+        
+        <div class="test-section">
+            <h2>1. Test des Modales</h2>
+            <button onclick="testModal()">Tester Modal</button>
+            <button onclick="hideModal()">Fermer Modal</button>
+            <div id="modalStatus" class="status">Modal: Fermé</div>
+        </div>
+        
+        <div class="test-section">
+            <h2>2. Test Overlay Blanc</h2>
+            <button onclick="showOverlay()">Afficher Overlay Blanc</button>
+            <button onclick="hideOverlay()">Masquer Overlay Blanc</button>
+            <div id="overlayStatus" class="status">Overlay: Masqué</div>
+        </div>
+        
+        <div class="test-section">
+            <h2>3. Test Z-Index</h2>
+            <div style="position: relative; height: 100px; background: #f0f0f0; border: 1px solid #ccc;">
+                <div style="position: absolute; top: 10px; left: 10px; width: 100px; height: 50px; background: red; z-index: 1;">Z-1</div>
+                <div style="position: absolute; top: 30px; left: 30px; width: 100px; height: 50px; background: blue; z-index: 10;">Z-10</div>
+                <div style="position: absolute; top: 50px; left: 50px; width: 100px; height: 50px; background: green; z-index: 100;">Z-100</div>
+                <div style="position: absolute; top: 70px; left: 70px; width: 100px; height: 50px; background: yellow; z-index: 1000;">Z-1000</div>
+            </div>
+        </div>
+        
+        <div class="test-section">
+            <h2>4. Vérification CSS Employee</h2>
+            <button onclick="checkEmployeeCSS()">Vérifier CSS</button>
+            <div id="cssStatus" class="status">Cliquez pour vérifier</div>
+        </div>
+        
+        <div class="test-section">
+            <h2>5. Test Iframe Espace Employé</h2>
+            <button onclick="loadEmployeePage()">Charger Page Employé</button>
+            <div id="iframeContainer" style="margin-top: 20px;"></div>
+        </div>
+    </div>
+    
+    <!-- Modal de test -->
+    <div id="testModal" class="modal-test">
+        <div class="modal-content-test">
+            <h3>Modal de Test</h3>
+            <p>Cette modal teste les overlays.</p>
+            <button onclick="hideModal()">Fermer</button>
+        </div>
+    </div>
+    
+    <!-- Overlay blanc de test -->
+    <div id="testOverlay" class="overlay-test"></div>
+    
+    <script>
+        function testModal() {
+            const modal = document.getElementById('testModal');
+            modal.classList.add('show');
+            document.getElementById('modalStatus').textContent = 'Modal: Ouvert';
+            document.getElementById('modalStatus').className = 'status warning';
+        }
+        
+        function hideModal() {
+            const modal = document.getElementById('testModal');
+            modal.classList.remove('show');
+            document.getElementById('modalStatus').textContent = 'Modal: Fermé';
+            document.getElementById('modalStatus').className = 'status success';
+        }
+        
+        function showOverlay() {
+            const overlay = document.getElementById('testOverlay');
+            overlay.classList.add('active');
+            document.getElementById('overlayStatus').textContent = 'Overlay: Visible (devrait masquer le contenu)';
+            document.getElementById('overlayStatus').className = 'status error';
+        }
+        
+        function hideOverlay() {
+            const overlay = document.getElementById('testOverlay');
+            overlay.classList.remove('active');
+            document.getElementById('overlayStatus').textContent = 'Overlay: Masqué';
+            document.getElementById('overlayStatus').className = 'status success';
+        }
+        
+        function checkEmployeeCSS() {
+            const link = document.createElement('link');
+            link.rel = 'stylesheet';
+            link.href = 'css/employee.css';
+            link.onload = function() {
+                document.getElementById('cssStatus').textContent = 'CSS Employee chargé avec succès';
+                document.getElementById('cssStatus').className = 'status success';
+            };
+            link.onerror = function() {
+                document.getElementById('cssStatus').textContent = 'Erreur de chargement CSS Employee';
+                document.getElementById('cssStatus').className = 'status error';
+            };
+            document.head.appendChild(link);
+        }
+        
+        function loadEmployeePage() {
+            const container = document.getElementById('iframeContainer');
+            container.innerHTML = '<iframe src="espace-employe.html" width="100%" height="600" style="border: 1px solid #ccc; border-radius: 8px;"></iframe>';
+        }
+        
+        // Test automatique au chargement
+        window.onload = function() {
+            console.log('Page de diagnostic chargée');
+            
+            // Vérifier si des éléments avec z-index élevé existent
+            const highZElements = document.querySelectorAll('*');
+            let suspiciousElements = [];
+            
+            highZElements.forEach(el => {
+                const style = window.getComputedStyle(el);
+                const zIndex = parseInt(style.zIndex);
+                if (zIndex > 500) {
+                    suspiciousElements.push({
+                        element: el,
+                        zIndex: zIndex,
+                        position: style.position,
+                        background: style.backgroundColor
+                    });
+                }
+            });
+            
+            if (suspiciousElements.length > 0) {
+                console.warn('Éléments suspects avec z-index élevé:', suspiciousElements);
+            }
+        };
+    </script>
+</body>
+</html>

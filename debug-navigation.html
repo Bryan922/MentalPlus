@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Debug Navigation - MentalPlus</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/dashboard.css">
+    <link rel="stylesheet" href="css/employee.css">
+    <style>
+        .debug-panel {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            background: white;
+            border: 2px solid #059669;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            z-index: 9999;
+            max-width: 300px;
+            font-size: 12px;
+        }
+        .debug-panel h3 {
+            margin: 0 0 10px 0;
+            color: #059669;
+        }
+        .debug-log {
+            max-height: 200px;
+            overflow-y: auto;
+            background: #f8f9fa;
+            padding: 8px;
+            border-radius: 4px;
+            margin-top: 10px;
+        }
+        .log-entry {
+            margin: 2px 0;
+            padding: 2px 4px;
+            border-radius: 2px;
+        }
+        .log-success { background: #d4edda; color: #155724; }
+        .log-error { background: #f8d7da; color: #721c24; }
+        .log-warning { background: #fff3cd; color: #856404; }
+        .log-info { background: #d1ecf1; color: #0c5460; }
+    </style>
+</head>
+<body>
+    <div class="debug-panel">
+        <h3>🔧 Debug Navigation</h3>
+        <button onclick="testNavigation()">Test Navigation</button>
+        <button onclick="clearLog()">Clear Log</button>
+        <div id="debugLog" class="debug-log"></div>
+    </div>
+
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <img src="Mental Serenity - Logo-Photoroom.png" alt="MentalPlus" class="logo-img">
+                </div>
+                <div class="user-info">
+                    <i class="fas fa-user-tie"></i>
+                    <div class="user-details">
+                        <h3>Employé Test</h3>
+                        <p>Accompagnateur</p>
+                    </div>
+                </div>
+            </div>
+            
+            <nav class="sidebar-nav">
+                <a href="#dashboard" class="nav-link active" data-section="dashboard">
+                    <i class="fas fa-tachometer-alt"></i>
+                    Tableau de bord
+                </a>
+                <a href="#appointments" class="nav-link" data-section="appointments">
+                    <i class="fas fa-calendar-alt"></i>
+                    Rendez-vous
+                </a>
+                <a href="#clients" class="nav-link" data-section="clients">
+                    <i class="fas fa-users"></i>
+                    Dossiers clients
+                </a>
+                <a href="#consultations" class="nav-link" data-section="consultations">
+                    <i class="fas fa-clipboard-list"></i>
+                    Consultations
+                </a>
+                <a href="#statistics" class="nav-link" data-section="statistics">
+                    <i class="fas fa-chart-line"></i>
+                    Statistiques
+                </a>
+                <a href="#messages" class="nav-link" data-section="messages">
+                    <i class="fas fa-envelope"></i>
+                    Messages
+                </a>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <section id="dashboard-section" class="content-section active">
+                <h1>📊 Tableau de bord</h1>
+                <p>Section tableau de bord active</p>
+            </section>
+            
+            <section id="appointments-section" class="content-section">
+                <h1>📅 Rendez-vous</h1>
+                <p>Section rendez-vous</p>
+            </section>
+            
+            <section id="clients-section" class="content-section">
+                <h1>👥 Dossiers clients</h1>
+                <p>Section clients</p>
+            </section>
+            
+            <section id="consultations-section" class="content-section">
+                <h1>📋 Consultations</h1>
+                <p>Section consultations</p>
+            </section>
+            
+            <section id="statistics-section" class="content-section">
+                <h1>📈 Statistiques</h1>
+                <p>Section statistiques</p>
+            </section>
+            
+            <section id="messages-section" class="content-section">
+                <h1>✉️ Messages</h1>
+                <p>Section messages</p>
+            </section>
+        </main>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/js/all.min.js"></script>
+    <script>
+        let debugLog = [];
+        
+        function log(message, type = 'info') {
+            const timestamp = new Date().toLocaleTimeString();
+            debugLog.push({ message, type, timestamp });
+            updateDebugDisplay();
+            console.log(`[${type.toUpperCase()}] ${message}`);
+        }
+        
+        function updateDebugDisplay() {
+            const logElement = document.getElementById('debugLog');
+            logElement.innerHTML = debugLog.map(entry => 
+                `<div class="log-entry log-${entry.type}">[${entry.timestamp}] ${entry.message}</div>`
+            ).join('');
+            logElement.scrollTop = logElement.scrollHeight;
+        }
+        
+        function clearLog() {
+            debugLog = [];
+            updateDebugDisplay();
+        }
+        
+        function showSection(sectionName) {
+            try {
+                log(`Switching to section: ${sectionName}`, 'info');
+                
+                // Masquer toutes les sections
+                const allSections = document.querySelectorAll('.content-section');
+                log(`Found ${allSections.length} sections`, 'info');
+                
+                allSections.forEach(section => {
+                    section.classList.remove('active');
+                    section.style.display = 'none';
+                });
+                
+                // Afficher la section demandée
+                const targetSection = document.getElementById(sectionName + '-section');
+                
+                if (targetSection) {
+                    targetSection.style.display = 'block';
+                    targetSection.classList.add('active');
+                    log(`Section ${sectionName} activated successfully`, 'success');
+                } else {
+                    log(`Section not found: ${sectionName}-section`, 'error');
+                    return;
+                }
+                
+                // Mettre à jour la navigation
+                const allNavLinks = document.querySelectorAll('.nav-link');
+                log(`Found ${allNavLinks.length} nav links`, 'info');
+                
+                allNavLinks.forEach(item => {
+                    item.classList.remove('active');
+                });
+                
+                const activeNavItem = document.querySelector(`[data-section="${sectionName}"]`);
+                
+                if (activeNavItem) {
+                    activeNavItem.classList.add('active');
+                    log(`Nav item for ${sectionName} activated`, 'success');
+                } else {
+                    log(`Nav item not found for section: ${sectionName}`, 'error');
+                }
+                
+            } catch (error) {
+                log(`Error in showSection: ${error.message}`, 'error');
+            }
+        }
+        
+        function testNavigation() {
+            log('=== STARTING NAVIGATION TEST ===', 'info');
+            
+            // Test 1: Vérifier les éléments DOM
+            const navLinks = document.querySelectorAll('.nav-link');
+            log(`Found ${navLinks.length} navigation links`, navLinks.length > 0 ? 'success' : 'error');
+            
+            const sections = document.querySelectorAll('.content-section');
+            log(`Found ${sections.length} content sections`, sections.length > 0 ? 'success' : 'error');
+            
+            // Test 2: Vérifier les attributs data-section
+            navLinks.forEach((link, index) => {
+                const dataSection = link.getAttribute('data-section');
+                if (dataSection) {
+                    log(`Nav link ${index + 1}: data-section="${dataSection}"`, 'success');
+                } else {
+                    log(`Nav link ${index + 1}: Missing data-section attribute`, 'error');
+                }
+            });
+            
+            // Test 3: Vérifier les IDs des sections
+            sections.forEach((section, index) => {
+                const id = section.id;
+                if (id) {
+                    log(`Section ${index + 1}: id="${id}"`, 'success');
+                } else {
+                    log(`Section ${index + 1}: Missing ID`, 'error');
+                }
+            });
+            
+            // Test 4: Tester la fonction showSection
+            log('Testing showSection function...', 'info');
+            showSection('appointments');
+            
+            log('=== NAVIGATION TEST COMPLETE ===', 'info');
+        }
+        
+        // Initialisation
+        document.addEventListener('DOMContentLoaded', function() {
+            log('DOM Content Loaded', 'success');
+            
+            // Ajouter les événements de navigation
+            const navLinks = document.querySelectorAll('.nav-link');
+            log(`Initializing ${navLinks.length} navigation links`, 'info');
+            
+            navLinks.forEach((link, index) => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const section = this.getAttribute('data-section');
+                    log(`Nav link ${index + 1} clicked: ${section}`, 'info');
+                    
+                    if (section) {
+                        showSection(section);
+                    } else {
+                        log('No data-section attribute found', 'error');
+                    }
+                });
+            });
+            
+            log('Navigation initialization complete', 'success');
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tests Automatisés - MentalPlus</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #4a5568;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+        }
+        .test-section {
+            margin: 20px 0;
+            padding: 20px;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            background: #f7fafc;
+        }
+        .test-section h2 {
+            color: #2d3748;
+            margin-top: 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .status {
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 0.9em;
+        }
+        .status.success { background: #c6f6d5; color: #22543d; }
+        .status.error { background: #fed7d7; color: #742a2a; }
+        .status.warning { background: #fefcbf; color: #744210; }
+        .status.info { background: #bee3f8; color: #2a4365; }
+        .test-item {
+            margin: 10px 0;
+            padding: 15px;
+            background: white;
+            border-radius: 8px;
+            border-left: 4px solid #cbd5e0;
+        }
+        .test-item.pass { border-left-color: #48bb78; }
+        .test-item.fail { border-left-color: #f56565; }
+        .test-item.skip { border-left-color: #ed8936; }
+        .controls {
+            text-align: center;
+            margin: 30px 0;
+        }
+        button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 25px;
+            font-size: 1.1em;
+            cursor: pointer;
+            margin: 0 10px;
+            transition: transform 0.2s;
+        }
+        button:hover {
+            transform: translateY(-2px);
+        }
+        .progress {
+            width: 100%;
+            height: 20px;
+            background: #e2e8f0;
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 20px 0;
+        }
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #48bb78, #38a169);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+        .summary {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+        .summary-card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .summary-card h3 {
+            margin: 0 0 10px 0;
+            color: #4a5568;
+        }
+        .summary-card .number {
+            font-size: 2em;
+            font-weight: bold;
+            color: #2d3748;
+        }
+        .log {
+            background: #1a202c;
+            color: #e2e8f0;
+            padding: 20px;
+            border-radius: 10px;
+            font-family: 'Courier New', monospace;
+            max-height: 300px;
+            overflow-y: auto;
+            margin: 20px 0;
+        }
+        .iframe-container {
+            margin: 20px 0;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        iframe {
+            width: 100%;
+            height: 400px;
+            border: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🧪 Tests Automatisés - MentalPlus</h1>
+        
+        <div class="controls">
+            <button onclick="runAllTests()">🚀 Lancer Tous les Tests</button>
+            <button onclick="runMobileTests()">📱 Tests Mobile</button>
+            <button onclick="runPerformanceTests()">⚡ Tests Performance</button>
+            <button onclick="clearResults()">🗑️ Effacer</button>
+        </div>
+
+        <div class="progress">
+            <div class="progress-bar" id="progressBar"></div>
+        </div>
+
+        <div class="summary" id="summary">
+            <div class="summary-card">
+                <h3>Tests Passés</h3>
+                <div class="number" id="passedCount">0</div>
+            </div>
+            <div class="summary-card">
+                <h3>Tests Échoués</h3>
+                <div class="number" id="failedCount">0</div>
+            </div>
+            <div class="summary-card">
+                <h3>Tests Ignorés</h3>
+                <div class="number" id="skippedCount">0</div>
+            </div>
+            <div class="summary-card">
+                <h3>Score Global</h3>
+                <div class="number" id="globalScore">0%</div>
+            </div>
+        </div>
+
+        <div class="test-section">
+            <h2>🔧 Tests Techniques <span class="status info" id="techStatus">En attente</span></h2>
+            <div id="techTests"></div>
+        </div>
+
+        <div class="test-section">
+            <h2>📱 Tests Mobile <span class="status info" id="mobileStatus">En attente</span></h2>
+            <div id="mobileTests"></div>
+        </div>
+
+        <div class="test-section">
+            <h2>🎨 Tests Interface <span class="status info" id="uiStatus">En attente</span></h2>
+            <div id="uiTests"></div>
+        </div>
+
+        <div class="test-section">
+            <h2>⚡ Tests Performance <span class="status info" id="perfStatus">En attente</span></h2>
+            <div id="perfTests"></div>
+        </div>
+
+        <div class="test-section">
+            <h2>🔍 Aperçu du Site</h2>
+            <div class="iframe-container">
+                <iframe src="espace-employe.html" id="sitePreview"></iframe>
+            </div>
+        </div>
+
+        <div class="test-section">
+            <h2>📋 Journal des Tests</h2>
+            <div class="log" id="testLog"></div>
+        </div>
+    </div>
+
+    <script>
+        let testResults = {
+            passed: 0,
+            failed: 0,
+            skipped: 0,
+            total: 0
+        };
+
+        function log(message, type = 'info') {
+            const logElement = document.getElementById('testLog');
+            const timestamp = new Date().toLocaleTimeString();
+            const logEntry = `[${timestamp}] ${type.toUpperCase()}: ${message}\n`;
+            logElement.textContent += logEntry;
+            logElement.scrollTop = logElement.scrollHeight;
+            console.log(logEntry);
+        }
+
+        function updateProgress() {
+            const progress = testResults.total > 0 ? ((testResults.passed + testResults.failed) / testResults.total) * 100 : 0;
+            document.getElementById('progressBar').style.width = progress + '%';
+            
+            document.getElementById('passedCount').textContent = testResults.passed;
+            document.getElementById('failedCount').textContent = testResults.failed;
+            document.getElementById('skippedCount').textContent = testResults.skipped;
+            
+            const score = testResults.total > 0 ? Math.round((testResults.passed / testResults.total) * 100) : 0;
+            document.getElementById('globalScore').textContent = score + '%';
+        }
+
+        function addTestResult(container, testName, status, details = '') {
+            const testItem = document.createElement('div');
+            testItem.className = `test-item ${status}`;
+            
+            const statusIcon = {
+                'pass': '✅',
+                'fail': '❌',
+                'skip': '⏭️'
+            }[status];
+            
+            testItem.innerHTML = `
+                <strong>${statusIcon} ${testName}</strong>
+                ${details ? `<div style="margin-top: 5px; color: #666;">${details}</div>` : ''}
+            `;
+            
+            document.getElementById(container).appendChild(testItem);
+            
+            testResults[status === 'pass' ? 'passed' : status === 'fail' ? 'failed' : 'skipped']++;
+            testResults.total++;
+            updateProgress();
+        }
+
+        function updateSectionStatus(sectionId, status) {
+            const statusElement = document.getElementById(sectionId);
+            statusElement.className = `status ${status}`;
+            statusElement.textContent = {
+                'success': 'Réussi',
+                'error': 'Échec',
+                'warning': 'Attention',
+                'info': 'En cours'
+            }[status];
+        }
+
+        async function runTechnicalTests() {
+            log('Démarrage des tests techniques...');
+            updateSectionStatus('techStatus', 'info');
+            
+            // Test 1: Chargement des scripts
+            try {
+                const scripts = ['js/employee.js', 'js/overlay-fix.js'];
+                let scriptsLoaded = 0;
+                
+                for (const script of scripts) {
+                    try {
+                        const response = await fetch(script);
+                        if (response.ok) {
+                            scriptsLoaded++;
+                            log(`Script ${script} chargé avec succès`);
+                        }
+                    } catch (e) {
+                        log(`Erreur lors du chargement de ${script}: ${e.message}`, 'error');
+                    }
+                }
+                
+                if (scriptsLoaded === scripts.length) {
+                    addTestResult('techTests', 'Chargement des Scripts', 'pass', `${scriptsLoaded}/${scripts.length} scripts chargés`);
+                } else {
+                    addTestResult('techTests', 'Chargement des Scripts', 'fail', `${scriptsLoaded}/${scripts.length} scripts chargés`);
+                }
+            } catch (e) {
+                addTestResult('techTests', 'Chargement des Scripts', 'fail', e.message);
+            }
+
+            // Test 2: Validation HTML
+            try {
+                const iframe = document.getElementById('sitePreview');
+                iframe.onload = function() {
+                    try {
+                        const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+                        const hasDoctype = iframeDoc.doctype !== null;
+                        const hasTitle = iframeDoc.title && iframeDoc.title.length > 0;
+                        const hasMetaViewport = iframeDoc.querySelector('meta[name="viewport"]') !== null;
+                        
+                        if (hasDoctype && hasTitle && hasMetaViewport) {
+                            addTestResult('techTests', 'Structure HTML', 'pass', 'DOCTYPE, title et viewport présents');
+                        } else {
+                            addTestResult('techTests', 'Structure HTML', 'fail', 'Éléments manquants détectés');
+                        }
+                    } catch (e) {
+                        addTestResult('techTests', 'Structure HTML', 'skip', 'Impossible d\'accéder au contenu iframe');
+                    }
+                };
+            } catch (e) {
+                addTestResult('techTests', 'Structure HTML', 'fail', e.message);
+            }
+
+            // Test 3: Console Errors
+            const originalConsoleError = console.error;
+            let errorCount = 0;
+            console.error = function(...args) {
+                errorCount++;
+                originalConsoleError.apply(console, args);
+            };
+            
+            setTimeout(() => {
+                console.error = originalConsoleError;
+                if (errorCount === 0) {
+                    addTestResult('techTests', 'Erreurs Console', 'pass', 'Aucune erreur détectée');
+                } else {
+                    addTestResult('techTests', 'Erreurs Console', 'fail', `${errorCount} erreur(s) détectée(s)`);
+                }
+                updateSectionStatus('techStatus', errorCount === 0 ? 'success' : 'error');
+            }, 2000);
+        }
+
+        async function runMobileTests() {
+            log('Démarrage des tests mobile...');
+            updateSectionStatus('mobileStatus', 'info');
+            
+            // Test 1: Responsive Design
+            const viewportWidth = window.innerWidth;
+            const isMobile = viewportWidth <= 768;
+            
+            addTestResult('mobileTests', 'Détection Mobile', isMobile ? 'pass' : 'skip', 
+                `Largeur: ${viewportWidth}px ${isMobile ? '(Mobile)' : '(Desktop)'}`);
+            
+            // Test 2: Touch Events
+            const supportsTouchEvents = 'ontouchstart' in window;
+            addTestResult('mobileTests', 'Support Touch', supportsTouchEvents ? 'pass' : 'skip', 
+                supportsTouchEvents ? 'Événements tactiles supportés' : 'Pas d\'événements tactiles');
+            
+            // Test 3: Menu Mobile
+            try {
+                const iframe = document.getElementById('sitePreview');
+                iframe.onload = function() {
+                    try {
+                        const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+                        const mobileToggle = iframeDoc.querySelector('.mobile-menu-toggle');
+                        const mobileOverlay = iframeDoc.querySelector('.mobile-overlay');
+                        const sidebar = iframeDoc.querySelector('.sidebar');
+                        
+                        if (mobileToggle && mobileOverlay && sidebar) {
+                            addTestResult('mobileTests', 'Éléments Menu Mobile', 'pass', 'Tous les éléments présents');
+                        } else {
+                            addTestResult('mobileTests', 'Éléments Menu Mobile', 'fail', 'Éléments manquants');
+                        }
+                    } catch (e) {
+                        addTestResult('mobileTests', 'Éléments Menu Mobile', 'skip', 'Impossible d\'accéder au contenu');
+                    }
+                };
+            } catch (e) {
+                addTestResult('mobileTests', 'Éléments Menu Mobile', 'fail', e.message);
+            }
+            
+            updateSectionStatus('mobileStatus', 'success');
+        }
+
+        async function runUITests() {
+            log('Démarrage des tests interface...');
+            updateSectionStatus('uiStatus', 'info');
+            
+            // Test 1: CSS Loading
+            try {
+                const stylesheets = document.styleSheets;
+                let cssLoaded = 0;
+                
+                for (let i = 0; i < stylesheets.length; i++) {
+                    try {
+                        const rules = stylesheets[i].cssRules || stylesheets[i].rules;
+                        if (rules && rules.length > 0) {
+                            cssLoaded++;
+                        }
+                    } catch (e) {
+                        // Cross-origin stylesheets
+                    }
+                }
+                
+                addTestResult('uiTests', 'Chargement CSS', cssLoaded > 0 ? 'pass' : 'fail', 
+                    `${cssLoaded} feuille(s) de style chargée(s)`);
+            } catch (e) {
+                addTestResult('uiTests', 'Chargement CSS', 'fail', e.message);
+            }
+            
+            // Test 2: Font Loading
+            if (document.fonts) {
+                document.fonts.ready.then(() => {
+                    const loadedFonts = document.fonts.size;
+                    addTestResult('uiTests', 'Chargement Polices', loadedFonts > 0 ? 'pass' : 'skip', 
+                        `${loadedFonts} police(s) chargée(s)`);
+                });
+            } else {
+                addTestResult('uiTests', 'Chargement Polices', 'skip', 'API Fonts non supportée');
+            }
+            
+            updateSectionStatus('uiStatus', 'success');
+        }
+
+        async function runPerformanceTests() {
+            log('Démarrage des tests performance...');
+            updateSectionStatus('perfStatus', 'info');
+            
+            // Test 1: Page Load Time
+            if (performance && performance.timing) {
+                const loadTime = performance.timing.loadEventEnd - performance.timing.navigationStart;
+                const isGoodPerformance = loadTime < 3000;
+                
+                addTestResult('perfTests', 'Temps de Chargement', isGoodPerformance ? 'pass' : 'warning', 
+                    `${loadTime}ms ${isGoodPerformance ? '(Bon)' : '(À améliorer)'}`);
+            } else {
+                addTestResult('perfTests', 'Temps de Chargement', 'skip', 'API Performance non disponible');
+            }
+            
+            // Test 2: Memory Usage
+            if (performance && performance.memory) {
+                const memoryUsage = Math.round(performance.memory.usedJSHeapSize / 1024 / 1024);
+                const isGoodMemory = memoryUsage < 50;
+                
+                addTestResult('perfTests', 'Utilisation Mémoire', isGoodMemory ? 'pass' : 'warning', 
+                    `${memoryUsage}MB ${isGoodMemory ? '(Bon)' : '(Élevé)'}`);
+            } else {
+                addTestResult('perfTests', 'Utilisation Mémoire', 'skip', 'Informations mémoire non disponibles');
+            }
+            
+            updateSectionStatus('perfStatus', 'success');
+        }
+
+        async function runAllTests() {
+            log('🚀 Démarrage de tous les tests...');
+            clearResults();
+            
+            await runTechnicalTests();
+            await runMobileTests();
+            await runUITests();
+            await runPerformanceTests();
+            
+            log('✅ Tous les tests terminés!');
+        }
+
+        function clearResults() {
+            testResults = { passed: 0, failed: 0, skipped: 0, total: 0 };
+            
+            ['techTests', 'mobileTests', 'uiTests', 'perfTests'].forEach(id => {
+                document.getElementById(id).innerHTML = '';
+            });
+            
+            ['techStatus', 'mobileStatus', 'uiStatus', 'perfStatus'].forEach(id => {
+                updateSectionStatus(id, 'info');
+            });
+            
+            document.getElementById('testLog').textContent = '';
+            updateProgress();
+            
+            log('🗑️ Résultats effacés');
+        }
+
+        // Auto-run tests on load
+        window.addEventListener('load', () => {
+            log('🎯 Page de tests chargée');
+            setTimeout(() => {
+                log('🔄 Lancement automatique des tests...');
+                runAllTests();
+            }, 1000);
+        });
+    </script>
+</body>
+</html>

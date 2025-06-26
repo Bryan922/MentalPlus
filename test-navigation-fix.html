@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Navigation Fix</title>
+    <link rel="stylesheet" href="css/employee.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .test-section {
+            margin: 20px 0;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .status {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 3px;
+        }
+        .success { background-color: #d4edda; color: #155724; }
+        .error { background-color: #f8d7da; color: #721c24; }
+        .info { background-color: #d1ecf1; color: #0c5460; }
+    </style>
+</head>
+<body>
+    <h1>Test de Navigation - Diagnostic</h1>
+    
+    <div class="test-section">
+        <h2>Test des liens de navigation</h2>
+        <div class="sidebar">
+            <nav>
+                <a href="#" class="nav-link" data-section="dashboard">
+                    <i class="fas fa-tachometer-alt"></i>
+                    <span>Tableau de bord</span>
+                </a>
+                <a href="#" class="nav-link" data-section="appointments">
+                    <i class="fas fa-calendar-alt"></i>
+                    <span>Rendez-vous</span>
+                </a>
+                <a href="#" class="nav-link" data-section="clients">
+                    <i class="fas fa-users"></i>
+                    <span>Dossiers clients</span>
+                </a>
+                <a href="#" class="nav-link" data-section="consultations">
+                    <i class="fas fa-stethoscope"></i>
+                    <span>Consultations</span>
+                </a>
+                <a href="#" class="nav-link" data-section="statistics">
+                    <i class="fas fa-chart-bar"></i>
+                    <span>Statistiques</span>
+                </a>
+                <a href="#" class="nav-link" data-section="messages">
+                    <i class="fas fa-envelope"></i>
+                    <span>Messages</span>
+                </a>
+            </nav>
+        </div>
+    </div>
+    
+    <div class="test-section">
+        <h2>Sections de contenu</h2>
+        <div id="dashboard" class="content-section active">
+            <h3>Dashboard</h3>
+            <p>Section tableau de bord active</p>
+        </div>
+        <div id="appointments" class="content-section">
+            <h3>Rendez-vous</h3>
+            <p>Section rendez-vous</p>
+        </div>
+        <div id="clients" class="content-section">
+            <h3>Clients</h3>
+            <p>Section clients</p>
+        </div>
+        <div id="consultations" class="content-section">
+            <h3>Consultations</h3>
+            <p>Section consultations</p>
+        </div>
+        <div id="statistics" class="content-section">
+            <h3>Statistiques</h3>
+            <p>Section statistiques</p>
+        </div>
+        <div id="messages" class="content-section">
+            <h3>Messages</h3>
+            <p>Section messages</p>
+        </div>
+    </div>
+    
+    <div class="test-section">
+        <h2>Logs de diagnostic</h2>
+        <div id="diagnostic-logs"></div>
+    </div>
+    
+    <script src="js/overlay-fix.js"></script>
+    <script>
+        // Script de test pour diagnostiquer les problèmes de navigation
+        document.addEventListener('DOMContentLoaded', function() {
+            const logContainer = document.getElementById('diagnostic-logs');
+            
+            function addLog(message, type = 'info') {
+                const logDiv = document.createElement('div');
+                logDiv.className = `status ${type}`;
+                logDiv.textContent = `[${new Date().toLocaleTimeString()}] ${message}`;
+                logContainer.appendChild(logDiv);
+            }
+            
+            addLog('Page chargée, initialisation du test...', 'success');
+            
+            // Compter les éléments
+            const navLinks = document.querySelectorAll('.nav-link');
+            const sections = document.querySelectorAll('.content-section');
+            
+            addLog(`${navLinks.length} liens de navigation trouvés`);
+            addLog(`${sections.length} sections de contenu trouvées`);
+            
+            // Tester les styles des liens
+            navLinks.forEach((link, index) => {
+                const style = window.getComputedStyle(link);
+                addLog(`Lien ${index + 1}: pointerEvents=${style.pointerEvents}, zIndex=${style.zIndex}, cursor=${style.cursor}`);
+            });
+            
+            // Fonction pour afficher une section
+            function showSection(sectionId) {
+                addLog(`Tentative d'affichage de la section: ${sectionId}`, 'info');
+                
+                // Masquer toutes les sections
+                sections.forEach(section => {
+                    section.style.display = 'none';
+                    section.classList.remove('active');
+                });
+                
+                // Afficher la section demandée
+                const targetSection = document.getElementById(sectionId);
+                if (targetSection) {
+                    targetSection.style.display = 'block';
+                    targetSection.classList.add('active');
+                    addLog(`Section ${sectionId} affichée avec succès`, 'success');
+                } else {
+                    addLog(`Erreur: Section ${sectionId} non trouvée`, 'error');
+                }
+            }
+            
+            // Ajouter les événements de clic
+            navLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    
+                    const section = this.getAttribute('data-section');
+                    addLog(`Clic détecté sur le lien: ${section}`, 'success');
+                    
+                    if (section) {
+                        showSection(section);
+                        
+                        // Mettre à jour les liens actifs
+                        navLinks.forEach(l => l.classList.remove('active'));
+                        this.classList.add('active');
+                    } else {
+                        addLog('Erreur: Attribut data-section manquant', 'error');
+                    }
+                });
+                
+                // Test de survol
+                link.addEventListener('mouseenter', function() {
+                    addLog(`Survol du lien: ${this.getAttribute('data-section')}`);
+                });
+            });
+            
+            addLog('Événements de navigation configurés', 'success');
+        });
+    </script>
+</body>
+</html>

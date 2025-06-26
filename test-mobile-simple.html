@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Mobile Menu Simple</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f0f0f0;
+        }
+
+        .mobile-menu-toggle {
+            display: none;
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 1001;
+            background: #2c5aa0;
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 18px;
+        }
+
+        .mobile-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+        }
+
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 280px;
+            height: 100vh;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            z-index: 1000;
+            transition: transform 0.3s ease;
+        }
+
+        .main-content {
+            margin-left: 280px;
+            padding: 20px;
+            min-height: 100vh;
+            background: white;
+            transition: margin-left 0.3s ease;
+        }
+
+        .nav-link {
+            display: block;
+            color: white;
+            text-decoration: none;
+            padding: 15px 20px;
+            margin: 5px 0;
+            border-radius: 8px;
+            transition: background 0.3s;
+            cursor: pointer;
+        }
+
+        .nav-link:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .content-section {
+            display: none;
+        }
+
+        .content-section.active {
+            display: block;
+        }
+
+        @media (max-width: 768px) {
+            .mobile-menu-toggle {
+                display: block;
+            }
+
+            .sidebar {
+                transform: translateX(-100%);
+            }
+
+            .sidebar.active {
+                transform: translateX(0);
+            }
+
+            .mobile-overlay.active {
+                display: block;
+            }
+
+            .main-content {
+                margin-left: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <button class="mobile-menu-toggle" id="mobileMenuToggle">
+        ☰
+    </button>
+
+    <div class="mobile-overlay" id="mobileOverlay"></div>
+
+    <div class="sidebar" id="sidebar">
+        <h2>Menu</h2>
+        <nav>
+            <a href="#" class="nav-link" data-section="dashboard">Tableau de bord</a>
+            <a href="#" class="nav-link" data-section="appointments">Rendez-vous</a>
+            <a href="#" class="nav-link" data-section="clients">Clients</a>
+            <a href="#" class="nav-link" data-section="messages">Messages</a>
+        </nav>
+    </div>
+
+    <div class="main-content">
+        <div class="content-section active" id="dashboard">
+            <h1>Tableau de bord</h1>
+            <p>Contenu du tableau de bord...</p>
+        </div>
+        <div class="content-section" id="appointments">
+            <h1>Rendez-vous</h1>
+            <p>Contenu des rendez-vous...</p>
+        </div>
+        <div class="content-section" id="clients">
+            <h1>Clients</h1>
+            <p>Contenu des clients...</p>
+        </div>
+        <div class="content-section" id="messages">
+            <h1>Messages</h1>
+            <p>Contenu des messages...</p>
+        </div>
+    </div>
+
+    <script>
+        console.log('Script chargé');
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('DOM chargé, initialisation...');
+            
+            const mobileToggle = document.getElementById('mobileMenuToggle');
+            const mobileOverlay = document.getElementById('mobileOverlay');
+            const sidebar = document.getElementById('sidebar');
+            const navLinks = document.querySelectorAll('.nav-link');
+            
+            console.log('Éléments trouvés:', {
+                mobileToggle: !!mobileToggle,
+                mobileOverlay: !!mobileOverlay,
+                sidebar: !!sidebar,
+                navLinks: navLinks.length
+            });
+            
+            // Toggle mobile menu
+            if (mobileToggle) {
+                mobileToggle.addEventListener('click', function(e) {
+                    console.log('Clic sur le bouton mobile');
+                    e.preventDefault();
+                    e.stopPropagation();
+                    
+                    sidebar.classList.toggle('active');
+                    mobileOverlay.classList.toggle('active');
+                });
+            }
+            
+            // Close menu when clicking overlay
+            if (mobileOverlay) {
+                mobileOverlay.addEventListener('click', function() {
+                    console.log('Clic sur overlay');
+                    sidebar.classList.remove('active');
+                    mobileOverlay.classList.remove('active');
+                });
+            }
+            
+            // Navigation links
+            navLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    
+                    const section = this.getAttribute('data-section');
+                    console.log('Navigation vers:', section);
+                    
+                    // Hide all sections
+                    document.querySelectorAll('.content-section').forEach(s => {
+                        s.classList.remove('active');
+                    });
+                    
+                    // Show target section
+                    const targetSection = document.getElementById(section);
+                    if (targetSection) {
+                        targetSection.classList.add('active');
+                    }
+                    
+                    // Close mobile menu
+                    if (window.innerWidth <= 768) {
+                        sidebar.classList.remove('active');
+                        mobileOverlay.classList.remove('active');
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

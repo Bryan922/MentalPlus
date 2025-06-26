@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Employee Interface</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/dashboard.css">
+    <link rel="stylesheet" href="css/employee.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .test-section {
+            padding: 20px;
+            margin: 10px;
+            border: 2px solid var(--primary-color, #2c5aa0);
+            border-radius: 8px;
+            background: var(--background-color, #f8f9fa);
+        }
+        .test-button {
+            margin: 5px;
+            padding: 10px 20px;
+            background: var(--primary-color, #2c5aa0);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .test-button:hover {
+            background: var(--primary-dark, #1e3d6f);
+        }
+        .status {
+            padding: 5px 10px;
+            margin: 5px 0;
+            border-radius: 4px;
+        }
+        .status.success { background: #d4edda; color: #155724; }
+        .status.error { background: #f8d7da; color: #721c24; }
+        .status.warning { background: #fff3cd; color: #856404; }
+    </style>
+</head>
+<body>
+    <div class="test-section">
+        <h1>Test de l'interface employé</h1>
+        
+        <div class="test-section">
+            <h2>Test des variables CSS</h2>
+            <div id="css-test-results"></div>
+            <button class="test-button" onclick="testCSSVariables()">Tester les variables CSS</button>
+        </div>
+        
+        <div class="test-section">
+            <h2>Test des éléments DOM</h2>
+            <div id="dom-test-results"></div>
+            <button class="test-button" onclick="testDOMElements()">Tester les éléments DOM</button>
+        </div>
+        
+        <div class="test-section">
+            <h2>Test des fonctions JavaScript</h2>
+            <div id="js-test-results"></div>
+            <button class="test-button" onclick="testJavaScriptFunctions()">Tester les fonctions JS</button>
+        </div>
+        
+        <div class="test-section">
+            <h2>Test de navigation</h2>
+            <div id="nav-test-results"></div>
+            <button class="test-button" onclick="testNavigation()">Tester la navigation</button>
+        </div>
+        
+        <div class="test-section">
+            <h2>Simulation de l'interface employé</h2>
+            <div class="dashboard-container" style="height: 300px; overflow: hidden;">
+                <aside class="sidebar" style="width: 200px;">
+                    <nav class="sidebar-nav">
+                        <a href="#dashboard" class="nav-link active" data-section="dashboard">
+                            <i class="fas fa-tachometer-alt"></i>
+                            Tableau de bord
+                        </a>
+                        <a href="#appointments" class="nav-link" data-section="appointments">
+                            <i class="fas fa-calendar-alt"></i>
+                            Rendez-vous
+                        </a>
+                    </nav>
+                </aside>
+                
+                <main class="main-content">
+                    <section id="dashboard-section" class="content-section active">
+                        <h3>Section Tableau de bord</h3>
+                        <p>Cette section devrait être visible par défaut.</p>
+                    </section>
+                    
+                    <section id="appointments-section" class="content-section">
+                        <h3>Section Rendez-vous</h3>
+                        <p>Cette section devrait être cachée par défaut.</p>
+                    </section>
+                </main>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        function testCSSVariables() {
+            const results = document.getElementById('css-test-results');
+            results.innerHTML = '';
+            
+            const variables = [
+                '--primary-color',
+                '--secondary-color',
+                '--background-color',
+                '--text-color',
+                '--border-color'
+            ];
+            
+            variables.forEach(variable => {
+                const value = getComputedStyle(document.documentElement).getPropertyValue(variable);
+                const status = value.trim() ? 'success' : 'error';
+                const message = value.trim() ? `${variable}: ${value.trim()}` : `${variable}: NON DÉFINIE`;
+                results.innerHTML += `<div class="status ${status}">${message}</div>`;
+            });
+        }
+        
+        function testDOMElements() {
+            const results = document.getElementById('dom-test-results');
+            results.innerHTML = '';
+            
+            const elements = [
+                '.sidebar',
+                '.nav-link',
+                '.content-section',
+                '.main-content',
+                '#dashboard-section',
+                '#appointments-section'
+            ];
+            
+            elements.forEach(selector => {
+                const element = document.querySelector(selector);
+                const status = element ? 'success' : 'error';
+                const message = element ? `${selector}: TROUVÉ` : `${selector}: NON TROUVÉ`;
+                results.innerHTML += `<div class="status ${status}">${message}</div>`;
+            });
+        }
+        
+        function testJavaScriptFunctions() {
+            const results = document.getElementById('js-test-results');
+            results.innerHTML = '';
+            
+            // Test si les fonctions existent
+            const functions = ['showSection'];
+            
+            functions.forEach(funcName => {
+                const exists = typeof window[funcName] === 'function';
+                const status = exists ? 'success' : 'error';
+                const message = exists ? `${funcName}: DISPONIBLE` : `${funcName}: NON DISPONIBLE`;
+                results.innerHTML += `<div class="status ${status}">${message}</div>`;
+            });
+            
+            // Test des erreurs JavaScript
+            try {
+                if (typeof showSection === 'function') {
+                    showSection('dashboard');
+                    results.innerHTML += '<div class="status success">showSection(\'dashboard\') exécutée sans erreur</div>';
+                } else {
+                    results.innerHTML += '<div class="status warning">showSection non disponible - chargement du script employee.js requis</div>';
+                }
+            } catch (error) {
+                results.innerHTML += `<div class="status error">Erreur lors de l'exécution: ${error.message}</div>`;
+            }
+        }
+        
+        function testNavigation() {
+            const results = document.getElementById('nav-test-results');
+            results.innerHTML = '';
+            
+            // Test des liens de navigation
+            const navLinks = document.querySelectorAll('.nav-link');
+            results.innerHTML += `<div class="status ${navLinks.length > 0 ? 'success' : 'error'}">Liens de navigation trouvés: ${navLinks.length}</div>`;
+            
+            // Test des sections de contenu
+            const contentSections = document.querySelectorAll('.content-section');
+            results.innerHTML += `<div class="status ${contentSections.length > 0 ? 'success' : 'error'}">Sections de contenu trouvées: ${contentSections.length}</div>`;
+            
+            // Test de la section active
+            const activeSection = document.querySelector('.content-section.active');
+            results.innerHTML += `<div class="status ${activeSection ? 'success' : 'error'}">Section active: ${activeSection ? activeSection.id : 'AUCUNE'}</div>`;
+            
+            // Test du lien actif
+            const activeLink = document.querySelector('.nav-link.active');
+            results.innerHTML += `<div class="status ${activeLink ? 'success' : 'error'}">Lien actif: ${activeLink ? activeLink.textContent.trim() : 'AUCUN'}</div>`;
+        }
+        
+        // Simulation de la navigation sans le script employee.js
+        function simulateNavigation() {
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
+                    // Retirer la classe active de tous les liens
+                    document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    // Masquer toutes les sections
+                    document.querySelectorAll('.content-section').forEach(section => {
+                        section.classList.remove('active');
+                        section.style.display = 'none';
+                    });
+                    
+                    // Afficher la section correspondante
+                    const sectionName = this.getAttribute('data-section');
+                    const targetSection = document.getElementById(sectionName + '-section');
+                    if (targetSection) {
+                        targetSection.style.display = 'block';
+                        targetSection.classList.add('active');
+                    }
+                });
+            });
+        }
+        
+        // Initialiser la simulation au chargement
+        document.addEventListener('DOMContentLoaded', function() {
+            simulateNavigation();
+            
+            // Tests automatiques
+            setTimeout(() => {
+                testCSSVariables();
+                testDOMElements();
+                testJavaScriptFunctions();
+                testNavigation();
+            }, 500);
+        });
+    </script>
+    
+    <!-- Charger le script employee.js si disponible -->
+    <script src="js/employee.js" onerror="console.log('employee.js non chargé - mode test uniquement')"></script>
+</body>
+</html>

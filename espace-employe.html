@@ -3,52 +3,92 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Espace Employé - PsychoAide</title>
+    <title>Espace Employé - MentalPlus</title>
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/dashboard.css">
     <link rel="stylesheet" href="css/employee.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
+    <!-- Disclaimer Modal -->
+    <div id="disclaimerModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2><i class="fas fa-exclamation-triangle"></i> Important - Rappel déontologique</h2>
+            </div>
+            <div class="modal-body">
+                <p><strong>Merci de ne pas poser de diagnostic médical ni d'utiliser de terminologie réservée aux professionnels réglementés.</strong></p>
+                <p>L'objectif est d'assurer un suivi bienveillant, d'accompagner et de soutenir les clients dans leur démarche de mieux-être.</p>
+                <div class="disclaimer-points">
+                    <ul>
+                        <li>Utilisez un langage accessible et bienveillant</li>
+                        <li>Concentrez-vous sur l'accompagnement et le soutien</li>
+                        <li>Respectez la confidentialité des données</li>
+                        <li>Orientez vers des professionnels de santé si nécessaire</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="acceptDisclaimer" class="btn-primary">J'ai compris</button>
+            </div>
+        </div>
+    </div>
+
     <div class="dashboard-container">
+        <!-- Mobile Menu Toggle -->
+        <button class="mobile-menu-toggle" id="mobileMenuToggle">
+            <i class="fas fa-bars"></i>
+        </button>
+        
+        <!-- Mobile Overlay -->
+        <div class="mobile-overlay" id="mobileOverlay"></div>
+        
         <!-- Sidebar -->
-        <aside class="sidebar">
+        <aside class="sidebar" id="sidebar">
             <div class="sidebar-header">
+                <div class="logo">
+                    <img src="Mental Serenity - Logo-Photoroom.png" alt="MentalPlus" class="logo-img">
+                </div>
                 <div class="user-info">
-                    <i class="fas fa-user-md"></i>
+                    <i class="fas fa-user-tie"></i>
                     <div class="user-details">
-                        <h3 id="employeeName">Dr. Martin</h3>
-                        <p id="employeeRole">Psychologue</p>
+                        <h3 id="employeeName">Employé</h3>
+                        <p id="employeeRole">Accompagnateur</p>
                     </div>
                 </div>
             </div>
             
             <nav class="sidebar-nav">
-                <a href="#planning" class="active">
+                <a href="#dashboard" class="nav-link active" data-section="dashboard">
+                    <i class="fas fa-tachometer-alt"></i>
+                    Tableau de bord
+                </a>
+                <a href="#appointments" class="nav-link" data-section="appointments">
                     <i class="fas fa-calendar-alt"></i>
-                    Planning
+                    Rendez-vous
                 </a>
-                <a href="#patients">
+                <a href="#clients" class="nav-link" data-section="clients">
                     <i class="fas fa-users"></i>
-                    Mes patients
+                    Dossiers clients
                 </a>
-                <a href="#consultations">
-                    <i class="fas fa-clipboard"></i>
+                <a href="#consultations" class="nav-link" data-section="consultations">
+                    <i class="fas fa-clipboard-list"></i>
                     Consultations
                 </a>
-                <a href="#messages">
+                <a href="#statistics" class="nav-link" data-section="statistics">
+                    <i class="fas fa-chart-line"></i>
+                    Statistiques
+                </a>
+                <a href="#messages" class="nav-link" data-section="messages">
                     <i class="fas fa-envelope"></i>
                     Messages
-                    <span class="badge">5</span>
-                </a>
-                <a href="#settings">
-                    <i class="fas fa-cog"></i>
-                    Paramètres
+                    <span class="badge" id="messagesBadge">0</span>
                 </a>
             </nav>
 
             <div class="sidebar-footer">
-                <a href="#help">
+                <a href="#help" class="nav-link" data-section="help">
                     <i class="fas fa-question-circle"></i>
                     Aide
                 </a>
@@ -61,147 +101,527 @@
 
         <!-- Main Content -->
         <main class="main-content">
-            <header class="content-header">
-                <div class="header-left">
-                    <h1>Planning</h1>
-                    <div class="date-navigation">
-                        <button id="prevDay"><i class="fas fa-chevron-left"></i></button>
-                        <h2 id="currentDate">15 Mai 2024</h2>
-                        <button id="nextDay"><i class="fas fa-chevron-right"></i></button>
+            <!-- Dashboard Section -->
+            <section id="dashboard-section" class="content-section active">
+                <header class="content-header">
+                    <div class="header-left">
+                        <h1><i class="fas fa-tachometer-alt"></i> Tableau de bord</h1>
+                        <div class="date-info">
+                            <span id="currentDateTime"></span>
+                        </div>
                     </div>
-                </div>
-                <div class="header-actions">
-                    <button class="btn-secondary">
-                        <i class="fas fa-filter"></i>
-                        Filtres
-                    </button>
-                    <button class="btn-primary">
-                        <i class="fas fa-plus"></i>
-                        Nouveau RDV
-                    </button>
-                    <button class="notification-btn">
-                        <i class="fas fa-bell"></i>
-                        <span class="notification-badge">3</span>
-                    </button>
-                </div>
-            </header>
-
-            <div class="schedule-container">
-                <div class="schedule-sidebar">
-                    <div class="time-slots">
-                        <div class="time-slot">09:00</div>
-                        <div class="time-slot">10:00</div>
-                        <div class="time-slot">11:00</div>
-                        <div class="time-slot">12:00</div>
-                        <div class="time-slot">14:00</div>
-                        <div class="time-slot">15:00</div>
-                        <div class="time-slot">16:00</div>
-                        <div class="time-slot">17:00</div>
+                    <div class="header-actions">
+                        <button class="btn-secondary" id="refreshDashboard">
+                            <i class="fas fa-sync-alt"></i>
+                            Actualiser
+                        </button>
+                        <button class="notification-btn">
+                            <i class="fas fa-bell"></i>
+                            <span class="notification-badge" id="notificationCount">0</span>
+                        </button>
                     </div>
-                </div>
+                </header>
 
-                <div class="schedule-content">
-                    <div class="appointment booked" style="top: 0; height: 120px;">
-                        <div class="appointment-header">
-                            <span class="time">09:00 - 10:00</span>
-                            <div class="appointment-actions">
-                                <button class="btn-icon"><i class="fas fa-edit"></i></button>
-                                <button class="btn-icon"><i class="fas fa-times"></i></button>
+                <div class="dashboard-overview">
+                    <div class="stats-cards">
+                        <div class="stat-card">
+                            <div class="stat-icon">
+                                <i class="fas fa-calendar-check"></i>
+                            </div>
+                            <div class="stat-content">
+                                <h3 id="todayAppointments">0</h3>
+                                <p>RDV aujourd'hui</p>
                             </div>
                         </div>
-                        <h3 class="patient-name">Jean Dupont</h3>
-                        <p class="appointment-type">Consultation standard</p>
-                        <div class="appointment-status confirmed">Confirmé</div>
-                    </div>
-
-                    <div class="appointment urgent" style="top: 240px; height: 120px;">
-                        <div class="appointment-header">
-                            <span class="time">13:00 - 14:00</span>
-                            <div class="appointment-actions">
-                                <button class="btn-icon"><i class="fas fa-edit"></i></button>
-                                <button class="btn-icon"><i class="fas fa-times"></i></button>
+                        <div class="stat-card">
+                            <div class="stat-icon">
+                                <i class="fas fa-users"></i>
+                            </div>
+                            <div class="stat-content">
+                                <h3 id="totalClients">0</h3>
+                                <p>Clients actifs</p>
                             </div>
                         </div>
-                        <h3 class="patient-name">Marie Martin</h3>
-                        <p class="appointment-type">Consultation urgente</p>
-                        <div class="appointment-status pending">En attente</div>
+                        <div class="stat-card">
+                            <div class="stat-icon">
+                                <i class="fas fa-clock"></i>
+                            </div>
+                            <div class="stat-content">
+                                <h3 id="pendingAppointments">0</h3>
+                                <p>En attente</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon">
+                                <i class="fas fa-moon"></i>
+                            </div>
+                            <div class="stat-content">
+                                <h3 id="nightConsultations">0</h3>
+                                <p>Consultations nuit</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="today-appointments">
+                    <h2><i class="fas fa-calendar-day"></i> Rendez-vous du jour</h2>
+                    <div id="todayAppointmentsList" class="appointments-list">
+                        <!-- Les rendez-vous seront chargés dynamiquement -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- Appointments Section -->
+            <section id="appointments-section" class="content-section">
+                <header class="content-header">
+                    <div class="header-left">
+                        <h1><i class="fas fa-calendar-alt"></i> Gestion des rendez-vous</h1>
+                        <div class="date-navigation">
+                            <button id="prevDay"><i class="fas fa-chevron-left"></i></button>
+                            <h2 id="currentDate"></h2>
+                            <button id="nextDay"><i class="fas fa-chevron-right"></i></button>
+                        </div>
+                    </div>
+                    <div class="header-actions">
+                        <div class="filter-group">
+                            <select id="appointmentTypeFilter">
+                                <option value="all">Tous les types</option>
+                                <option value="standard">Consultation standard</option>
+                                <option value="night">Consultation de nuit</option>
+                                <option value="urgent">Urgence</option>
+                            </select>
+                        </div>
+                        <button class="btn-primary" id="newAppointmentBtn">
+                            <i class="fas fa-plus"></i>
+                            Nouveau RDV
+                        </button>
+                    </div>
+                </header>
+
+                <div class="appointments-container">
+                    <div class="appointments-table">
+                        <table id="appointmentsTable">
+                            <thead>
+                                <tr>
+                                    <th>Heure</th>
+                                    <th>Client</th>
+                                    <th>Type</th>
+                                    <th>Contact</th>
+                                    <th>Statut</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="appointmentsTableBody">
+                                <!-- Les rendez-vous seront chargés dynamiquement -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Clients Section -->
+            <section id="clients-section" class="content-section">
+                <header class="content-header">
+                    <div class="header-left">
+                        <h1><i class="fas fa-users"></i> Dossiers clients</h1>
+                    </div>
+                    <div class="header-actions">
+                        <div class="search-box">
+                            <input type="text" id="clientSearch" placeholder="Rechercher un client...">
+                            <i class="fas fa-search"></i>
+                        </div>
+                    </div>
+                </header>
+
+                <div class="clients-container">
+                    <div class="clients-grid" id="clientsGrid">
+                        <!-- Les dossiers clients seront chargés dynamiquement -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- Client Detail Modal -->
+            <div id="clientDetailModal" class="modal">
+                <div class="modal-content large">
+                    <div class="modal-header">
+                        <h2 id="clientDetailName">Dossier client</h2>
+                        <button class="close-modal">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="client-detail-tabs">
+                            <button class="tab-btn active" data-tab="info">Informations</button>
+                            <button class="tab-btn" data-tab="history">Historique</button>
+                            <button class="tab-btn" data-tab="progress">Suivi</button>
+                            <button class="tab-btn" data-tab="notes">Notes</button>
+                        </div>
+
+                        <div class="tab-content">
+                            <div id="info-tab" class="tab-pane active">
+                                <div class="client-info-grid">
+                                    <div class="info-section">
+                                        <h3>Informations personnelles</h3>
+                                        <div class="info-item">
+                                            <label>Nom complet:</label>
+                                            <span id="clientFullName"></span>
+                                        </div>
+                                        <div class="info-item">
+                                            <label>Email:</label>
+                                            <span id="clientEmail"></span>
+                                        </div>
+                                        <div class="info-item">
+                                            <label>Téléphone:</label>
+                                            <span id="clientPhone"></span>
+                                        </div>
+                                        <div class="info-item">
+                                            <label>Adresse:</label>
+                                            <span id="clientAddress"></span>
+                                        </div>
+                                        <div class="info-item">
+                                            <label>Date d'inscription:</label>
+                                            <span id="clientRegistrationDate"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div id="history-tab" class="tab-pane">
+                                <div class="history-section">
+                                    <h3>Historique des rendez-vous</h3>
+                                    <div id="clientAppointmentHistory" class="history-list">
+                                        <!-- Historique chargé dynamiquement -->
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div id="progress-tab" class="tab-pane">
+                                <div class="progress-section">
+                                    <h3>Suivi psychologique</h3>
+                                    <div class="progress-chart-container">
+                                        <canvas id="progressChart"></canvas>
+                                    </div>
+                                    <div class="progress-controls">
+                                        <div class="mood-selector">
+                                            <label>État mental actuel:</label>
+                                            <select id="currentMood">
+                                                <option value="1">Très bas</option>
+                                                <option value="2">Bas</option>
+                                                <option value="3">Moyen</option>
+                                                <option value="4">Bon</option>
+                                                <option value="5">Très bon</option>
+                                            </select>
+                                        </div>
+                                        <button class="btn-primary" id="updateProgressBtn">Mettre à jour</button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div id="notes-tab" class="tab-pane">
+                                <div class="notes-section">
+                                    <h3>Comptes-rendus de séances</h3>
+                                    <div class="session-notes">
+                                        <div class="new-note">
+                                            <h4>Nouvelle note de séance</h4>
+                                            <form id="sessionNoteForm">
+                                                <div class="form-group">
+                                                    <label>Date de la séance:</label>
+                                                    <input type="date" id="sessionDate" required>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>Objectifs de la séance:</label>
+                                                    <textarea id="sessionObjectives" placeholder="Objectifs travaillés durant la séance..."></textarea>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>Points abordés:</label>
+                                                    <textarea id="sessionPoints" placeholder="Points principaux abordés..."></textarea>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>Axes d'amélioration:</label>
+                                                    <textarea id="sessionImprovements" placeholder="Axes d'amélioration identifiés..."></textarea>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>Observations générales:</label>
+                                                    <textarea id="sessionObservations" placeholder="Observations et remarques..."></textarea>
+                                                </div>
+                                                <button type="submit" class="btn-primary">Enregistrer la note</button>
+                                            </form>
+                                        </div>
+                                        <div class="notes-history" id="sessionNotesHistory">
+                                            <!-- Historique des notes chargé dynamiquement -->
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <div class="dashboard-grid">
-                <!-- Statistiques journalières -->
-                <section class="dashboard-card stats">
-                    <h2>Statistiques du jour</h2>
-                    <div class="stats-grid">
-                        <div class="stat-item">
-                            <i class="fas fa-users"></i>
-                            <div class="stat-content">
-                                <span class="stat-value">8</span>
-                                <span class="stat-label">Patients</span>
-                            </div>
-                        </div>
-                        <div class="stat-item">
-                            <i class="fas fa-clock"></i>
-                            <div class="stat-content">
-                                <span class="stat-value">7h</span>
-                                <span class="stat-label">Consultations</span>
-                            </div>
-                        </div>
-                        <div class="stat-item">
-                            <i class="fas fa-exclamation-circle"></i>
-                            <div class="stat-content">
-                                <span class="stat-value">2</span>
-                                <span class="stat-label">Urgences</span>
-                            </div>
-                        </div>
+            <!-- Consultations Section -->
+            <section id="consultations-section" class="content-section">
+                <header class="content-header">
+                    <div class="header-left">
+                        <h1><i class="fas fa-clipboard-list"></i> Consultations en cours</h1>
                     </div>
-                </section>
+                    <div class="header-actions">
+                        <button class="btn-primary" id="startConsultationBtn">
+                            <i class="fas fa-play"></i>
+                            Démarrer consultation
+                        </button>
+                    </div>
+                </header>
 
-                <!-- Prochains rendez-vous -->
-                <section class="dashboard-card upcoming">
-                    <h2>Prochains rendez-vous</h2>
-                    <div class="upcoming-list">
-                        <div class="upcoming-item">
-                            <div class="time-badge">14:00</div>
-                            <div class="upcoming-details">
-                                <h3>Sophie Bernard</h3>
-                                <p>Première consultation</p>
-                            </div>
-                            <button class="btn-icon"><i class="fas fa-chevron-right"></i></button>
-                        </div>
-                        <div class="upcoming-item">
-                            <div class="time-badge">15:00</div>
-                            <div class="upcoming-details">
-                                <h3>Pierre Dubois</h3>
-                                <p>Suivi mensuel</p>
-                            </div>
-                            <button class="btn-icon"><i class="fas fa-chevron-right"></i></button>
-                        </div>
+                <div class="consultations-container">
+                    <div id="activeConsultations" class="consultations-list">
+                        <!-- Consultations actives chargées dynamiquement -->
                     </div>
-                </section>
+                </div>
+            </section>
 
-                <!-- Notes rapides -->
-                <section class="dashboard-card quick-notes">
-                    <h2>Notes rapides</h2>
-                    <div class="notes-container">
-                        <textarea placeholder="Ajouter une note..."></textarea>
-                        <div class="notes-list">
-                            <div class="note-item">
-                                <p>Rappeler Mme Martin pour son prochain RDV</p>
-                                <span class="note-time">Il y a 1h</span>
+            <!-- Statistics Section -->
+            <section id="statistics-section" class="content-section">
+                <header class="content-header">
+                    <div class="header-left">
+                        <h1><i class="fas fa-chart-line"></i> Statistiques</h1>
+                    </div>
+                    <div class="header-actions">
+                        <select id="statsTimeRange">
+                            <option value="week">Cette semaine</option>
+                            <option value="month">Ce mois</option>
+                            <option value="quarter">Ce trimestre</option>
+                        </select>
+                    </div>
+                </header>
+
+                <div class="statistics-container">
+                    <div class="stats-charts">
+                        <div class="chart-container">
+                            <h3>Évolution des consultations</h3>
+                            <canvas id="consultationsChart"></canvas>
+                        </div>
+                        <div class="chart-container">
+                            <h3>Répartition par type</h3>
+                            <canvas id="typeChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Messages Section -->
+            <section id="messages-section" class="content-section">
+                <header class="content-header">
+                    <div class="header-left">
+                        <h1><i class="fas fa-envelope"></i> Messages</h1>
+                    </div>
+                    <div class="header-actions">
+                        <button class="btn-primary" id="composeMessageBtn">
+                            <i class="fas fa-plus"></i>
+                            Nouveau message
+                        </button>
+                    </div>
+                </header>
+
+                <div class="messages-container">
+                    <div id="messagesList" class="messages-list">
+                        <!-- Messages chargés dynamiquement -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- Help Section -->
+            <section id="help-section" class="content-section">
+                <header class="content-header">
+                    <div class="header-left">
+                        <h1><i class="fas fa-question-circle"></i> Aide et support</h1>
+                    </div>
+                </header>
+
+                <div class="help-container">
+                    <div class="help-content">
+                        <div class="help-section">
+                            <h3>Guide d'utilisation</h3>
+                            <div class="help-items">
+                                <div class="help-item">
+                                    <h4>Gestion des rendez-vous</h4>
+                                    <p>Consultez et gérez tous vos rendez-vous depuis l'onglet "Rendez-vous". Vous pouvez filtrer par type et voir les détails de chaque client.</p>
+                                </div>
+                                <div class="help-item">
+                                    <h4>Dossiers clients</h4>
+                                    <p>Chaque client dispose d'un dossier complet avec ses informations, son historique et son suivi psychologique.</p>
+                                </div>
+                                <div class="help-item">
+                                    <h4>Suivi psychologique</h4>
+                                    <p>Utilisez l'onglet "Suivi" dans le dossier client pour noter l'évolution de l'état mental et visualiser les progrès.</p>
+                                </div>
                             </div>
-                            <div class="note-item">
-                                <p>Préparer le dossier de M. Dupont</p>
-                                <span class="note-time">Il y a 3h</span>
+                        </div>
+                        
+                        <div class="help-section">
+                            <h3>Rappel déontologique</h3>
+                            <div class="disclaimer-reminder">
+                                <p><strong>Important:</strong> Merci de ne pas poser de diagnostic médical ni d'utiliser de terminologie réservée aux professionnels réglementés.</p>
+                                <p>L'objectif est d'assurer un suivi bienveillant, d'accompagner et de soutenir les clients dans leur démarche de mieux-être.</p>
                             </div>
                         </div>
                     </div>
-                </section>
-            </div>
+                </div>
+            </section>
         </main>
     </div>
 
+    <!-- Modal pour éditer un rendez-vous -->
+    <div id="editAppointmentModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Modifier le rendez-vous</h2>
+                <span class="close" onclick="closeEditAppointmentModal()">&times;</span>
+            </div>
+            <div class="modal-body">
+                <form id="editAppointmentForm">
+                    <div class="form-group">
+                        <label for="editClientName">Client:</label>
+                        <input type="text" id="editClientName" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="editAppointmentDate">Date:</label>
+                        <input type="date" id="editAppointmentDate" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="editAppointmentTime">Heure:</label>
+                        <input type="time" id="editAppointmentTime" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="editAppointmentType">Type:</label>
+                        <select id="editAppointmentType" required>
+                            <option value="consultation">Consultation</option>
+                            <option value="suivi">Suivi</option>
+                            <option value="urgence">Urgence</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="editAppointmentNotes">Notes:</label>
+                        <textarea id="editAppointmentNotes" rows="3"></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" onclick="closeEditAppointmentModal()">Annuler</button>
+                <button type="button" class="btn btn-primary" onclick="saveAppointmentChanges()">Sauvegarder</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal pour nouveau rendez-vous -->
+    <div id="newAppointmentModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Nouveau rendez-vous</h2>
+                <span class="close" onclick="closeNewAppointmentModal()">&times;</span>
+            </div>
+            <div class="modal-body">
+                <form id="newAppointmentForm">
+                    <div class="form-group">
+                        <label for="newClientSelect">Client:</label>
+                        <select id="newClientSelect" required>
+                            <option value="">Sélectionner un client</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="newAppointmentDate">Date:</label>
+                        <input type="date" id="newAppointmentDate" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="newAppointmentTime">Heure:</label>
+                        <input type="time" id="newAppointmentTime" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="newAppointmentType">Type:</label>
+                        <select id="newAppointmentType" required>
+                            <option value="consultation">Consultation</option>
+                            <option value="suivi">Suivi</option>
+                            <option value="urgence">Urgence</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="newAppointmentNotes">Notes:</label>
+                        <textarea id="newAppointmentNotes" rows="3"></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" onclick="closeNewAppointmentModal()">Annuler</button>
+                <button type="button" class="btn btn-primary" onclick="saveNewAppointment()">Créer</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal pour les messages -->
+    <div id="messageModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="messageModalTitle">Message</h2>
+                <span class="close" onclick="closeMessageModal()">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div id="messageContent">
+                    <!-- Contenu du message -->
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" onclick="closeMessageModal()">Fermer</button>
+                <button type="button" class="btn btn-primary" onclick="replyToMessage()">Répondre</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal pour composer un message -->
+    <div id="composeMessageModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Nouveau message</h2>
+                <span class="close" onclick="closeComposeMessageModal()">&times;</span>
+            </div>
+            <div class="modal-body">
+                <form id="composeMessageForm">
+                    <div class="form-group">
+                        <label for="messageRecipient">Destinataire:</label>
+                        <input type="text" id="messageRecipient" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="messageSubject">Sujet:</label>
+                        <input type="text" id="messageSubject" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="messageBody">Message:</label>
+                        <textarea id="messageBody" rows="6" required></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" onclick="closeComposeMessageModal()">Annuler</button>
+                <button type="button" class="btn btn-primary" onclick="sendMessage()">Envoyer</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Panel des notifications -->
+    <div id="notificationsPanel" class="notifications-panel">
+        <div class="notifications-header">
+            <h3>Notifications</h3>
+            <div class="notifications-actions">
+                <button class="btn-icon" onclick="markAllAsRead()" title="Marquer tout comme lu">
+                    <i class="fas fa-check-double"></i>
+                </button>
+                <button class="btn-icon" onclick="closeNotificationsPanel()" title="Fermer">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+        </div>
+        <div id="notificationsList" class="notifications-list">
+            <!-- Notifications chargées dynamiquement -->
+        </div>
+    </div>
+
+    <script src="js/overlay-fix.js"></script>
     <script src="js/employee.js"></script>
 </body>
-</html> 
+</html>

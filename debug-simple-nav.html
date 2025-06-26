@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Debug Navigation Simple</title>
+    <style>
+        .content-section {
+            display: none;
+            padding: 20px;
+            border: 2px solid #ccc;
+            margin: 10px;
+        }
+        .content-section.active {
+            display: block;
+            border-color: #007bff;
+        }
+        .nav-link {
+            display: inline-block;
+            padding: 10px 15px;
+            margin: 5px;
+            background: #f8f9fa;
+            text-decoration: none;
+            border: 1px solid #ddd;
+            cursor: pointer;
+        }
+        .nav-link.active {
+            background: #007bff;
+            color: white;
+        }
+        .debug-info {
+            background: #f0f0f0;
+            padding: 10px;
+            margin: 10px;
+            font-family: monospace;
+        }
+    </style>
+</head>
+<body>
+    <h1>Test de Navigation Simplifié</h1>
+    
+    <div class="debug-info" id="debugInfo">
+        Debug: Chargement...
+    </div>
+    
+    <nav>
+        <a href="#" class="nav-link active" data-section="dashboard">Dashboard</a>
+        <a href="#" class="nav-link" data-section="appointments">Rendez-vous</a>
+        <a href="#" class="nav-link" data-section="clients">Clients</a>
+        <a href="#" class="nav-link" data-section="consultations">Consultations</a>
+        <a href="#" class="nav-link" data-section="statistics">Statistiques</a>
+        <a href="#" class="nav-link" data-section="messages">Messages</a>
+    </nav>
+    
+    <section id="dashboard-section" class="content-section active">
+        <h2>Dashboard Section</h2>
+        <p>Contenu du tableau de bord</p>
+    </section>
+    
+    <section id="appointments-section" class="content-section">
+        <h2>Appointments Section</h2>
+        <p>Contenu des rendez-vous</p>
+    </section>
+    
+    <section id="clients-section" class="content-section">
+        <h2>Clients Section</h2>
+        <p>Contenu des clients</p>
+    </section>
+    
+    <section id="consultations-section" class="content-section">
+        <h2>Consultations Section</h2>
+        <p>Contenu des consultations</p>
+    </section>
+    
+    <section id="statistics-section" class="content-section">
+        <h2>Statistics Section</h2>
+        <p>Contenu des statistiques</p>
+    </section>
+    
+    <section id="messages-section" class="content-section">
+        <h2>Messages Section</h2>
+        <p>Contenu des messages</p>
+    </section>
+    
+    <script>
+        function updateDebug(message) {
+            const debugInfo = document.getElementById('debugInfo');
+            debugInfo.innerHTML += '<br>' + new Date().toLocaleTimeString() + ': ' + message;
+        }
+        
+        function showSection(sectionName) {
+            updateDebug('showSection appelée avec: ' + sectionName);
+            
+            try {
+                // Masquer toutes les sections
+                const allSections = document.querySelectorAll('.content-section');
+                updateDebug('Sections trouvées: ' + allSections.length);
+                
+                allSections.forEach(section => {
+                    section.classList.remove('active');
+                    section.style.display = 'none';
+                });
+                
+                // Afficher la section demandée
+                const targetSection = document.getElementById(sectionName + '-section');
+                updateDebug('Section cible: ' + (targetSection ? 'trouvée' : 'NON TROUVÉE') + ' (' + sectionName + '-section)');
+                
+                if (targetSection) {
+                    targetSection.style.display = 'block';
+                    targetSection.classList.add('active');
+                    updateDebug('Section activée: ' + sectionName);
+                } else {
+                    updateDebug('ERREUR: Section non trouvée: ' + sectionName + '-section');
+                    return;
+                }
+                
+                // Mettre à jour la navigation
+                const allNavLinks = document.querySelectorAll('.nav-link');
+                updateDebug('Liens de navigation trouvés: ' + allNavLinks.length);
+                
+                allNavLinks.forEach(item => {
+                    item.classList.remove('active');
+                });
+                
+                const activeNavItem = document.querySelector(`[data-section="${sectionName}"]`);
+                updateDebug('Lien actif: ' + (activeNavItem ? 'trouvé' : 'NON TROUVÉ'));
+                
+                if (activeNavItem) {
+                    activeNavItem.classList.add('active');
+                }
+                
+            } catch (error) {
+                updateDebug('ERREUR dans showSection: ' + error.message);
+            }
+        }
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            updateDebug('DOM chargé');
+            
+            const navLinks = document.querySelectorAll('.nav-link');
+            updateDebug('Initialisation: ' + navLinks.length + ' liens trouvés');
+            
+            navLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    
+                    const section = this.getAttribute('data-section');
+                    updateDebug('Clic sur: ' + section);
+                    
+                    if (section) {
+                        showSection(section);
+                    } else {
+                        updateDebug('ERREUR: data-section manquant');
+                    }
+                });
+            });
+            
+            updateDebug('Événements configurés');
+        });
+    </script>
+</body>
+</html>
