@@ -255,10 +255,8 @@ Collaborators: username, full name, or email À FOURNIR
 3. **Autres services**
 ```
 Stripe (paiements):
-- Clé publique: [À FOURNIR]
-- Clé secrète: [À FOURNIR - SENSIBLE]
-
-Domaine de production: [À FOURNIR]
+- Clé publique: [À FOURNIR] plus tard
+- Clé secrète: [À FOURNIR - SENSIBLE] plus tard
 ```
 
 ---
