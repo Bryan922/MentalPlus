@@ -8,13 +8,16 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
-    <header>
+    <header class="main-header">
         <nav class="navbar">
-            <div class="nav-container">
-                <div class="nav-logo">
-                    <h2>MentalPlus</h2>
-                </div>
-                <ul class="nav-menu">
+            <div class="nav-brand">
+                <a href="index.html" class="brand-logo">
+                    <img src="mental-serenity-logo.png" alt="Mental Serenity" class="logo-img">
+                </a>
+            </div>
+            
+            <div class="nav-menu" id="nav-menu">
+                <ul class="nav-list">
                     <li class="nav-item">
                         <a href="index.html" class="nav-link">Accueil</a>
                     </li>
@@ -28,14 +31,15 @@
                         <a href="contact.html" class="nav-link">Contact</a>
                     </li>
                     <li class="nav-item">
-                        <a href="mentions-legales.html" class="nav-link active">Mentions Légales</a>
+                        <a href="auth.html" class="nav-link nav-cta">Connexion</a>
                     </li>
                 </ul>
-                <div class="hamburger">
-                    <span class="bar"></span>
-                    <span class="bar"></span>
-                    <span class="bar"></span>
-                </div>
+            </div>
+            
+            <div class="nav-toggle" id="nav-toggle">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
             </div>
         </nav>
     </header>
@@ -146,6 +150,7 @@
         </div>
     </footer>
 
+    <script src="js/navbar.js"></script>
     <script src="js/script.js"></script>
 </body>
 </html>

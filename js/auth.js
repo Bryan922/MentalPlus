@@ -1,9 +1,9 @@
 // Gestion de l'authentification
+import { supabaseAuth } from './supabase-auth.js';
+
 class AuthManager {
     constructor() {
-        // Temporairement, on simule l'API
-        this.simulateAPI = true;
-        this.baseUrl = '/api/auth.php';
+        this.auth = supabaseAuth;
         this.errorMessage = document.querySelector('.error-message');
         this.successMessage = document.querySelector('.success-message');
         this.setupEventListeners();
@@ -26,20 +26,15 @@ class AuthManager {
         const rememberMe = document.getElementById('rememberMe').checked;
 
         try {
-            let response;
-            if (this.simulateAPI) {
-                // Simulation de réponse pour les tests
-                response = {
-                    success: true,
-                    token: 'fake_token_123'
-                };
-            } else {
-                response = await this.sendRequest('login', {
-                    email,
-                    password,
-                    remember_me: rememberMe
-                });
-            }
+            const { success, data, error } = await this.auth.signIn(email, password);
+            
+            if (!success) throw new Error(error);
+
+            const response = {
+                success: true,
+                token: data.session.access_token,
+                user: data.user
+            };
 
             if (response.success) {
                 this.showSuccess('Connexion réussie ! Redirection...');
@@ -66,19 +61,14 @@ class AuthManager {
         }
 
         try {
-            let response;
-            if (this.simulateAPI) {
-                // Simulation de réponse pour les tests
-                response = {
-                    success: true
-                };
-            } else {
-                response = await this.sendRequest('register', {
-                    name,
-                    email,
-                    password
-                });
-            }
+            const { success, data, error } = await this.auth.signUp(email, password, { name });
+            
+            if (!success) throw new Error(error);
+
+            const response = {
+                success: true,
+                user: data.user
+            };
 
             if (response.success) {
                 this.showSuccess('Compte créé avec succès ! Redirection vers la connexion...');
@@ -153,15 +143,27 @@ class AuthManager {
     }
 
     showError(message) {
-        this.errorMessage.textContent = message;
-        this.errorMessage.style.display = 'block';
-        this.successMessage.style.display = 'none';
+        if (this.errorMessage) {
+            this.errorMessage.textContent = message;
+            this.errorMessage.style.display = 'block';
+            setTimeout(() => {
+                this.errorMessage.style.display = 'none';
+            }, 3000);
+        } else {
+            console.error('Message d\'erreur:', message);
+        }
     }
 
     showSuccess(message) {
-        this.successMessage.textContent = message;
-        this.successMessage.style.display = 'block';
-        this.errorMessage.style.display = 'none';
+        if (this.successMessage) {
+            this.successMessage.textContent = message;
+            this.successMessage.style.display = 'block';
+            setTimeout(() => {
+                this.successMessage.style.display = 'none';
+            }, 3000);
+        } else {
+            console.log('Message de succès:', message);
+        }
     }
 
     async sendRequest(action, data) {
@@ -189,4 +191,4 @@ class AuthManager {
 // Initialisation
 document.addEventListener('DOMContentLoaded', () => {
     new AuthManager();
-}); 
+});

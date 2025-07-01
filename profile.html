@@ -489,21 +489,39 @@
     </style>
 </head>
 <body>
-    <header>
-        <nav>
-            <a href="index.html" class="logo">MentalSerenity</a>
-            <div class="burger-menu">
-                <span></span>
-                <span></span>
-                <span></span>
+    <header class="main-header">
+        <nav class="navbar">
+            <div class="nav-brand">
+                <a href="index.html" class="brand-logo">
+                    <img src="mental-serenity-logo.png" alt="Mental Serenity" class="logo-img">
+                </a>
             </div>
-            <ul>
-                <li><a href="index.html">Accueil</a></li>
-                <li><a href="services.html">Services</a></li>
-                <li><a href="tarifs.html">Tarifs</a></li>
-                <li><a href="contact.html">Contact</a></li>
-                <li><a href="#" class="btn-connexion" id="btnLogout">Déconnexion</a></li>
-            </ul>
+            
+            <div class="nav-menu" id="nav-menu">
+                <ul class="nav-list">
+                    <li class="nav-item">
+                        <a href="index.html" class="nav-link">Accueil</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="services.html" class="nav-link">Services</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="tarifs.html" class="nav-link">Tarifs</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="contact.html" class="nav-link">Contact</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="auth.html" class="nav-link nav-cta">Connexion</a>
+                    </li>
+                </ul>
+            </div>
+            
+            <div class="nav-toggle" id="nav-toggle">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </div>
         </nav>
     </header>
 
@@ -808,65 +826,32 @@
         </div>
     </div>
 
-    <script src="js/main.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // Vérification de l'authentification
-            const token = localStorage.getItem('token');
-            if (!token) {
-                window.location.href = 'auth.html';
-                return;
-            }
+            // Gestion de la déconnexion déléguée au système auth-fix
+            const logoutBtn = document.getElementById('btnLogout');
+            if (logoutBtn) {
+                logoutBtn.addEventListener('click', function(e) {
+                     e.preventDefault();
+                     e.stopPropagation();
+                     
+                     // Utiliser le gestionnaire d'authentification unifié
+                     if (window.authManager) {
+                         window.authManager.logout();
+                     } else {
+                         // Fallback si authManager n'est pas disponible
+                         localStorage.clear();
+                         window.location.href = 'auth.html';
+                     }
+                 });
+             }
 
-            // Déconnexion
-            document.getElementById('btnLogout').addEventListener('click', function(e) {
-                e.preventDefault();
-                localStorage.removeItem('token');
-                window.location.href = 'auth.html';
-            });
-
-            // Navigation dans le profil
-            const menuLinks = document.querySelectorAll('.profile-menu a');
-            const sections = document.querySelectorAll('main section');
-
-            menuLinks.forEach(link => {
-                link.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    const targetId = this.getAttribute('href').substring(1);
-
-                    // Mise à jour des classes actives
-                    menuLinks.forEach(l => l.classList.remove('active'));
-                    this.classList.add('active');
-
-                    // Affichage de la section correspondante
-                    sections.forEach(section => {
-                        section.style.display = section.id === targetId ? 'block' : 'none';
-                    });
-                });
-            });
-
-            // TODO: Charger les données de l'utilisateur depuis l'API
-            // Pour l'instant, on utilise des données de test
-            const userData = {
-                name: 'John Smith',
-                email: 'john@example.com'
-            };
-
-            // Mise à jour des informations de profil
-            document.getElementById('profileName').textContent = userData.name;
-            document.getElementById('profileEmail').textContent = userData.email;
-            document.getElementById('profileInitials').textContent = userData.name
-                .split(' ')
-                .map(n => n[0])
-                .join('');
-
-            // Gestion du formulaire de paramètres
-            document.getElementById('settingsForm').addEventListener('submit', function(e) {
-                e.preventDefault();
-                // TODO: Envoyer les modifications à l'API
-                alert('Modifications enregistrées avec succès !');
-            });
+            // La navigation et le chargement des données sont gérés par profile-fix.js
+            // Les formulaires sont également gérés par profile-fix.js
         });
     </script>
+    <script src="js/auth-fix.js"></script>
+    <script src="js/profile-fix.js"></script>
+    <script src="js/navbar-fix.js"></script>
 </body>
-</html> 
+</html>

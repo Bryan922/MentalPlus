@@ -324,7 +324,9 @@
     </div>
 
     <script src="js/main.js"></script>
-    <script src="js/auth.js"></script>
+    <script type="module" src="js/supabase-config.js"></script>
+    <script type="module" src="js/supabase-auth.js"></script>
+    <script type="module" src="js/auth.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             // Gestion des onglets
@@ -366,5 +368,81 @@
         });
     </script>
     <script src="js/navbar.js"></script>
+    <script src="js/auth-fix.js"></script>
+    <script type="module">
+        import { AuthManager } from './js/auth.js';
+        
+        // Initialiser le gestionnaire d'authentification
+        window.addEventListener('DOMContentLoaded', () => {
+            window.authManager = new AuthManager();
+        });
+    </script>
+    <script>
+        // Intégration avec le système d'authentification corrigé
+        document.addEventListener('DOMContentLoaded', function() {
+            // Remplacer la gestion de connexion existante
+            const loginForm = document.getElementById('loginForm')
+            if (loginForm) {
+                loginForm.addEventListener('submit', function(e) {
+                    e.preventDefault()
+                    
+                    const email = document.getElementById('loginEmail').value
+                    const password = document.getElementById('loginPassword').value
+                    
+                    if (email && password) {
+                        // Utiliser le gestionnaire d'authentification corrigé
+                        if (window.authManager) {
+                            window.authManager.login({
+                                email: email,
+                                name: email.split('@')[0],
+                                token: 'auth_token_' + Date.now()
+                            })
+                            
+                            // Redirection après connexion
+                            const redirectUrl = localStorage.getItem('redirectAfterLogin') || 'profile.html'
+                            localStorage.removeItem('redirectAfterLogin')
+                            
+                            setTimeout(() => {
+                                window.location.href = redirectUrl
+                            }, 1000)
+                        }
+                    }
+                })
+            }
+            
+            // Gestion de l'inscription
+            const registerForm = document.getElementById('registerForm')
+            if (registerForm) {
+                registerForm.addEventListener('submit', function(e) {
+                    e.preventDefault()
+                    
+                    const name = document.getElementById('registerName').value
+                    const email = document.getElementById('registerEmail').value
+                    const password = document.getElementById('registerPassword').value
+                    const confirmPassword = document.getElementById('confirmPassword').value
+                    
+                    if (password !== confirmPassword) {
+                        alert('Les mots de passe ne correspondent pas')
+                        return
+                    }
+                    
+                    if (name && email && password) {
+                        // Créer le compte et connecter automatiquement
+                        if (window.authManager) {
+                            window.authManager.login({
+                                email: email,
+                                name: name,
+                                token: 'auth_token_' + Date.now()
+                            })
+                            
+                            setTimeout(() => {
+                                window.location.href = 'profile.html'
+                            }, 1000)
+                        }
+                    }
+                })
+            }
+        })
+    </script>
 </body>
 </html>

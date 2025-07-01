@@ -11,23 +11,39 @@
 
 </head>
 <body>
-    <header>
-        <nav>
-            <div class="logo">MentalSerenity</div>
-            <div class="burger-menu">
-                <span></span>
-                <span></span>
-                <span></span>
+    <header class="main-header">
+        <nav class="navbar">
+            <div class="nav-brand">
+                <a href="index.html" class="brand-logo">
+                    <img src="Mental Serenity - Logo-Photoroom.png" alt="Mental Serenity" class="logo-img">
+                </a>
             </div>
-            <ul>
-                <li><a href="index.html">Accueil</a></li>
-                <li><a href="index.html#services">Nos Services</a></li>
-                <li><a href="#" class="active">Prendre RDV</a></li>
-                <li><a href="#tarifs">Tarifs</a></li>
-                <li id="auth-link">
-                    <a href="auth.html" class="btn-connexion">Connexion</a>
-                </li>
-            </ul>
+            
+            <div class="nav-menu" id="nav-menu">
+                <ul class="nav-list">
+                    <li class="nav-item">
+                        <a href="index.html" class="nav-link">Accueil</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="services.html" class="nav-link">Services</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="tarifs.html" class="nav-link">Tarifs</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="contact.html" class="nav-link">Contact</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="auth.html" class="nav-link nav-cta">Connexion</a>
+                    </li>
+                </ul>
+            </div>
+            
+            <div class="nav-toggle" id="nav-toggle">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </div>
         </nav>
     </header>
 
@@ -283,9 +299,10 @@
         </div>
     </main>
 
+    <script src="js/navbar.js"></script>
+    <script src="js/auth-fix.js"></script>
+    <script src="js/rendez-vous-fix.js"></script>
+    <script type="module" src="js/supabase-config.js"></script>
     <script src="js/stripe-config.js" type="module"></script>
-    <script src="js/rendez-vous.js" type="module"></script>
-    <script src="js/auth.js"></script>
-    <script src="js/main.js"></script>
 </body>
 </html>

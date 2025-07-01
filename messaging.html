@@ -9,16 +9,39 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
-    <header>
-        <nav>
-            <div class="logo">MentalSerenity</div>
-            <ul>
-                <li><a href="index.html">Accueil</a></li>
-                <li><a href="rendez-vous.html">Prendre RDV</a></li>
-                <li><a href="profile.html">Mon Profil</a></li>
-                <li><a href="#" class="active">Messages</a></li>
-                <li><a href="#" id="logout-btn">Déconnexion</a></li>
-            </ul>
+    <header class="main-header">
+        <nav class="navbar">
+            <div class="nav-brand">
+                <a href="index.html" class="brand-logo">
+                    <img src="Mental Serenity - Logo-Photoroom.png" alt="Mental Serenity" class="logo-img">
+                </a>
+            </div>
+            
+            <div class="nav-menu" id="nav-menu">
+                <ul class="nav-list">
+                    <li class="nav-item">
+                        <a href="index.html" class="nav-link">Accueil</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="services.html" class="nav-link">Services</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="tarifs.html" class="nav-link">Tarifs</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="contact.html" class="nav-link">Contact</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="auth.html" class="nav-link nav-cta">Connexion</a>
+                    </li>
+                </ul>
+            </div>
+            
+            <div class="nav-toggle" id="nav-toggle">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </div>
         </nav>
     </header>
 
@@ -114,6 +137,10 @@
         </aside>
     </main>
 
+    <script src="js/auth-fix.js"></script>
+    <script src="js/navbar.js"></script>
+    <script type="module" src="js/supabase-config.js"></script>
+    <script type="module" src="js/messaging-supabase.js"></script>
     <script src="js/messaging.js"></script>
 </body>
-</html> 
+</html>
