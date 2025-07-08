@@ -536,6 +536,7 @@
                     <li><a href="#documents">Mes documents</a></li>
                     <li><a href="#settings">Paramètres</a></li>
                 </ul>
+                <button id="logout-btn" class="btn-secondary" style="width:100%;margin-top:1.5rem;">Déconnexion</button>
             </aside>
 
             <main class="profile-section">
@@ -829,7 +830,7 @@
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             // Gestion de la déconnexion déléguée au système auth-fix
-            const logoutBtn = document.getElementById('btnLogout');
+            const logoutBtn = document.getElementById('logout-btn');
             if (logoutBtn) {
                 logoutBtn.addEventListener('click', function(e) {
                      e.preventDefault();

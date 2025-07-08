@@ -32,24 +32,30 @@ function checkAuth() {
     return true;
 }
 
-// Navigation entre les sections
+// Correction navigation profil
 function initializeNavigation() {
-    const navLinks = document.querySelectorAll('.profile-nav a');
-    const sections = document.querySelectorAll('.profile-section');
+    const navLinks = document.querySelectorAll('.profile-menu a');
+    const sections = document.querySelectorAll('.profile-section > section');
     
     navLinks.forEach(link => {
         link.addEventListener('click', (e) => {
             e.preventDefault();
             const targetId = link.getAttribute('href').substring(1);
-            
             // Mise à jour des classes actives
             navLinks.forEach(l => l.classList.remove('active'));
-            sections.forEach(s => s.classList.remove('active'));
-            
             link.classList.add('active');
-            document.getElementById(targetId).classList.add('active');
+            // Affichage/masquage des sections
+            sections.forEach(s => {
+                if (s.id === targetId) {
+                    s.style.display = 'block';
+                } else {
+                    s.style.display = 'none';
+                }
+            });
         });
     });
+    // Afficher la première section par défaut
+    sections.forEach((s, i) => s.style.display = i === 0 ? 'block' : 'none');
 }
 
 // Chargement des données utilisateur
@@ -282,8 +288,8 @@ function cancelAppointment(appointmentId) {
 
 // Chargement des documents
 function loadDocuments() {
-    const documentsGrid = document.querySelector('.documents-grid');
-    
+    const documentsList = document.querySelector('.documents-list');
+    if (!documentsList) return;
     // Exemple de documents
     const documents = [
         {
@@ -297,20 +303,17 @@ function loadDocuments() {
             type: 'pdf'
         }
     ];
-
-    documentsGrid.innerHTML = documents.map(doc => `
-        <div class="document-card">
-            <div class="document-icon">
-                <i class="fas fa-file-${doc.type}"></i>
-            </div>
+    documentsList.innerHTML = documents.map(doc => `
+        <li class="document-item">
+            <div class="document-icon">${doc.type.toUpperCase()}</div>
             <div class="document-info">
-                <h4>${doc.name}</h4>
-                <p>${formatDate(doc.date)}</p>
+                <div class="document-name">${doc.name}</div>
+                <div class="document-date">Ajouté le ${formatDate(doc.date)}</div>
             </div>
-            <button class="btn-download" onclick="downloadDocument('${doc.name}')">
-                <i class="fas fa-download"></i>
-            </button>
-        </div>
+            <div class="document-actions">
+                <button class="btn-download" onclick="downloadDocument('${doc.name}')">Télécharger</button>
+            </div>
+        </li>
     `).join('');
 }
 
@@ -321,11 +324,14 @@ function formatDate(dateStr) {
 }
 
 // Gestion de la déconnexion
-document.getElementById('logout-btn').addEventListener('click', (e) => {
-    e.preventDefault();
-    if (confirm('Êtes-vous sûr de vouloir vous déconnecter ?')) {
-        localStorage.removeItem('isAuthenticated');
-        localStorage.removeItem('user');
-        window.location.href = 'index.html';
-    }
-}); 
+const logoutBtn = document.getElementById('logout-btn');
+if (logoutBtn) {
+    logoutBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        if (confirm('Êtes-vous sûr de vouloir vous déconnecter ?')) {
+            localStorage.removeItem('isAuthenticated');
+            localStorage.removeItem('user');
+            window.location.href = 'index.html';
+        }
+    });
+} 
