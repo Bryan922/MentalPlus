@@ -38,12 +38,24 @@ class UnifiedAppointmentBooking {
     async loadPricing() {
         try {
             const { success, data } = await dbManager.getPricing();
-            if (success && data) {
+            if (success && data && data.length > 0) {
                 this.pricing = data;
                 console.log('Tarifs chargés:', this.pricing);
+            } else {
+                // Fallback tarifs par défaut
+                this.pricing = [
+                    { type_consultation: 'classique', montant: 60 },
+                    { type_consultation: 'nuit', montant: 80 }
+                ];
+                console.warn('Aucun tarif trouvé en base, fallback par défaut:', this.pricing);
             }
         } catch (error) {
-            console.error('Erreur lors du chargement des tarifs:', error);
+            // Fallback tarifs par défaut en cas d'erreur
+            this.pricing = [
+                { type_consultation: 'classique', montant: 60 },
+                { type_consultation: 'nuit', montant: 80 }
+            ];
+            console.error('Erreur lors du chargement des tarifs, fallback par défaut:', error);
         }
     }
 
@@ -270,12 +282,23 @@ class UnifiedAppointmentBooking {
 
     generateTimeSlots(type) {
         const slots = [];
-        const startHour = type === 'nuit' ? 20 : 9; // 20h pour la nuit, 9h pour le jour
-        const endHour = type === 'nuit' ? 23 : 18; // 23h pour la nuit, 18h pour le jour
-        
-        for (let hour = startHour; hour < endHour; hour++) {
-            slots.push(`${hour.toString().padStart(2, '0')}:00`);
-            slots.push(`${hour.toString().padStart(2, '0')}:30`);
+        let typeForSlots = this.selectedType;
+        if (typeForSlots === 'regular' || typeForSlots === 'classique') typeForSlots = 'classique';
+        if (typeForSlots === 'night' || typeForSlots === 'nuit') typeForSlots = 'nuit';
+
+        if (typeForSlots === 'nuit') {
+            // Horaires de nuit (20h-6h)
+            for (let h = 20; h <= 23; h++) {
+                slots.push(h.toString().padStart(2, '0') + ':00');
+            }
+            for (let h = 0; h <= 6; h++) {
+                slots.push(h.toString().padStart(2, '0') + ':00');
+            }
+        } else {
+            // Horaires de jour (9h-19h)
+            for (let h = 9; h <= 19; h++) {
+                slots.push(h.toString().padStart(2, '0') + ':00');
+            }
         }
         
         return slots;
@@ -365,6 +388,17 @@ class UnifiedAppointmentBooking {
         
         this.currentStep = step;
         this.updateStepIndicators();
+
+        if (step === 3 && window.Stripe && document.getElementById('card-element')) {
+            if (!this.stripe || !this.cardElement) {
+                this.stripe = Stripe('VOTRE_PUBLIC_KEY_STRIPE');
+                const elements = this.stripe.elements();
+                this.cardElement = elements.create('card');
+            }
+            setTimeout(() => {
+                this.cardElement.mount('#card-element');
+            }, 100);
+        }
     }
 
     updatePriceDisplay() {
@@ -638,8 +672,9 @@ class UnifiedAppointmentBooking {
     }
 }
 
-// Instance globale
+// 1. Attacher l'instance à window pour compatibilité HTML inline
 export const appointmentBooking = new UnifiedAppointmentBooking();
+window.appointmentBooking = appointmentBooking;
 
 // Fonctions globales pour la navigation
 window.nextStep = () => {
