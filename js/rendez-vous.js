@@ -294,18 +294,22 @@ document.addEventListener('DOMContentLoaded', function() {
         updatePrice();
     }
     
+    // Correction : updatePrice doit toujours prendre le type actif
     function updatePrice() {
-        const appointmentType = document.querySelector('.type-btn.active').dataset.type;
+        // Prendre le type actif depuis le DOM
+        const activeBtn = document.querySelector('.type-btn.active');
+        const appointmentType = activeBtn ? activeBtn.dataset.type : 'regular';
         const priceElement = document.getElementById('summary-price');
         const submitButton = document.querySelector('.btn-submit');
-        
+        // Debug : afficher le type et le prix
+        console.log('updatePrice() type:', appointmentType);
         if (appointmentType === 'night') {
-             priceElement.textContent = '80€';
-             submitButton.innerHTML = '<i class="fas fa-lock"></i> Confirmer et payer 80€';
-         } else {
-             priceElement.textContent = '60€';
-             submitButton.innerHTML = '<i class="fas fa-lock"></i> Confirmer et payer 60€';
-         }
+            priceElement.textContent = '80€';
+            submitButton.innerHTML = '<i class="fas fa-lock"></i> Confirmer et payer 80€';
+        } else {
+            priceElement.textContent = '60€';
+            submitButton.innerHTML = '<i class="fas fa-lock"></i> Confirmer et payer 60€';
+        }
     }
 
     // Sélection des domaines
@@ -503,16 +507,19 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    // Gestion du type de rendez-vous (classique/nuit)
+    // Correction : gestion robuste du changement de type de consultation
+    // Ajout de logs de debug et forçage de la classe .active
+
     document.querySelectorAll('.type-btn').forEach(button => {
         button.addEventListener('click', () => {
-            // Mise à jour des boutons
+            // Retirer la classe active de tous les boutons
             document.querySelectorAll('.type-btn').forEach(btn => btn.classList.remove('active'));
+            // Ajouter la classe active au bouton cliqué
             button.classList.add('active');
-
+            // Debug : afficher le type sélectionné
+            console.log('Type sélectionné :', button.dataset.type);
             // Mise à jour du type de rendez-vous
             appointmentType = button.dataset.type;
-
             // Gestion du mode nuit/jour
             const calendarContainer = document.querySelector('.calendar-container');
             if (appointmentType === 'night') {
@@ -520,15 +527,10 @@ document.addEventListener('DOMContentLoaded', function() {
             } else {
                 calendarContainer.classList.remove('night-mode');
             }
-
-            // Réinitialisation de la sélection
             selectedTime = null;
-
-            // Mise à jour des créneaux horaires disponibles
             if (selectedDate) {
                 generateTimeSlots(selectedDate);
             }
-            
             // Mise à jour du résumé et du prix
             updateSummary();
             updatePrice();
