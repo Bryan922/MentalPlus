@@ -131,7 +131,7 @@ class UnifiedDatabaseManager {
                 .insert([{
                     client_id: appointmentData.client_id,
                     employee_id: appointmentData.employee_id,
-                    date: appointmentData.date,
+                    appointment_date: appointmentData.date,
                     heure: appointmentData.heure,
                     duree: appointmentData.duree || 60,
                     type: appointmentData.type,
@@ -160,7 +160,7 @@ class UnifiedDatabaseManager {
                     employees (nom, prenom, email)
                 `)
                 .eq('client_id', clientId)
-                .order('date', { ascending: false })
+                .order('appointment_date', { ascending: false })
                 .order('heure', { ascending: false });
 
             if (error) throw error;
@@ -180,7 +180,7 @@ class UnifiedDatabaseManager {
                     clients (nom, prenom, email, telephone)
                 `)
                 .eq('employee_id', employeeId)
-                .order('date', { ascending: true })
+                .order('appointment_date', { ascending: true })
                 .order('heure', { ascending: true });
 
             if (error) throw error;
@@ -200,7 +200,7 @@ class UnifiedDatabaseManager {
                     clients (nom, prenom, email, telephone),
                     employees (nom, prenom, email)
                 `)
-                .order('date', { ascending: true })
+                .order('appointment_date', { ascending: true })
                 .order('heure', { ascending: true });
 
             if (error) throw error;
@@ -220,7 +220,7 @@ class UnifiedDatabaseManager {
                     clients (nom, prenom, email, telephone),
                     employees (nom, prenom, email)
                 `)
-                .eq('date', date)
+                .eq('appointment_date', date)
                 .order('heure', { ascending: true });
 
             if (error) throw error;
@@ -257,7 +257,7 @@ class UnifiedDatabaseManager {
             let query = supabase
                 .from('appointments')
                 .select('id')
-                .eq('date', date)
+                .eq('appointment_date', date)
                 .eq('heure', heure)
                 .neq('status', 'annulé');
 
@@ -310,7 +310,7 @@ class UnifiedDatabaseManager {
                 .from('payments')
                 .select(`
                     *,
-                    appointments (date, heure, type, domaine)
+                    appointments (appointment_date, heure, type, domaine)
                 `)
                 .eq('client_id', clientId)
                 .order('created_at', { ascending: false });
@@ -376,7 +376,7 @@ class UnifiedDatabaseManager {
                 .from('consultations')
                 .select(`
                     *,
-                    appointments (date, heure, type, domaine),
+                    appointments (appointment_date, heure, type, domaine),
                     employees (nom, prenom)
                 `)
                 .eq('appointments.client_id', clientId)
@@ -615,7 +615,7 @@ class UnifiedDatabaseManager {
             const { count: todayAppointments } = await supabase
                 .from('appointments')
                 .select('*', { count: 'exact', head: true })
-                .eq('date', today);
+                .eq('appointment_date', today);
 
             // Total clients
             const { count: totalClients } = await supabase

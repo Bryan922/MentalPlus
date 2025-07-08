@@ -65,6 +65,7 @@ class UnifiedAppointmentBooking {
             btn.addEventListener('click', (e) => {
                 e.preventDefault();
                 this.selectedType = btn.dataset.type;
+                // Correction : forcer la mise à jour du prix et du bouton
                 this.updatePrice();
                 
                 // Mettre à jour l'interface
@@ -283,10 +284,20 @@ class UnifiedAppointmentBooking {
     // Correction : mise à jour dynamique du tarif à chaque changement de type
     updatePrice() {
         if (!this.pricing) return;
-        const priceInfo = this.pricing.find(p => p.type_consultation === this.selectedType);
+        // Correction : forcer la correspondance du type (jour/nuit)
+        let type = this.selectedType;
+        if (type === 'regular' || type === 'classique') type = 'classique';
+        if (type === 'night' || type === 'nuit') type = 'nuit';
+        const priceInfo = this.pricing.find(p => p.type_consultation === type);
         const priceElement = document.getElementById('summary-price');
+        const submitButton = document.querySelector('.btn-submit');
         if (priceInfo && priceElement) {
             priceElement.textContent = priceInfo.montant + '€';
+            if (submitButton) {
+                submitButton.innerHTML = `<i class='fas fa-lock'></i> Confirmer et payer ${priceInfo.montant}€`;
+            }
+            // Debug
+            console.log('updatePrice:', type, priceInfo.montant);
         }
     }
     // Appeler updatePrice() à chaque changement de type de consultation
