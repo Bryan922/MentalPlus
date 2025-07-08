@@ -165,15 +165,11 @@ class AuthenticationManager {
                 if (session) {
                     const user = session.user
                     const userName = user.user_metadata?.name || user.email
-                    link.innerHTML = `
-                        <a href="profile.html" class="btn-profile">
-                            <i class="fas fa-user"></i> ${userName}
-                    </a>
-                `
-            } else {
-                link.innerHTML = `<a href="auth.html" class="nav-link nav-cta">Connexion</a>`
-            }
-        })
+                    link.innerHTML = `<a href="profile.html" class="btn-profile"><i class="fas fa-user"></i> ${userName}</a>`;
+                } else {
+                    link.innerHTML = `<a href="auth.html" class="nav-link nav-cta">Connexion</a>`
+                }
+            })
 
         // Ajouter bouton de déconnexion si connecté
         if (this.isAuthenticated()) {
