@@ -97,6 +97,26 @@ class UnifiedClientSpace {
         
         // Afficher la section par défaut
         this.showSection('dashboard');
+
+        // Correction affichage connexion/déconnexion
+        const authButton = document.getElementById('auth-btn');
+        const logoutButton = document.getElementById('logout-btn');
+        if (window.authManager && window.authManager.isAuthenticated && window.authManager.isAuthenticated()) {
+          if (authButton) authButton.style.display = 'none';
+          if (logoutButton) logoutButton.style.display = 'block';
+        } else {
+          if (authButton) authButton.style.display = 'block';
+          if (logoutButton) logoutButton.style.display = 'none';
+        }
+        // Ajout eventListener pour déconnexion
+        if (logoutButton) {
+          logoutButton.addEventListener('click', async () => {
+            if (window.authManager && typeof window.authManager.logout === 'function') {
+              await window.authManager.logout();
+              window.location.reload();
+            }
+          });
+        }
     }
 
     setupEventListeners() {
