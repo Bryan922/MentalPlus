@@ -132,9 +132,9 @@ class UnifiedClientSpace {
         navButtons.forEach((btn, idx) => {
           btn.addEventListener('click', () => {
             navButtons.forEach(b => b.classList.remove('active'));
-            sections.forEach(s => s.classList.remove('active'));
+            sections.forEach(s => s.style.display = 'none');
             btn.classList.add('active');
-            sections[idx].classList.add('active');
+            sections[idx].style.display = 'block';
           });
         });
         // Correction suppression rendez-vous renforcée

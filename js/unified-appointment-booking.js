@@ -64,7 +64,21 @@ class UnifiedAppointmentBooking {
         typeButtons.forEach(btn => {
             btn.addEventListener('click', (e) => {
                 e.preventDefault();
-                this.selectConsultationType(e.currentTarget.dataset.type);
+                this.selectedType = btn.dataset.type;
+                this.updatePrice();
+                
+                // Mettre à jour l'interface
+                document.querySelectorAll('.type-btn').forEach(btn => {
+                    btn.classList.remove('active');
+                });
+                document.querySelector(`[data-type="${btn.dataset.type}"]`).classList.add('active');
+                
+                // Recharger les créneaux disponibles
+                if (this.selectedDate) {
+                    this.loadTimeSlotsForDate(this.selectedDate);
+                }
+                
+                console.log('Type de consultation sélectionné:', this.selectedType);
             });
         });
 
