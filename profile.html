@@ -533,8 +533,7 @@
                 <p class="profile-email" id="profileEmail">john@example.com</p>
                 <ul class="profile-menu">
                     <li><a href="#appointments" class="active">Mes rendez-vous</a></li>
-                    <li><a href="#documents">Mes documents</a></li>
-                    <li><a href="#settings">Paramètres</a></li>
+                    <li><a href="settings.html" id="settings-link">Paramètres</a></li>
                 </ul>
                 <button id="logout-btn" class="btn-secondary" style="width:100%;margin-top:1.5rem;">Déconnexion</button>
             </aside>
@@ -573,32 +572,6 @@
                         </form>
                     </div>
                 </div>
-
-                <section id="documents" style="display: none;">
-                    <h2 class="section-title">Mes documents</h2>
-                    <ul class="documents-list">
-                        <li class="document-item">
-                            <div class="document-icon">PDF</div>
-                            <div class="document-info">
-                                <div class="document-name">Rapport de consultation - Février 2024</div>
-                                <div class="document-date">Ajouté le 28/02/2024</div>
-                            </div>
-                            <div class="document-actions">
-                                <a href="#" class="btn-download">Télécharger</a>
-                            </div>
-                        </li>
-                        <li class="document-item">
-                            <div class="document-icon">PDF</div>
-                            <div class="document-info">
-                                <div class="document-name">Ordonnance - Janvier 2024</div>
-                                <div class="document-date">Ajouté le 15/01/2024</div>
-                            </div>
-                            <div class="document-actions">
-                                <a href="#" class="btn-download">Télécharger</a>
-                            </div>
-                        </li>
-                    </ul>
-                </section>
 
                 <section id="settings" style="display: none;">
                     <h2 class="section-title">Paramètres du compte</h2>
@@ -828,6 +801,7 @@
             // Les formulaires sont également gérés par profile-fix.js
         });
     </script>
+    <script type="module" src="js/unified-auth.js"></script>
     <script src="js/auth-fix.js"></script>
     <script src="js/profile-fix.js"></script>
     <script src="js/navbar-fix.js"></script>
