@@ -335,3 +335,34 @@ if (logoutBtn) {
         }
     });
 } 
+
+// Correction updateAppointmentStatus (HTML inline -> JS global)
+window.updateAppointmentStatus = function(appointmentId, newStatus) {
+    // Simulation de mise à jour vers l'API
+    let appointments = JSON.parse(localStorage.getItem('appointments') || '[]');
+    const appointment = appointments.find(apt => apt.id === appointmentId);
+    if (!appointment) return;
+    const statusMessages = {
+        'cancelled': 'Rendez-vous annulé',
+        'rescheduled': 'Rendez-vous reprogrammé',
+        'confirmed': 'Rendez-vous confirmé'
+    };
+    // Mise à jour locale
+    appointment.status = newStatus;
+    // Mise à jour de l'affichage
+    const card = document.querySelector(`[data-appointment-id="${appointmentId}"]`);
+    if (card) {
+        const statusBadge = card.querySelector('.appointment-status');
+        statusBadge.className = `appointment-status status-${newStatus}`;
+        statusBadge.textContent = statusMessages[newStatus];
+        // Si le rendez-vous est annulé, on désactive les boutons
+        if (newStatus === 'cancelled') {
+            const actions = card.querySelector('.appointment-actions');
+            if (actions) actions.innerHTML = '<span class="text-muted">Rendez-vous annulé</span>';
+        }
+    }
+    // Notification de l'admin (simulation)
+    console.log(`Admin notifié: Rendez-vous ${appointmentId} ${statusMessages[newStatus].toLowerCase()}`);
+    // Feedback utilisateur
+    alert(statusMessages[newStatus]);
+} 
