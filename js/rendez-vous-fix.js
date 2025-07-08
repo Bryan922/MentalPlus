@@ -396,4 +396,58 @@ const rdvManager = new RendezVousManager()
 // Exposer globalement pour compatibilité
 window.rdvManager = rdvManager
 
+// Fonctions globales pour la navigation entre les étapes
+function nextStep() {
+    const currentStep = document.querySelector('.form-step.active');
+    const currentStepNumber = parseInt(currentStep.id.replace('step', ''));
+    const nextStepNumber = currentStepNumber + 1;
+    
+    if (!validateStep(currentStepNumber)) {
+        return;
+    }
+
+    document.querySelector(`#step${currentStepNumber}`).classList.remove('active');
+    document.querySelector(`#step${nextStepNumber}`).classList.add('active');
+    updateStepIndicators(nextStepNumber);
+}
+
+function prevStep() {
+    const currentStep = document.querySelector('.form-step.active');
+    const currentStepNumber = parseInt(currentStep.id.replace('step', ''));
+    const prevStepNumber = currentStepNumber - 1;
+    
+    document.querySelector(`#step${currentStepNumber}`).classList.remove('active');
+    document.querySelector(`#step${prevStepNumber}`).classList.add('active');
+    updateStepIndicators(prevStepNumber);
+}
+
+function updateStepIndicators(activeStep) {
+    document.querySelectorAll('.step').forEach(step => {
+        const stepNumber = parseInt(step.dataset.step);
+        step.classList.remove('active');
+        if (stepNumber === activeStep) {
+            step.classList.add('active');
+        }
+    });
+}
+
+function validateStep(stepNumber) {
+    switch(stepNumber) {
+        case 1:
+            if (!rdvManager.selectedDomain) {
+                alert('Veuillez sélectionner un domaine d\'intervention');
+                return false;
+            }
+            return true;
+        case 2:
+            if (!rdvManager.selectedDate || !rdvManager.selectedTime) {
+                alert('Veuillez sélectionner une date et une heure');
+                return false;
+            }
+            return true;
+        default:
+            return true;
+    }
+}
+
 console.log('Gestionnaire de rendez-vous initialisé')

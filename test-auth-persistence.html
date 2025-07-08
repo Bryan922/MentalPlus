@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Persistance Session - MentalSerenity</title>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .test-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        .test-section {
+            background: white;
+            border-radius: 10px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .test-result {
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 5px;
+            border-left: 4px solid;
+        }
+        
+        .test-success {
+            background: #d4edda;
+            border-color: #28a745;
+            color: #155724;
+        }
+        
+        .test-error {
+            background: #f8d7da;
+            border-color: #dc3545;
+            color: #721c24;
+        }
+        
+        .test-warning {
+            background: #fff3cd;
+            border-color: #ffc107;
+            color: #856404;
+        }
+        
+        .test-info {
+            background: #d1ecf1;
+            border-color: #17a2b8;
+            color: #0c5460;
+        }
+        
+        .test-button {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 0.5rem;
+        }
+        
+        .test-button:hover {
+            background: var(--secondary-color);
+        }
+        
+        .log-container {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 5px;
+            padding: 1rem;
+            max-height: 300px;
+            overflow-y: auto;
+            font-family: monospace;
+            font-size: 0.9rem;
+        }
+        
+        .auth-form {
+            background: #f8f9fa;
+            padding: 1rem;
+            border-radius: 5px;
+            margin: 1rem 0;
+        }
+        
+        .form-group {
+            margin-bottom: 1rem;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+        }
+        
+        .form-group input {
+            width: 100%;
+            padding: 0.5rem;
+            border: 1px solid #ddd;
+            border-radius: 3px;
+        }
+        
+        .status-indicator {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 8px;
+        }
+        
+        .status-connected {
+            background: #28a745;
+        }
+        
+        .status-disconnected {
+            background: #dc3545;
+        }
+        
+        .status-loading {
+            background: #ffc107;
+        }
+    </style>
+</head>
+<body>
+    <header class="main-header">
+        <nav class="navbar">
+            <div class="nav-brand">
+                <a href="index.html" class="brand-logo">
+                    <img src="Mental Serenity - Logo-Photoroom.png" alt="Mental Serenity" class="logo-img">
+                </a>
+            </div>
+            
+            <div class="nav-menu" id="nav-menu">
+                <ul class="nav-list">
+                    <li class="nav-item">
+                        <a href="index.html" class="nav-link">Accueil</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="services.html" class="nav-link">Services</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="tarifs.html" class="nav-link">Tarifs</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="contact.html" class="nav-link">Contact</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="auth.html" class="nav-link nav-cta">Connexion</a>
+                    </li>
+                </ul>
+            </div>
+            
+            <div class="nav-toggle" id="nav-toggle">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </div>
+        </nav>
+    </header>
+
+    <main class="test-container">
+        <h1>🔐 Test de Persistance de Session - MentalSerenity</h1>
+        
+        <div class="test-section">
+            <h2>📊 État de l'Authentification</h2>
+            <div id="auth-status" class="test-result test-info">
+                <span class="status-indicator status-loading"></span>
+                Vérification de l'état d'authentification...
+            </div>
+            <button class="test-button" onclick="checkAuthStatus()">Vérifier l'État</button>
+            <button class="test-button" onclick="refreshSession()">Rafraîchir la Session</button>
+            <button class="test-button" onclick="clearSession()">Effacer la Session</button>
+        </div>
+
+        <div class="test-section">
+            <h2>🔑 Test de Connexion</h2>
+            <div class="auth-form">
+                <div class="form-group">
+                    <label for="testEmail">Email de test:</label>
+                    <input type="email" id="testEmail" value="test@mentalplus.com" placeholder="test@mentalplus.com">
+                </div>
+                <div class="form-group">
+                    <label for="testPassword">Mot de passe de test:</label>
+                    <input type="password" id="testPassword" value="test123456" placeholder="test123456">
+                </div>
+                <button class="test-button" onclick="testLogin()">Tester la Connexion</button>
+                <button class="test-button" onclick="testSignup()">Tester l'Inscription</button>
+                <button class="test-button" onclick="testLogout()">Tester la Déconnexion</button>
+            </div>
+        </div>
+
+        <div class="test-section">
+            <h2>🔄 Test de Persistance</h2>
+            <button class="test-button" onclick="testPageReload()">Recharger la Page</button>
+            <button class="test-button" onclick="testNewTab()">Ouvrir dans un Nouvel Onglet</button>
+            <button class="test-button" onclick="testLocalStorage()">Vérifier le LocalStorage</button>
+            <button class="test-button" onclick="testSessionStorage()">Vérifier le SessionStorage</button>
+        </div>
+
+        <div class="test-section">
+            <h2>🌐 Test de Navigation</h2>
+            <button class="test-button" onclick="testNavigateToProtected()">Aller sur Page Protégée</button>
+            <button class="test-button" onclick="testNavigateToAuth()">Aller sur Page Auth</button>
+            <button class="test-button" onclick="testNavigateToHome()">Aller sur Accueil</button>
+        </div>
+
+        <div class="test-section">
+            <h2>📊 Logs de Diagnostic</h2>
+            <div class="log-container" id="diagnostic-logs">
+                <div>Initialisation du test de persistance...</div>
+            </div>
+        </div>
+    </main>
+
+    <script src="js/navbar.js"></script>
+    <script type="module" src="js/unified-auth.js"></script>
+    <script>
+        // Variables globales pour les tests
+        let authStatus = 'unknown'
+        let testResults = []
+
+        // Fonction pour ajouter des logs
+        function addLog(message, type = 'info') {
+            const logsContainer = document.getElementById('diagnostic-logs')
+            const timestamp = new Date().toLocaleTimeString()
+            const logEntry = document.createElement('div')
+            logEntry.className = `log-entry log-${type}`
+            logEntry.innerHTML = `[${timestamp}] ${message}`
+            
+            logsContainer.appendChild(logEntry)
+            logsContainer.scrollTop = logsContainer.scrollHeight
+            
+            console.log(`[${type.toUpperCase()}] ${message}`)
+        }
+
+        // Fonction pour mettre à jour le statut d'authentification
+        function updateAuthStatus(status, message) {
+            const statusElement = document.getElementById('auth-status')
+            const indicator = statusElement.querySelector('.status-indicator')
+            
+            statusElement.className = `test-result test-${status === 'connected' ? 'success' : status === 'disconnected' ? 'error' : 'warning'}`
+            indicator.className = `status-indicator status-${status}`
+            statusElement.innerHTML = `<span class="status-indicator status-${status}"></span>${message}`
+            
+            authStatus = status
+        }
+
+        // Attendre que le système d'authentification soit initialisé
+        async function waitForAuth() {
+            return new Promise(resolve => {
+                const checkAuth = () => {
+                    if (window.unifiedAuth && window.unifiedAuth.isInitialized) {
+                        resolve()
+                    } else {
+                        setTimeout(checkAuth, 100)
+                    }
+                }
+                checkAuth()
+            })
+        }
+
+        // Test de l'état d'authentification
+        async function checkAuthStatus() {
+            addLog('🔍 Vérification de l\'état d\'authentification...')
+            
+            try {
+                await waitForAuth()
+                
+                const isAuth = window.unifiedAuth.isAuthenticated()
+                const user = window.unifiedAuth.getCurrentUserData()
+                
+                if (isAuth && user) {
+                    updateAuthStatus('connected', `Connecté en tant que: ${user.email}`)
+                    addLog(`✅ Utilisateur connecté: ${user.email}`, 'success')
+                    addLog(`📧 Email: ${user.email}`, 'info')
+                    addLog(`🆔 ID: ${user.id}`, 'info')
+                    addLog(`📅 Créé le: ${new Date(user.created_at).toLocaleString('fr-FR')}`, 'info')
+                } else {
+                    updateAuthStatus('disconnected', 'Non connecté')
+                    addLog('❌ Aucun utilisateur connecté', 'error')
+                }
+                
+            } catch (error) {
+                updateAuthStatus('disconnected', `Erreur: ${error.message}`)
+                addLog(`❌ Erreur lors de la vérification: ${error.message}`, 'error')
+            }
+        }
+
+        // Test de connexion
+        async function testLogin() {
+            addLog('🔑 Test de connexion...')
+            
+            const email = document.getElementById('testEmail').value
+            const password = document.getElementById('testPassword').value
+            
+            if (!email || !password) {
+                addLog('❌ Email et mot de passe requis', 'error')
+                return
+            }
+            
+            try {
+                await waitForAuth()
+                
+                const result = await window.unifiedAuth.signIn(email, password)
+                
+                if (result.success) {
+                    addLog(`✅ Connexion réussie pour: ${email}`, 'success')
+                    await checkAuthStatus()
+                } else {
+                    addLog(`❌ Échec de la connexion: ${result.error}`, 'error')
+                }
+                
+            } catch (error) {
+                addLog(`❌ Erreur lors de la connexion: ${error.message}`, 'error')
+            }
+        }
+
+        // Test d'inscription
+        async function testSignup() {
+            addLog('📝 Test d\'inscription...')
+            
+            const email = document.getElementById('testEmail').value
+            const password = document.getElementById('testPassword').value
+            
+            if (!email || !password) {
+                addLog('❌ Email et mot de passe requis', 'error')
+                return
+            }
+            
+            try {
+                await waitForAuth()
+                
+                const result = await window.unifiedAuth.signUp(email, password, { name: 'Utilisateur Test' })
+                
+                if (result.success) {
+                    addLog(`✅ Inscription réussie pour: ${email}`, 'success')
+                    addLog('📧 Vérifiez votre email pour confirmer le compte', 'info')
+                } else {
+                    addLog(`❌ Échec de l'inscription: ${result.error}`, 'error')
+                }
+                
+            } catch (error) {
+                addLog(`❌ Erreur lors de l'inscription: ${error.message}`, 'error')
+            }
+        }
+
+        // Test de déconnexion
+        async function testLogout() {
+            addLog('🚪 Test de déconnexion...')
+            
+            try {
+                await waitForAuth()
+                
+                const result = await window.unifiedAuth.signOut()
+                
+                if (result.success) {
+                    addLog('✅ Déconnexion réussie', 'success')
+                    updateAuthStatus('disconnected', 'Déconnecté')
+                } else {
+                    addLog(`❌ Échec de la déconnexion: ${result.error}`, 'error')
+                }
+                
+            } catch (error) {
+                addLog(`❌ Erreur lors de la déconnexion: ${error.message}`, 'error')
+            }
+        }
+
+        // Test de rafraîchissement de session
+        async function refreshSession() {
+            addLog('🔄 Test de rafraîchissement de session...')
+            
+            try {
+                await waitForAuth()
+                
+                const result = await window.unifiedAuth.getCurrentSession()
+                
+                if (result.success && result.session) {
+                    addLog('✅ Session rafraîchie avec succès', 'success')
+                    await checkAuthStatus()
+                } else {
+                    addLog('❌ Aucune session active à rafraîchir', 'warning')
+                }
+                
+            } catch (error) {
+                addLog(`❌ Erreur lors du rafraîchissement: ${error.message}`, 'error')
+            }
+        }
+
+        // Test d'effacement de session
+        async function clearSession() {
+            addLog('🗑️ Test d\'effacement de session...')
+            
+            try {
+                localStorage.clear()
+                sessionStorage.clear()
+                
+                addLog('✅ Session effacée manuellement', 'success')
+                updateAuthStatus('disconnected', 'Session effacée')
+                
+            } catch (error) {
+                addLog(`❌ Erreur lors de l'effacement: ${error.message}`, 'error')
+            }
+        }
+
+        // Test de rechargement de page
+        function testPageReload() {
+            addLog('🔄 Test de rechargement de page...')
+            addLog('La page va se recharger dans 3 secondes...', 'info')
+            
+            setTimeout(() => {
+                window.location.reload()
+            }, 3000)
+        }
+
+        // Test d'ouverture dans un nouvel onglet
+        function testNewTab() {
+            addLog('🆕 Ouverture dans un nouvel onglet...')
+            window.open(window.location.href, '_blank')
+        }
+
+        // Test du localStorage
+        function testLocalStorage() {
+            addLog('💾 Vérification du localStorage...')
+            
+            const keys = Object.keys(localStorage)
+            addLog(`📊 Nombre d'éléments dans localStorage: ${keys.length}`, 'info')
+            
+            keys.forEach(key => {
+                const value = localStorage.getItem(key)
+                addLog(`🔑 ${key}: ${value ? value.substring(0, 50) + '...' : 'null'}`, 'info')
+            })
+        }
+
+        // Test du sessionStorage
+        function testSessionStorage() {
+            addLog('💾 Vérification du sessionStorage...')
+            
+            const keys = Object.keys(sessionStorage)
+            addLog(`📊 Nombre d'éléments dans sessionStorage: ${keys.length}`, 'info')
+            
+            keys.forEach(key => {
+                const value = sessionStorage.getItem(key)
+                addLog(`🔑 ${key}: ${value ? value.substring(0, 50) + '...' : 'null'}`, 'info')
+            })
+        }
+
+        // Tests de navigation
+        function testNavigateToProtected() {
+            addLog('🔒 Navigation vers page protégée...')
+            window.location.href = 'profile.html'
+        }
+
+        function testNavigateToAuth() {
+            addLog('🔐 Navigation vers page d\'authentification...')
+            window.location.href = 'auth.html'
+        }
+
+        function testNavigateToHome() {
+            addLog('🏠 Navigation vers accueil...')
+            window.location.href = 'index.html'
+        }
+
+        // Initialisation au chargement de la page
+        document.addEventListener('DOMContentLoaded', async () => {
+            addLog('🚀 Initialisation du test de persistance...')
+            
+            // Attendre que l'authentification soit initialisée
+            await waitForAuth()
+            
+            addLog('✅ Système d\'authentification prêt', 'success')
+            
+            // Vérifier l'état initial
+            await checkAuthStatus()
+            
+            addLog('🎯 Tests prêts - utilisez les boutons ci-dessus', 'info')
+        })
+
+        // Exposer les fonctions globalement
+        window.checkAuthStatus = checkAuthStatus
+        window.testLogin = testLogin
+        window.testSignup = testSignup
+        window.testLogout = testLogout
+        window.refreshSession = refreshSession
+        window.clearSession = clearSession
+        window.testPageReload = testPageReload
+        window.testNewTab = testNewTab
+        window.testLocalStorage = testLocalStorage
+        window.testSessionStorage = testSessionStorage
+        window.testNavigateToProtected = testNavigateToProtected
+        window.testNavigateToAuth = testNavigateToAuth
+        window.testNavigateToHome = testNavigateToHome
+    </script>
+</body>
+</html> 

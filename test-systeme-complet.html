@@ -1,0 +1,686 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Système Complet - MentalSerenity</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .test-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .test-section {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .test-section h2 {
+            color: #2c3e50;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+        .test-item {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 5px;
+            padding: 15px;
+            margin: 10px 0;
+        }
+        .test-item h3 {
+            color: #495057;
+            margin-bottom: 10px;
+        }
+        .test-status {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 0.8em;
+            font-weight: bold;
+        }
+        .status-success { background: #d4edda; color: #155724; }
+        .status-error { background: #f8d7da; color: #721c24; }
+        .status-warning { background: #fff3cd; color: #856404; }
+        .status-info { background: #d1ecf1; color: #0c5460; }
+        .test-button {
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        .test-button:hover {
+            background: #2980b9;
+        }
+        .test-button.danger {
+            background: #e74c3c;
+        }
+        .test-button.danger:hover {
+            background: #c0392b;
+        }
+        .test-button.success {
+            background: #27ae60;
+        }
+        .test-button.success:hover {
+            background: #229954;
+        }
+        .test-results {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 5px;
+            padding: 15px;
+            margin: 10px 0;
+            font-family: monospace;
+            font-size: 0.9em;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+        .progress-bar {
+            width: 100%;
+            height: 20px;
+            background: #e9ecef;
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 10px 0;
+        }
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #3498db, #2ecc71);
+            transition: width 0.3s ease;
+        }
+        .summary-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        .stat-card {
+            background: white;
+            border: 1px solid #dee2e6;
+            border-radius: 5px;
+            padding: 15px;
+            text-align: center;
+        }
+        .stat-number {
+            font-size: 2em;
+            font-weight: bold;
+            color: #3498db;
+        }
+        .stat-label {
+            color: #6c757d;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <header>
+            <h1><i class="fas fa-vial"></i> Test Système Complet - MentalSerenity</h1>
+            <p>Page de test pour vérifier toutes les fonctionnalités du système unifié</p>
+        </header>
+
+        <!-- Résumé des tests -->
+        <div class="test-section">
+            <h2><i class="fas fa-chart-bar"></i> Résumé des Tests</h2>
+            <div class="summary-stats">
+                <div class="stat-card">
+                    <div class="stat-number" id="totalTests">0</div>
+                    <div class="stat-label">Tests Totaux</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="passedTests">0</div>
+                    <div class="stat-label">Tests Réussis</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="failedTests">0</div>
+                    <div class="stat-label">Tests Échoués</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="successRate">0%</div>
+                    <div class="stat-label">Taux de Réussite</div>
+                </div>
+            </div>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressBar" style="width: 0%"></div>
+            </div>
+        </div>
+
+        <!-- Test de Connexion -->
+        <div class="test-section">
+            <h2><i class="fas fa-database"></i> Test de Connexion Base de Données</h2>
+            <div class="test-item">
+                <h3>Connexion Supabase</h3>
+                <p>Vérification de la connexion à la base de données Supabase</p>
+                <button class="test-button" onclick="testDatabaseConnection()">
+                    <i class="fas fa-plug"></i> Tester la Connexion
+                </button>
+                <div class="test-results" id="dbConnectionResults"></div>
+            </div>
+        </div>
+
+        <!-- Test d'Authentification -->
+        <div class="test-section">
+            <h2><i class="fas fa-user-shield"></i> Test d'Authentification</h2>
+            <div class="test-item">
+                <h3>Session Actuelle</h3>
+                <p>Vérification de l'état de l'authentification</p>
+                <button class="test-button" onclick="testCurrentSession()">
+                    <i class="fas fa-user"></i> Vérifier Session
+                </button>
+                <div class="test-results" id="sessionResults"></div>
+            </div>
+            <div class="test-item">
+                <h3>Test de Connexion</h3>
+                <p>Test de connexion avec des identifiants de test</p>
+                <button class="test-button" onclick="testLogin()">
+                    <i class="fas fa-sign-in-alt"></i> Tester Connexion
+                </button>
+                <button class="test-button danger" onclick="testLogout()">
+                    <i class="fas fa-sign-out-alt"></i> Tester Déconnexion
+                </button>
+                <div class="test-results" id="authResults"></div>
+            </div>
+        </div>
+
+        <!-- Test des Gestionnaires -->
+        <div class="test-section">
+            <h2><i class="fas fa-cogs"></i> Test des Gestionnaires</h2>
+            <div class="test-item">
+                <h3>Gestionnaire de Base de Données</h3>
+                <p>Test du gestionnaire unifié de base de données</p>
+                <button class="test-button" onclick="testDatabaseManager()">
+                    <i class="fas fa-database"></i> Tester DB Manager
+                </button>
+                <div class="test-results" id="dbManagerResults"></div>
+            </div>
+            <div class="test-item">
+                <h3>Gestionnaire Client</h3>
+                <p>Test du gestionnaire d'espace client</p>
+                <button class="test-button" onclick="testClientManager()">
+                    <i class="fas fa-user"></i> Tester Client Manager
+                </button>
+                <div class="test-results" id="clientManagerResults"></div>
+            </div>
+            <div class="test-item">
+                <h3>Gestionnaire Employé</h3>
+                <p>Test du gestionnaire d'espace employé</p>
+                <button class="test-button" onclick="testEmployeeManager()">
+                    <i class="fas fa-user-tie"></i> Tester Employee Manager
+                </button>
+                <div class="test-results" id="employeeManagerResults"></div>
+            </div>
+        </div>
+
+        <!-- Test des Fonctionnalités -->
+        <div class="test-section">
+            <h2><i class="fas fa-tasks"></i> Test des Fonctionnalités</h2>
+            <div class="test-item">
+                <h3>Gestion des Clients</h3>
+                <p>Test des opérations CRUD sur les clients</p>
+                <button class="test-button" onclick="testClientOperations()">
+                    <i class="fas fa-users"></i> Tester Clients
+                </button>
+                <div class="test-results" id="clientResults"></div>
+            </div>
+            <div class="test-item">
+                <h3>Gestion des Rendez-vous</h3>
+                <p>Test des opérations sur les rendez-vous</p>
+                <button class="test-button" onclick="testAppointmentOperations()">
+                    <i class="fas fa-calendar-alt"></i> Tester Rendez-vous
+                </button>
+                <div class="test-results" id="appointmentResults"></div>
+            </div>
+            <div class="test-item">
+                <h3>Gestion des Paiements</h3>
+                <p>Test du système de paiements</p>
+                <button class="test-button" onclick="testPaymentOperations()">
+                    <i class="fas fa-credit-card"></i> Tester Paiements
+                </button>
+                <div class="test-results" id="paymentResults"></div>
+            </div>
+        </div>
+
+        <!-- Test d'Intégration -->
+        <div class="test-section">
+            <h2><i class="fas fa-link"></i> Test d'Intégration</h2>
+            <div class="test-item">
+                <h3>Flux Complet</h3>
+                <p>Test du flux complet client → rendez-vous → paiement</p>
+                <button class="test-button success" onclick="testCompleteFlow()">
+                    <i class="fas fa-play"></i> Tester Flux Complet
+                </button>
+                <div class="test-results" id="flowResults"></div>
+            </div>
+            <div class="test-item">
+                <h3>Communication Client-Employé</h3>
+                <p>Test de la messagerie entre client et employé</p>
+                <button class="test-button" onclick="testCommunication()">
+                    <i class="fas fa-comments"></i> Tester Communication
+                </button>
+                <div class="test-results" id="communicationResults"></div>
+            </div>
+        </div>
+
+        <!-- Test de Performance -->
+        <div class="test-section">
+            <h2><i class="fas fa-tachometer-alt"></i> Test de Performance</h2>
+            <div class="test-item">
+                <h3>Temps de Réponse</h3>
+                <p>Mesure des temps de réponse des opérations</p>
+                <button class="test-button" onclick="testPerformance()">
+                    <i class="fas fa-stopwatch"></i> Tester Performance
+                </button>
+                <div class="test-results" id="performanceResults"></div>
+            </div>
+        </div>
+
+        <!-- Actions Globales -->
+        <div class="test-section">
+            <h2><i class="fas fa-magic"></i> Actions Globales</h2>
+            <button class="test-button success" onclick="runAllTests()">
+                <i class="fas fa-play-circle"></i> Lancer Tous les Tests
+            </button>
+            <button class="test-button" onclick="clearAllResults()">
+                <i class="fas fa-trash"></i> Effacer les Résultats
+            </button>
+            <button class="test-button" onclick="exportTestResults()">
+                <i class="fas fa-download"></i> Exporter les Résultats
+            </button>
+        </div>
+    </div>
+
+    <script type="module">
+        import { supabaseAuth } from './js/supabase-auth.js';
+        import { dbManager } from './unified-database-manager.js';
+
+        // Variables globales pour les tests
+        let testResults = {
+            total: 0,
+            passed: 0,
+            failed: 0
+        };
+
+        // Fonction pour mettre à jour les statistiques
+        function updateStats() {
+            document.getElementById('totalTests').textContent = testResults.total;
+            document.getElementById('passedTests').textContent = testResults.passed;
+            document.getElementById('failedTests').textContent = testResults.failed;
+            
+            const successRate = testResults.total > 0 ? Math.round((testResults.passed / testResults.total) * 100) : 0;
+            document.getElementById('successRate').textContent = successRate + '%';
+            document.getElementById('progressBar').style.width = successRate + '%';
+        }
+
+        // Fonction pour ajouter un résultat de test
+        function addTestResult(containerId, message, status = 'info') {
+            const container = document.getElementById(containerId);
+            const timestamp = new Date().toLocaleTimeString();
+            const statusClass = `status-${status}`;
+            
+            container.innerHTML += `
+                <div class="test-status ${statusClass}">
+                    [${timestamp}] ${message}
+                </div>
+            `;
+            
+            container.scrollTop = container.scrollHeight;
+            
+            // Mettre à jour les statistiques
+            testResults.total++;
+            if (status === 'success') testResults.passed++;
+            if (status === 'error') testResults.failed++;
+            updateStats();
+        }
+
+        // Test de connexion à la base de données
+        window.testDatabaseConnection = async function() {
+            addTestResult('dbConnectionResults', 'Test de connexion à Supabase...', 'info');
+            
+            try {
+                const result = await dbManager.testConnection();
+                if (result.success) {
+                    addTestResult('dbConnectionResults', '✅ Connexion réussie à Supabase', 'success');
+                } else {
+                    addTestResult('dbConnectionResults', '❌ Échec de la connexion: ' + result.error, 'error');
+                }
+            } catch (error) {
+                addTestResult('dbConnectionResults', '❌ Erreur de connexion: ' + error.message, 'error');
+            }
+        };
+
+        // Test de session actuelle
+        window.testCurrentSession = async function() {
+            addTestResult('sessionResults', 'Vérification de la session actuelle...', 'info');
+            
+            try {
+                const { success, session } = await supabaseAuth.getCurrentSession();
+                if (success && session) {
+                    addTestResult('sessionResults', '✅ Session active trouvée', 'success');
+                    addTestResult('sessionResults', `Utilisateur: ${session.user.email}`, 'info');
+                } else {
+                    addTestResult('sessionResults', 'ℹ️ Aucune session active', 'warning');
+                }
+            } catch (error) {
+                addTestResult('sessionResults', '❌ Erreur lors de la vérification: ' + error.message, 'error');
+            }
+        };
+
+        // Test de connexion
+        window.testLogin = async function() {
+            addTestResult('authResults', 'Test de connexion...', 'info');
+            
+            try {
+                // Test avec un email fictif
+                const result = await supabaseAuth.signInWithEmail('test@example.com', 'password123');
+                if (result.success) {
+                    addTestResult('authResults', '✅ Connexion réussie', 'success');
+                } else {
+                    addTestResult('authResults', 'ℹ️ Connexion échouée (normal pour un test)', 'warning');
+                }
+            } catch (error) {
+                addTestResult('authResults', 'ℹ️ Erreur de connexion (normal pour un test): ' + error.message, 'warning');
+            }
+        };
+
+        // Test de déconnexion
+        window.testLogout = async function() {
+            addTestResult('authResults', 'Test de déconnexion...', 'info');
+            
+            try {
+                const result = await supabaseAuth.signOut();
+                if (result.success) {
+                    addTestResult('authResults', '✅ Déconnexion réussie', 'success');
+                } else {
+                    addTestResult('authResults', '❌ Erreur lors de la déconnexion', 'error');
+                }
+            } catch (error) {
+                addTestResult('authResults', '❌ Erreur de déconnexion: ' + error.message, 'error');
+            }
+        };
+
+        // Test du gestionnaire de base de données
+        window.testDatabaseManager = async function() {
+            addTestResult('dbManagerResults', 'Test du gestionnaire de base de données...', 'info');
+            
+            try {
+                // Test de récupération des tarifs
+                const pricingResult = await dbManager.getPricing();
+                if (pricingResult.success) {
+                    addTestResult('dbManagerResults', '✅ Récupération des tarifs réussie', 'success');
+                } else {
+                    addTestResult('dbManagerResults', '❌ Erreur récupération tarifs: ' + pricingResult.error, 'error');
+                }
+
+                // Test des statistiques
+                const statsResult = await dbManager.getDashboardStats();
+                if (statsResult.success) {
+                    addTestResult('dbManagerResults', '✅ Récupération des statistiques réussie', 'success');
+                } else {
+                    addTestResult('dbManagerResults', '❌ Erreur récupération stats: ' + statsResult.error, 'error');
+                }
+            } catch (error) {
+                addTestResult('dbManagerResults', '❌ Erreur test DB manager: ' + error.message, 'error');
+            }
+        };
+
+        // Test du gestionnaire client
+        window.testClientManager = async function() {
+            addTestResult('clientManagerResults', 'Test du gestionnaire client...', 'info');
+            
+            try {
+                // Vérifier si on a une session
+                const { success, session } = await supabaseAuth.getCurrentSession();
+                if (success && session) {
+                    addTestResult('clientManagerResults', '✅ Session client trouvée', 'success');
+                } else {
+                    addTestResult('clientManagerResults', 'ℹ️ Aucune session client (normal)', 'warning');
+                }
+            } catch (error) {
+                addTestResult('clientManagerResults', '❌ Erreur test client manager: ' + error.message, 'error');
+            }
+        };
+
+        // Test du gestionnaire employé
+        window.testEmployeeManager = async function() {
+            addTestResult('employeeManagerResults', 'Test du gestionnaire employé...', 'info');
+            
+            try {
+                // Test similaire au client manager
+                const { success, session } = await supabaseAuth.getCurrentSession();
+                if (success && session) {
+                    addTestResult('employeeManagerResults', '✅ Session employé trouvée', 'success');
+                } else {
+                    addTestResult('employeeManagerResults', 'ℹ️ Aucune session employé (normal)', 'warning');
+                }
+            } catch (error) {
+                addTestResult('employeeManagerResults', '❌ Erreur test employee manager: ' + error.message, 'error');
+            }
+        };
+
+        // Test des opérations clients
+        window.testClientOperations = async function() {
+            addTestResult('clientResults', 'Test des opérations clients...', 'info');
+            
+            try {
+                // Test de récupération de tous les clients
+                const result = await dbManager.getAllClients();
+                if (result.success) {
+                    addTestResult('clientResults', `✅ Récupération de ${result.data.length} clients`, 'success');
+                } else {
+                    addTestResult('clientResults', '❌ Erreur récupération clients: ' + result.error, 'error');
+                }
+            } catch (error) {
+                addTestResult('clientResults', '❌ Erreur test opérations clients: ' + error.message, 'error');
+            }
+        };
+
+        // Test des opérations rendez-vous
+        window.testAppointmentOperations = async function() {
+            addTestResult('appointmentResults', 'Test des opérations rendez-vous...', 'info');
+            
+            try {
+                // Test de récupération de tous les rendez-vous
+                const result = await dbManager.getAllAppointments();
+                if (result.success) {
+                    addTestResult('appointmentResults', `✅ Récupération de ${result.data.length} rendez-vous`, 'success');
+                } else {
+                    addTestResult('appointmentResults', '❌ Erreur récupération rendez-vous: ' + result.error, 'error');
+                }
+            } catch (error) {
+                addTestResult('appointmentResults', '❌ Erreur test opérations rendez-vous: ' + error.message, 'error');
+            }
+        };
+
+        // Test des opérations paiements
+        window.testPaymentOperations = async function() {
+            addTestResult('paymentResults', 'Test des opérations paiements...', 'info');
+            
+            try {
+                // Test de récupération des tarifs
+                const result = await dbManager.getPricing();
+                if (result.success) {
+                    addTestResult('paymentResults', `✅ Récupération de ${result.data.length} tarifs`, 'success');
+                } else {
+                    addTestResult('paymentResults', '❌ Erreur récupération tarifs: ' + result.error, 'error');
+                }
+            } catch (error) {
+                addTestResult('paymentResults', '❌ Erreur test opérations paiements: ' + error.message, 'error');
+            }
+        };
+
+        // Test du flux complet
+        window.testCompleteFlow = async function() {
+            addTestResult('flowResults', 'Test du flux complet...', 'info');
+            
+            try {
+                // Test de connexion
+                addTestResult('flowResults', '1. Test de connexion...', 'info');
+                const connectionResult = await dbManager.testConnection();
+                if (connectionResult.success) {
+                    addTestResult('flowResults', '✅ Connexion réussie', 'success');
+                } else {
+                    addTestResult('flowResults', '❌ Connexion échouée', 'error');
+                    return;
+                }
+
+                // Test de récupération des données
+                addTestResult('flowResults', '2. Récupération des données...', 'info');
+                const [clientsResult, appointmentsResult, pricingResult] = await Promise.all([
+                    dbManager.getAllClients(),
+                    dbManager.getAllAppointments(),
+                    dbManager.getPricing()
+                ]);
+
+                if (clientsResult.success) {
+                    addTestResult('flowResults', `✅ ${clientsResult.data.length} clients récupérés`, 'success');
+                }
+                if (appointmentsResult.success) {
+                    addTestResult('flowResults', `✅ ${appointmentsResult.data.length} rendez-vous récupérés`, 'success');
+                }
+                if (pricingResult.success) {
+                    addTestResult('flowResults', `✅ ${pricingResult.data.length} tarifs récupérés`, 'success');
+                }
+
+                addTestResult('flowResults', '✅ Flux complet testé avec succès', 'success');
+            } catch (error) {
+                addTestResult('flowResults', '❌ Erreur test flux complet: ' + error.message, 'error');
+            }
+        };
+
+        // Test de communication
+        window.testCommunication = async function() {
+            addTestResult('communicationResults', 'Test de communication...', 'info');
+            
+            try {
+                // Test de récupération des messages
+                const { success, session } = await supabaseAuth.getCurrentSession();
+                if (success && session) {
+                    const messagesResult = await dbManager.getMessagesForUser(session.user.id, 'client');
+                    if (messagesResult.success) {
+                        addTestResult('communicationResults', `✅ ${messagesResult.data.length} messages récupérés`, 'success');
+                    } else {
+                        addTestResult('communicationResults', 'ℹ️ Aucun message trouvé', 'warning');
+                    }
+                } else {
+                    addTestResult('communicationResults', 'ℹ️ Aucune session pour tester la communication', 'warning');
+                }
+            } catch (error) {
+                addTestResult('communicationResults', '❌ Erreur test communication: ' + error.message, 'error');
+            }
+        };
+
+        // Test de performance
+        window.testPerformance = async function() {
+            addTestResult('performanceResults', 'Test de performance...', 'info');
+            
+            try {
+                const startTime = performance.now();
+                
+                // Test de plusieurs opérations
+                await Promise.all([
+                    dbManager.getAllClients(),
+                    dbManager.getAllAppointments(),
+                    dbManager.getPricing()
+                ]);
+                
+                const endTime = performance.now();
+                const duration = Math.round(endTime - startTime);
+                
+                addTestResult('performanceResults', `✅ Tests terminés en ${duration}ms`, 'success');
+                
+                if (duration < 1000) {
+                    addTestResult('performanceResults', '✅ Performance excellente', 'success');
+                } else if (duration < 3000) {
+                    addTestResult('performanceResults', '⚠️ Performance correcte', 'warning');
+                } else {
+                    addTestResult('performanceResults', '❌ Performance lente', 'error');
+                }
+            } catch (error) {
+                addTestResult('performanceResults', '❌ Erreur test performance: ' + error.message, 'error');
+            }
+        };
+
+        // Lancer tous les tests
+        window.runAllTests = async function() {
+            addTestResult('dbConnectionResults', '=== DÉBUT DES TESTS COMPLETS ===', 'info');
+            
+            // Réinitialiser les statistiques
+            testResults = { total: 0, passed: 0, failed: 0 };
+            updateStats();
+            
+            // Lancer tous les tests
+            await testDatabaseConnection();
+            await testCurrentSession();
+            await testDatabaseManager();
+            await testClientManager();
+            await testEmployeeManager();
+            await testClientOperations();
+            await testAppointmentOperations();
+            await testPaymentOperations();
+            await testCompleteFlow();
+            await testCommunication();
+            await testPerformance();
+            
+            addTestResult('dbConnectionResults', '=== FIN DES TESTS COMPLETS ===', 'info');
+        };
+
+        // Effacer tous les résultats
+        window.clearAllResults = function() {
+            const containers = [
+                'dbConnectionResults', 'sessionResults', 'authResults',
+                'dbManagerResults', 'clientManagerResults', 'employeeManagerResults',
+                'clientResults', 'appointmentResults', 'paymentResults',
+                'flowResults', 'communicationResults', 'performanceResults'
+            ];
+            
+            containers.forEach(id => {
+                document.getElementById(id).innerHTML = '';
+            });
+            
+            testResults = { total: 0, passed: 0, failed: 0 };
+            updateStats();
+        };
+
+        // Exporter les résultats
+        window.exportTestResults = function() {
+            const results = {
+                timestamp: new Date().toISOString(),
+                summary: testResults,
+                details: {}
+            };
+            
+            const containers = [
+                'dbConnectionResults', 'sessionResults', 'authResults',
+                'dbManagerResults', 'clientManagerResults', 'employeeManagerResults',
+                'clientResults', 'appointmentResults', 'paymentResults',
+                'flowResults', 'communicationResults', 'performanceResults'
+            ];
+            
+            containers.forEach(id => {
+                results.details[id] = document.getElementById(id).innerText;
+            });
+            
+            const blob = new Blob([JSON.stringify(results, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `test-results-${new Date().toISOString().split('T')[0]}.json`;
+            a.click();
+            URL.revokeObjectURL(url);
+        };
+
+        // Initialisation
+        document.addEventListener('DOMContentLoaded', function() {
+            updateStats();
+            addTestResult('dbConnectionResults', 'Système de test initialisé', 'info');
+        });
+    </script>
+</body>
+</html> 

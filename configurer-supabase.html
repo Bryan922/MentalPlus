@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Configuration Supabase - MentalSerenity</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .config-container {
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 30px;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+        .config-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .config-header h1 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+        .config-header p {
+            color: #7f8c8d;
+            font-size: 1.1em;
+        }
+        .config-step {
+            background: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        .config-step h3 {
+            color: #3498db;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .config-step-number {
+            background: #3498db;
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: border-color 0.3s;
+        }
+        .form-group input:focus {
+            outline: none;
+            border-color: #3498db;
+        }
+        .form-group .help-text {
+            font-size: 12px;
+            color: #7f8c8d;
+            margin-top: 5px;
+        }
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin: 5px;
+        }
+        .btn-primary {
+            background: #3498db;
+            color: white;
+        }
+        .btn-primary:hover {
+            background: #2980b9;
+        }
+        .btn-success {
+            background: #27ae60;
+            color: white;
+        }
+        .btn-success:hover {
+            background: #229954;
+        }
+        .btn-warning {
+            background: #f39c12;
+            color: white;
+        }
+        .btn-warning:hover {
+            background: #e67e22;
+        }
+        .status-message {
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            font-weight: bold;
+        }
+        .status-success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .status-error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        .status-info {
+            background: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+        .code-block {
+            background: #2c3e50;
+            color: #ecf0f1;
+            padding: 15px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            overflow-x: auto;
+            margin: 10px 0;
+        }
+        .copy-btn {
+            background: #34495e;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+            margin-left: 10px;
+        }
+        .copy-btn:hover {
+            background: #2c3e50;
+        }
+        .test-results {
+            background: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+            font-family: monospace;
+            font-size: 14px;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="config-container">
+        <div class="config-header">
+            <h1><i class="fas fa-cog"></i> Configuration Supabase</h1>
+            <p>Configurez votre base de données Supabase pour MentalSerenity</p>
+        </div>
+
+        <!-- Étape 1: Créer le projet Supabase -->
+        <div class="config-step">
+            <h3>
+                <span class="config-step-number">1</span>
+                Créer un Projet Supabase
+            </h3>
+            <p>Si vous n'avez pas encore de projet Supabase, suivez ces étapes :</p>
+            <ol>
+                <li>Allez sur <a href="https://supabase.com" target="_blank">supabase.com</a></li>
+                <li>Créez un compte ou connectez-vous</li>
+                <li>Cliquez sur "New Project"</li>
+                <li>Remplissez les informations :
+                    <ul>
+                        <li><strong>Name :</strong> mentalserenity</li>
+                        <li><strong>Database Password :</strong> Créez un mot de passe fort</li>
+                        <li><strong>Region :</strong> Choisissez la région la plus proche</li>
+                    </ul>
+                </li>
+                <li>Cliquez sur "Create new project"</li>
+            </ol>
+            <button class="btn btn-primary" onclick="window.open('https://supabase.com', '_blank')">
+                <i class="fas fa-external-link-alt"></i> Aller sur Supabase
+            </button>
+        </div>
+
+        <!-- Étape 2: Récupérer les clés -->
+        <div class="config-step">
+            <h3>
+                <span class="config-step-number">2</span>
+                Récupérer les Clés d'API
+            </h3>
+            <p>Dans votre projet Supabase :</p>
+            <ol>
+                <li>Allez dans <strong>Settings > API</strong></li>
+                <li>Copiez les informations suivantes :</li>
+            </ol>
+            
+            <div class="form-group">
+                <label for="project-url">Project URL :</label>
+                <input type="text" id="project-url" placeholder="https://xxxxxxxxxxxxx.supabase.co">
+                <div class="help-text">L'URL de votre projet Supabase</div>
+            </div>
+            
+            <div class="form-group">
+                <label for="anon-key">Anon Key :</label>
+                <input type="text" id="anon-key" placeholder="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...">
+                <div class="help-text">La clé publique anonyme</div>
+            </div>
+        </div>
+
+        <!-- Étape 3: Déployer le schéma -->
+        <div class="config-step">
+            <h3>
+                <span class="config-step-number">3</span>
+                Déployer le Schéma de Base de Données
+            </h3>
+            <p>Dans votre projet Supabase :</p>
+            <ol>
+                <li>Allez dans <strong>SQL Editor</strong></li>
+                <li>Cliquez sur "New query"</li>
+                <li>Copiez le contenu du fichier <code>database-schema-supabase.sql</code></li>
+                <li>Collez dans l'éditeur et cliquez sur "Run"</li>
+            </ol>
+            
+            <button class="btn btn-warning" onclick="showSchemaContent()">
+                <i class="fas fa-database"></i> Voir le Schéma SQL
+            </button>
+            
+            <div id="schema-content" style="display: none;">
+                <div class="code-block">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                        <span>Contenu du fichier database-schema-supabase.sql</span>
+                        <button class="copy-btn" onclick="copySchemaContent()">
+                            <i class="fas fa-copy"></i> Copier
+                        </button>
+                    </div>
+                    <div id="schema-text">
+                        -- Le contenu du schéma sera chargé ici
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Étape 4: Tester la configuration -->
+        <div class="config-step">
+            <h3>
+                <span class="config-step-number">4</span>
+                Tester la Configuration
+            </h3>
+            <p>Une fois les clés configurées et le schéma déployé :</p>
+            
+            <button class="btn btn-success" onclick="testConfiguration()">
+                <i class="fas fa-play"></i> Tester la Configuration
+            </button>
+            
+            <div id="test-results" class="test-results" style="display: none;"></div>
+        </div>
+
+        <!-- Étape 5: Générer le fichier de configuration -->
+        <div class="config-step">
+            <h3>
+                <span class="config-step-number">5</span>
+                Générer le Fichier de Configuration
+            </h3>
+            <p>Générez le fichier de configuration mis à jour :</p>
+            
+            <button class="btn btn-primary" onclick="generateConfigFile()">
+                <i class="fas fa-download"></i> Générer le Fichier de Configuration
+            </button>
+        </div>
+
+        <!-- Messages de statut -->
+        <div id="status-messages"></div>
+
+        <!-- Actions rapides -->
+        <div class="config-step">
+            <h3><i class="fas fa-rocket"></i> Actions Rapides</h3>
+            <button class="btn btn-primary" onclick="window.open('test-systeme-complet.html', '_blank')">
+                <i class="fas fa-vial"></i> Tester le Système Complet
+            </button>
+            <button class="btn btn-success" onclick="window.open('GUIDE-DEPLOIEMENT-SUPABASE.md', '_blank')">
+                <i class="fas fa-book"></i> Voir le Guide Complet
+            </button>
+            <button class="btn btn-warning" onclick="window.open('rapport-analyse-complete-systeme.md', '_blank')">
+                <i class="fas fa-chart-bar"></i> Voir le Rapport d'Analyse
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // Fonction pour afficher le contenu du schéma
+        async function showSchemaContent() {
+            const schemaDiv = document.getElementById('schema-content');
+            const schemaText = document.getElementById('schema-text');
+            
+            if (schemaDiv.style.display === 'none') {
+                try {
+                    // Charger le contenu du fichier
+                    const response = await fetch('database-schema-supabase.sql');
+                    const content = await response.text();
+                    schemaText.textContent = content;
+                    schemaDiv.style.display = 'block';
+                } catch (error) {
+                    schemaText.textContent = 'Erreur lors du chargement du fichier. Veuillez ouvrir le fichier database-schema-supabase.sql manuellement.';
+                    schemaDiv.style.display = 'block';
+                }
+            } else {
+                schemaDiv.style.display = 'none';
+            }
+        }
+
+        // Fonction pour copier le contenu du schéma
+        function copySchemaContent() {
+            const schemaText = document.getElementById('schema-text');
+            navigator.clipboard.writeText(schemaText.textContent).then(() => {
+                showStatus('Schéma copié dans le presse-papiers !', 'success');
+            }).catch(() => {
+                showStatus('Erreur lors de la copie', 'error');
+            });
+        }
+
+        // Fonction pour tester la configuration
+        async function testConfiguration() {
+            const projectUrl = document.getElementById('project-url').value;
+            const anonKey = document.getElementById('anon-key').value;
+            
+            if (!projectUrl || !anonKey) {
+                showStatus('Veuillez remplir l\'URL et la clé Supabase', 'error');
+                return;
+            }
+            
+            const resultsDiv = document.getElementById('test-results');
+            resultsDiv.style.display = 'block';
+            resultsDiv.innerHTML = 'Test de connexion en cours...\n';
+            
+            try {
+                // Créer un client Supabase temporaire
+                const { createClient } = await import('https://cdn.skypack.dev/@supabase/supabase-js@2');
+                const supabase = createClient(projectUrl, anonKey);
+                
+                // Test de connexion
+                resultsDiv.innerHTML += '1. Test de connexion à Supabase...\n';
+                const { data, error } = await supabase.from('clients').select('count', { count: 'exact', head: true });
+                
+                if (error) throw error;
+                
+                resultsDiv.innerHTML += '✅ Connexion réussie !\n';
+                
+                // Test des tables
+                resultsDiv.innerHTML += '2. Vérification des tables...\n';
+                const tables = ['clients', 'appointments', 'payments', 'pricing'];
+                
+                for (const table of tables) {
+                    try {
+                        const { error: tableError } = await supabase.from(table).select('count', { count: 'exact', head: true });
+                        if (tableError) {
+                            resultsDiv.innerHTML += `❌ Table ${table} : ${tableError.message}\n`;
+                        } else {
+                            resultsDiv.innerHTML += `✅ Table ${table} : OK\n`;
+                        }
+                    } catch (error) {
+                        resultsDiv.innerHTML += `❌ Table ${table} : Erreur\n`;
+                    }
+                }
+                
+                resultsDiv.innerHTML += '\n🎉 Configuration valide ! Vous pouvez maintenant utiliser le système.';
+                showStatus('Configuration testée avec succès !', 'success');
+                
+            } catch (error) {
+                resultsDiv.innerHTML += `❌ Erreur : ${error.message}\n`;
+                resultsDiv.innerHTML += '\nVérifiez que :\n';
+                resultsDiv.innerHTML += '- Les clés sont correctes\n';
+                resultsDiv.innerHTML += '- Le schéma a été déployé\n';
+                resultsDiv.innerHTML += '- Le projet Supabase est actif';
+                showStatus('Erreur lors du test de configuration', 'error');
+            }
+        }
+
+        // Fonction pour générer le fichier de configuration
+        function generateConfigFile() {
+            const projectUrl = document.getElementById('project-url').value;
+            const anonKey = document.getElementById('anon-key').value;
+            
+            if (!projectUrl || !anonKey) {
+                showStatus('Veuillez remplir l\'URL et la clé Supabase', 'error');
+                return;
+            }
+            
+            const configContent = `// Configuration Supabase pour MentalSerenity
+// Ce fichier a été généré automatiquement
+
+import { createClient } from 'https://cdn.skypack.dev/@supabase/supabase-js@2'
+
+// Configuration Supabase
+const SUPABASE_URL = '${projectUrl}'
+const SUPABASE_ANON_KEY = '${anonKey}'
+
+// Créer le client Supabase
+export const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
+
+// Fonctions utilitaires pour la gestion des erreurs
+export const handleSupabaseError = (error, context = '') => {
+    console.error(\`Erreur Supabase \${context}:\`, error)
+    return {
+        success: false,
+        error: error.message || 'Une erreur est survenue'
+    }
+}
+
+// Fonction pour vérifier la connexion
+export const testConnection = async () => {
+    try {
+        const { data, error } = await supabase.from('clients').select('count', { count: 'exact', head: true })
+        if (error) throw error
+        console.log('Connexion Supabase réussie')
+        return { success: true }
+    } catch (error) {
+        return handleSupabaseError(error, 'test de connexion')
+    }
+}
+
+// ... (reste du fichier avec toutes les fonctions)`;
+
+            // Créer et télécharger le fichier
+            const blob = new Blob([configContent], { type: 'application/javascript' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'supabase-config-updated.js';
+            a.click();
+            URL.revokeObjectURL(url);
+            
+            showStatus('Fichier de configuration généré et téléchargé !', 'success');
+        }
+
+        // Fonction pour afficher les messages de statut
+        function showStatus(message, type) {
+            const statusDiv = document.getElementById('status-messages');
+            const statusElement = document.createElement('div');
+            statusElement.className = `status-message status-${type}`;
+            statusElement.textContent = message;
+            
+            statusDiv.appendChild(statusElement);
+            
+            // Supprimer le message après 5 secondes
+            setTimeout(() => {
+                if (statusElement.parentNode) {
+                    statusElement.parentNode.removeChild(statusElement);
+                }
+            }, 5000);
+        }
+
+        // Sauvegarder la configuration dans localStorage
+        function saveConfig() {
+            const projectUrl = document.getElementById('project-url').value;
+            const anonKey = document.getElementById('anon-key').value;
+            
+            if (projectUrl && anonKey) {
+                localStorage.setItem('supabaseConfig', JSON.stringify({
+                    SUPABASE_URL: projectUrl,
+                    SUPABASE_ANON_KEY: anonKey
+                }));
+                showStatus('Configuration sauvegardée localement !', 'success');
+            }
+        }
+
+        // Charger la configuration depuis localStorage
+        function loadConfig() {
+            const savedConfig = localStorage.getItem('supabaseConfig');
+            if (savedConfig) {
+                const config = JSON.parse(savedConfig);
+                document.getElementById('project-url').value = config.SUPABASE_URL || '';
+                document.getElementById('anon-key').value = config.SUPABASE_ANON_KEY || '';
+            }
+        }
+
+        // Sauvegarder automatiquement lors de la saisie
+        document.getElementById('project-url').addEventListener('input', saveConfig);
+        document.getElementById('anon-key').addEventListener('input', saveConfig);
+
+        // Charger la configuration au chargement de la page
+        document.addEventListener('DOMContentLoaded', loadConfig);
+    </script>
+</body>
+</html> 

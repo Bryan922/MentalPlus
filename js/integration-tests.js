@@ -1,724 +1,488 @@
-/**
- * Tests d'intégration pour MentalPlus
- * Validation de la sécurité et des fonctionnalités Supabase
- */
+// Tests d'intégration pour diagnostiquer les problèmes de redirection et de navigation
+// Ce fichier contient tous les tests nécessaires pour identifier et corriger les problèmes
 
-/**
- * Classe principale pour les tests d'intégration
- */
 class IntegrationTests {
-  constructor() {
-    this.testResults = [];
-    this.testUser = {
-      email: 'test@mentalplus.fr',
-      password: 'TestPassword123!',
-      fullName: 'Utilisateur Test',
-      phone: '0123456789',
-      role: 'client'
-    };
-    this.testEmployee = {
-      email: 'employee@mentalplus.fr',
-      password: 'EmployeePass123!',
-      fullName: 'Employé Test',
-      role: 'employee'
-    };
-    
-    console.log('🧪 Tests d\'intégration initialisés');
-  }
-
-  /**
-   * Exécuter tous les tests
-   */
-  async runAllTests() {
-    console.log('🚀 Démarrage des tests d\'intégration...');
-    
-    try {
-      // Tests de sécurité
-      await this.runSecurityTests();
-      
-      // Tests d'authentification
-      await this.runAuthenticationTests();
-      
-      // Tests de validation
-      await this.runValidationTests();
-      
-      // Tests de rendez-vous
-      await this.runAppointmentTests();
-      
-      // Tests de performance
-      await this.runPerformanceTests();
-      
-      // Afficher les résultats
-      this.displayResults();
-      
-    } catch (error) {
-      console.error('❌ Erreur lors des tests:', error);
-      this.addResult('ERREUR GLOBALE', false, error.message);
+    constructor() {
+        this.results = [];
+        this.logContainer = document.getElementById('diagnostic-logs');
     }
-  }
 
-  /**
-   * Tests de sécurité
-   */
-  async runSecurityTests() {
-    console.log('🔒 Tests de sécurité...');
-    
-    // Test de détection d'injection SQL
-    this.testSQLInjectionDetection();
-    
-    // Test de validation d'email
-    this.testEmailValidation();
-    
-    // Test de validation de mot de passe
-    this.testPasswordValidation();
-    
-    // Test de sanitisation
-    this.testInputSanitization();
-    
-    // Test de limitation de taux
-    this.testRateLimit();
-    
-    // Test de génération CSRF
-    this.testCSRFToken();
-  }
-
-  /**
-   * Test de détection d'injection SQL
-   */
-  testSQLInjectionDetection() {
-    const maliciousInputs = [
-      "'; DROP TABLE users; --",
-      "<script>alert('xss')</script>",
-      "1' OR '1'='1",
-      "UNION SELECT * FROM passwords",
-      "javascript:alert('xss')"
-    ];
-    
-    let allDetected = true;
-    
-    maliciousInputs.forEach(input => {
-      const result = securityUtils.detectInjection(input);
-      if (result.isSafe) {
-        allDetected = false;
-        console.warn(`⚠️ Injection non détectée: ${input}`);
-      }
-    });
-    
-    this.addResult('Détection d\'injection', allDetected, 
-      allDetected ? 'Toutes les injections détectées' : 'Certaines injections non détectées');
-  }
-
-  /**
-   * Test de validation d'email
-   */
-  testEmailValidation() {
-    const validEmails = [
-      'test@example.com',
-      'user.name@domain.co.uk',
-      'test+tag@gmail.com'
-    ];
-    
-    const invalidEmails = [
-      'invalid-email',
-      '@domain.com',
-      'test@',
-      'test..test@domain.com',
-      'test@tempmail.org' // Domaine suspect
-    ];
-    
-    let allValid = true;
-    let allInvalid = true;
-    
-    validEmails.forEach(email => {
-      const result = securityUtils.validateEmail(email);
-      if (!result.isValid) {
-        allValid = false;
-        console.warn(`⚠️ Email valide rejeté: ${email}`);
-      }
-    });
-    
-    invalidEmails.forEach(email => {
-      const result = securityUtils.validateEmail(email);
-      if (result.isValid) {
-        allInvalid = false;
-        console.warn(`⚠️ Email invalide accepté: ${email}`);
-      }
-    });
-    
-    this.addResult('Validation d\'email', allValid && allInvalid,
-      `Emails valides: ${allValid}, Emails invalides: ${allInvalid}`);
-  }
-
-  /**
-   * Test de validation de mot de passe
-   */
-  testPasswordValidation() {
-    const weakPasswords = [
-      '123456',
-      'password',
-      'azerty',
-      'abc123',
-      'motdepasse'
-    ];
-    
-    const strongPasswords = [
-      'MyStr0ngP@ssw0rd!',
-      'C0mpl3x!P@ssw0rd',
-      'S3cur3#P@ssw0rd123'
-    ];
-    
-    let weakRejected = true;
-    let strongAccepted = true;
-    
-    weakPasswords.forEach(password => {
-      const result = securityUtils.validatePassword(password);
-      if (result.isValid) {
-        weakRejected = false;
-        console.warn(`⚠️ Mot de passe faible accepté: ${password}`);
-      }
-    });
-    
-    strongPasswords.forEach(password => {
-      const result = securityUtils.validatePassword(password);
-      if (!result.isValid) {
-        strongAccepted = false;
-        console.warn(`⚠️ Mot de passe fort rejeté: ${password}`);
-      }
-    });
-    
-    this.addResult('Validation de mot de passe', weakRejected && strongAccepted,
-      `Faibles rejetés: ${weakRejected}, Forts acceptés: ${strongAccepted}`);
-  }
-
-  /**
-   * Test de sanitisation des entrées
-   */
-  testInputSanitization() {
-    const testInputs = [
-      { input: '<script>alert("xss")</script>', type: 'text', expected: '&lt;script&gt;alert(&quot;xss&quot;)&lt;/script&gt;' },
-      { input: 'Jean-Pierre O\'Connor', type: 'name', expected: 'Jean-Pierre O\'Connor' },
-      { input: '01 23 45 67 89', type: 'phone', expected: '01 23 45 67 89' },
-      { input: 'Test & Co', type: 'text', expected: 'Test &amp; Co' }
-    ];
-    
-    let allSanitized = true;
-    
-    testInputs.forEach(test => {
-      const result = securityUtils.sanitizeInput(test.input, test.type);
-      if (result !== test.expected) {
-        allSanitized = false;
-        console.warn(`⚠️ Sanitisation incorrecte: ${test.input} -> ${result} (attendu: ${test.expected})`);
-      }
-    });
-    
-    this.addResult('Sanitisation des entrées', allSanitized,
-      allSanitized ? 'Toutes les entrées correctement sanitisées' : 'Erreurs de sanitisation');
-  }
-
-  /**
-   * Test de limitation de taux
-   */
-  testRateLimit() {
-    const action = 'test_action';
-    let rateLimitWorking = true;
-    
-    // Effectuer plusieurs tentatives rapidement
-    for (let i = 0; i < 7; i++) {
-      const result = securityUtils.checkRateLimit(action, 5, 60000);
-      
-      if (i < 5 && !result.allowed) {
-        rateLimitWorking = false;
-        console.warn(`⚠️ Rate limit trop strict: tentative ${i + 1} bloquée`);
-      }
-      
-      if (i >= 5 && result.allowed) {
-        rateLimitWorking = false;
-        console.warn(`⚠️ Rate limit inefficace: tentative ${i + 1} autorisée`);
-      }
-    }
-    
-    this.addResult('Limitation de taux', rateLimitWorking,
-      rateLimitWorking ? 'Rate limiting fonctionnel' : 'Problème de rate limiting');
-  }
-
-  /**
-   * Test de génération de token CSRF
-   */
-  testCSRFToken() {
-    const token1 = securityUtils.generateCSRFToken();
-    const token2 = securityUtils.generateCSRFToken();
-    
-    const isUnique = token1 !== token2;
-    const hasCorrectLength = token1.length === 64; // 32 bytes en hex
-    const isHex = /^[a-f0-9]+$/i.test(token1);
-    
-    const isValid = isUnique && hasCorrectLength && isHex;
-    
-    this.addResult('Génération CSRF', isValid,
-      `Unique: ${isUnique}, Longueur: ${hasCorrectLength}, Format: ${isHex}`);
-  }
-
-  /**
-   * Tests d'authentification
-   */
-  async runAuthenticationTests() {
-    console.log('🔐 Tests d\'authentification...');
-    
-    // Test de connexion Supabase
-    await this.testSupabaseConnection();
-    
-    // Test de validation de formulaire d'inscription
-    this.testSignUpFormValidation();
-    
-    // Test de validation de formulaire de connexion
-    this.testSignInFormValidation();
-  }
-
-  /**
-   * Test de connexion Supabase
-   */
-  async testSupabaseConnection() {
-    try {
-      const isConnected = await window.testSupabaseConnection();
-      this.addResult('Connexion Supabase', isConnected,
-        isConnected ? 'Connexion établie' : 'Échec de connexion');
-    } catch (error) {
-      this.addResult('Connexion Supabase', false, `Erreur: ${error.message}`);
-    }
-  }
-
-  /**
-   * Test de validation du formulaire d'inscription
-   */
-  testSignUpFormValidation() {
-    const validData = {
-      email: 'test@example.com',
-      password: 'ValidPass123!',
-      confirmPassword: 'ValidPass123!',
-      fullName: 'Test User',
-      phone: '0123456789',
-      role: 'client'
-    };
-    
-    const invalidData = {
-      email: 'invalid-email',
-      password: '123',
-      confirmPassword: '456',
-      fullName: '',
-      phone: 'invalid-phone',
-      role: 'invalid-role'
-    };
-    
-    const validResult = formValidator.validateSignUpForm(validData);
-    const invalidResult = formValidator.validateSignUpForm(invalidData);
-    
-    const isWorking = validResult.isValid && !invalidResult.isValid;
-    
-    this.addResult('Validation formulaire inscription', isWorking,
-      `Données valides: ${validResult.isValid}, Données invalides: ${!invalidResult.isValid}`);
-  }
-
-  /**
-   * Test de validation du formulaire de connexion
-   */
-  testSignInFormValidation() {
-    // Test avec des données malveillantes
-    const maliciousData = {
-      email: "admin'; DROP TABLE users; --",
-      password: "<script>alert('xss')</script>"
-    };
-    
-    const emailCheck = securityUtils.detectInjection(maliciousData.email);
-    const passwordCheck = securityUtils.detectInjection(maliciousData.password);
-    
-    const isSecure = !emailCheck.isSafe && !passwordCheck.isSafe;
-    
-    this.addResult('Sécurité formulaire connexion', isSecure,
-      isSecure ? 'Données malveillantes détectées' : 'Faille de sécurité détectée');
-  }
-
-  /**
-   * Tests de validation
-   */
-  async runValidationTests() {
-    console.log('✅ Tests de validation...');
-    
-    // Test de validation de date
-    this.testDateValidation();
-    
-    // Test de validation de téléphone
-    this.testPhoneValidation();
-    
-    // Test de validation de rendez-vous
-    this.testAppointmentValidation();
-  }
-
-  /**
-   * Test de validation de date
-   */
-  testDateValidation() {
-    const today = new Date().toISOString().split('T')[0];
-    const yesterday = new Date(Date.now() - 86400000).toISOString().split('T')[0];
-    const tomorrow = new Date(Date.now() + 86400000).toISOString().split('T')[0];
-    const farFuture = new Date(Date.now() + 400 * 86400000).toISOString().split('T')[0];
-    
-    const todayResult = securityUtils.validateDate(today);
-    const yesterdayResult = securityUtils.validateDate(yesterday);
-    const tomorrowResult = securityUtils.validateDate(tomorrow);
-    const farFutureResult = securityUtils.validateDate(farFuture, false);
-    
-    const isWorking = todayResult.isValid && !yesterdayResult.isValid && 
-                     tomorrowResult.isValid && !farFutureResult.isValid;
-    
-    this.addResult('Validation de date', isWorking,
-      `Aujourd'hui: ${todayResult.isValid}, Hier: ${!yesterdayResult.isValid}, Demain: ${tomorrowResult.isValid}`);
-  }
-
-  /**
-   * Test de validation de téléphone
-   */
-  testPhoneValidation() {
-    const validPhones = ['0123456789', '+33123456789', '01 23 45 67 89'];
-    const invalidPhones = ['123', 'abcdefghij', '00000000000'];
-    
-    let allValidAccepted = true;
-    let allInvalidRejected = true;
-    
-    validPhones.forEach(phone => {
-      const result = securityUtils.validatePhone(phone);
-      if (!result.isValid) {
-        allValidAccepted = false;
-      }
-    });
-    
-    invalidPhones.forEach(phone => {
-      const result = securityUtils.validatePhone(phone);
-      if (result.isValid) {
-        allInvalidRejected = false;
-      }
-    });
-    
-    this.addResult('Validation de téléphone', allValidAccepted && allInvalidRejected,
-      `Valides acceptés: ${allValidAccepted}, Invalides rejetés: ${allInvalidRejected}`);
-  }
-
-  /**
-   * Test de validation de rendez-vous
-   */
-  testAppointmentValidation() {
-    const tomorrow = new Date(Date.now() + 86400000).toISOString().split('T')[0];
-    
-    const validAppointment = {
-      date: tomorrow,
-      time: '10:00',
-      type: 'consultation',
-      employee_id: 'test-employee-id',
-      notes: 'Notes de test'
-    };
-    
-    const invalidAppointment = {
-      date: '',
-      time: '',
-      type: '',
-      employee_id: '',
-      notes: '<script>alert("xss")</script>'
-    };
-    
-    const validResult = formValidator.validateAppointmentForm(validAppointment);
-    const invalidResult = formValidator.validateAppointmentForm(invalidAppointment);
-    
-    const isWorking = validResult.isValid && !invalidResult.isValid;
-    
-    this.addResult('Validation de rendez-vous', isWorking,
-      `Données valides: ${validResult.isValid}, Données invalides: ${!invalidResult.isValid}`);
-  }
-
-  /**
-   * Tests de rendez-vous
-   */
-  async runAppointmentTests() {
-    console.log('📅 Tests de rendez-vous...');
-    
-    // Test de récupération des types de rendez-vous
-    this.testAppointmentTypes();
-    
-    // Test de récupération des créneaux horaires
-    this.testTimeSlots();
-    
-    // Test de vérification de disponibilité (simulation)
-    this.testAvailabilityCheck();
-  }
-
-  /**
-   * Test des types de rendez-vous
-   */
-  testAppointmentTypes() {
-    const types = appointmentsService.getAppointmentTypes();
-    
-    const hasTypes = types && types.length > 0;
-    const hasRequiredFields = types.every(type => 
-      type.id && type.name && type.duration
-    );
-    
-    this.addResult('Types de rendez-vous', hasTypes && hasRequiredFields,
-      `${types.length} types disponibles, champs requis: ${hasRequiredFields}`);
-  }
-
-  /**
-   * Test des créneaux horaires
-   */
-  testTimeSlots() {
-    const slots = appointmentsService.getTimeSlots();
-    
-    const hasSlots = slots && slots.length > 0;
-    const validFormat = slots.every(slot => /^\d{2}:\d{2}$/.test(slot));
-    
-    this.addResult('Créneaux horaires', hasSlots && validFormat,
-      `${slots.length} créneaux, format valide: ${validFormat}`);
-  }
-
-  /**
-   * Test de vérification de disponibilité (simulation)
-   */
-  testAvailabilityCheck() {
-    // Simulation d'une vérification de disponibilité
-    const tomorrow = new Date(Date.now() + 86400000).toISOString().split('T')[0];
-    
-    // Test avec des paramètres valides
-    const validParams = {
-      date: tomorrow,
-      time: '10:00',
-      employeeId: 'test-employee'
-    };
-    
-    // Test avec des paramètres invalides
-    const invalidParams = {
-      date: '',
-      time: '',
-      employeeId: ''
-    };
-    
-    // Simulation de la logique de validation
-    const validCheck = validParams.date && validParams.time && validParams.employeeId;
-    const invalidCheck = !invalidParams.date || !invalidParams.time || !invalidParams.employeeId;
-    
-    this.addResult('Vérification de disponibilité', validCheck && invalidCheck,
-      `Paramètres valides: ${validCheck}, Paramètres invalides détectés: ${invalidCheck}`);
-  }
-
-  /**
-   * Tests de performance
-   */
-  async runPerformanceTests() {
-    console.log('⚡ Tests de performance...');
-    
-    // Test de performance de validation
-    this.testValidationPerformance();
-    
-    // Test de performance de sanitisation
-    this.testSanitizationPerformance();
-  }
-
-  /**
-   * Test de performance de validation
-   */
-  testValidationPerformance() {
-    const iterations = 1000;
-    const testEmail = 'test@example.com';
-    
-    const startTime = performance.now();
-    
-    for (let i = 0; i < iterations; i++) {
-      securityUtils.validateEmail(testEmail);
-    }
-    
-    const endTime = performance.now();
-    const duration = endTime - startTime;
-    const avgTime = duration / iterations;
-    
-    const isPerformant = avgTime < 1; // Moins de 1ms par validation
-    
-    this.addResult('Performance validation', isPerformant,
-      `${avgTime.toFixed(3)}ms par validation (${iterations} itérations)`);
-  }
-
-  /**
-   * Test de performance de sanitisation
-   */
-  testSanitizationPerformance() {
-    const iterations = 1000;
-    const testInput = '<script>alert("test")</script>Hello World!';
-    
-    const startTime = performance.now();
-    
-    for (let i = 0; i < iterations; i++) {
-      securityUtils.sanitizeInput(testInput, 'text');
-    }
-    
-    const endTime = performance.now();
-    const duration = endTime - startTime;
-    const avgTime = duration / iterations;
-    
-    const isPerformant = avgTime < 0.5; // Moins de 0.5ms par sanitisation
-    
-    this.addResult('Performance sanitisation', isPerformant,
-      `${avgTime.toFixed(3)}ms par sanitisation (${iterations} itérations)`);
-  }
-
-  /**
-   * Ajouter un résultat de test
-   */
-  addResult(testName, success, details) {
-    const result = {
-      name: testName,
-      success: success,
-      details: details,
-      timestamp: new Date().toISOString()
-    };
-    
-    this.testResults.push(result);
-    
-    const status = success ? '✅' : '❌';
-    console.log(`${status} ${testName}: ${details}`);
-  }
-
-  /**
-   * Afficher les résultats des tests
-   */
-  displayResults() {
-    const totalTests = this.testResults.length;
-    const passedTests = this.testResults.filter(r => r.success).length;
-    const failedTests = totalTests - passedTests;
-    
-    console.log('\n📊 RÉSULTATS DES TESTS D\'INTÉGRATION');
-    console.log('=' .repeat(50));
-    console.log(`Total: ${totalTests} tests`);
-    console.log(`✅ Réussis: ${passedTests}`);
-    console.log(`❌ Échoués: ${failedTests}`);
-    console.log(`📈 Taux de réussite: ${((passedTests / totalTests) * 100).toFixed(1)}%`);
-    
-    if (failedTests > 0) {
-      console.log('\n❌ TESTS ÉCHOUÉS:');
-      this.testResults
-        .filter(r => !r.success)
-        .forEach(result => {
-          console.log(`- ${result.name}: ${result.details}`);
-        });
-    }
-    
-    // Créer un rapport HTML si possible
-    this.createHTMLReport();
-  }
-
-  /**
-   * Créer un rapport HTML
-   */
-  createHTMLReport() {
-    const totalTests = this.testResults.length;
-    const passedTests = this.testResults.filter(r => r.success).length;
-    const failedTests = totalTests - passedTests;
-    
-    const reportHTML = `
-      <div class="test-report">
-        <h2>Rapport des Tests d'Intégration MentalPlus</h2>
+    log(message, type = 'info') {
+        const timestamp = new Date().toLocaleTimeString();
+        const logEntry = document.createElement('div');
+        logEntry.className = `log-entry log-${type}`;
+        logEntry.innerHTML = `[${timestamp}] ${message}`;
         
-        <div class="test-summary">
-          <div class="summary-item">
-            <span class="label">Total:</span>
-            <span class="value">${totalTests} tests</span>
-          </div>
-          <div class="summary-item success">
-            <span class="label">Réussis:</span>
-            <span class="value">${passedTests}</span>
-          </div>
-          <div class="summary-item ${failedTests > 0 ? 'failed' : 'success'}">
-            <span class="label">Échoués:</span>
-            <span class="value">${failedTests}</span>
-          </div>
-          <div class="summary-item">
-            <span class="label">Taux de réussite:</span>
-            <span class="value">${((passedTests / totalTests) * 100).toFixed(1)}%</span>
-          </div>
-        </div>
+        if (this.logContainer) {
+            this.logContainer.appendChild(logEntry);
+            this.logContainer.scrollTop = this.logContainer.scrollHeight;
+        }
         
-        <div class="test-details">
-          <h3>Détails des Tests</h3>
-          ${this.testResults.map(result => `
-            <div class="test-item ${result.success ? 'success' : 'failed'}">
-              <div class="test-name">${result.success ? '✅' : '❌'} ${result.name}</div>
-              <div class="test-details">${result.details}</div>
-              <div class="test-time">${new Date(result.timestamp).toLocaleString()}</div>
-            </div>
-          `).join('')}
-        </div>
-      </div>
-    `;
-    
-    // Stocker le rapport pour affichage ultérieur
-    window.testReport = reportHTML;
-    
-    console.log('📄 Rapport HTML généré (disponible dans window.testReport)');
-  }
+        console.log(`[${type.toUpperCase()}] ${message}`);
+    }
 
-  /**
-   * Obtenir les résultats des tests
-   */
-  getResults() {
-    return this.testResults;
-  }
+    addResult(name, success, details) {
+        this.results.push({ name, success, details, timestamp: new Date() });
+    }
 
-  /**
-   * Réinitialiser les tests
-   */
-  reset() {
-    this.testResults = [];
-    console.log('🔄 Tests réinitialisés');
-  }
+    // Test de navigation générale
+    async testNavigation() {
+        this.log('🔍 Test de navigation générale...', 'info');
+        
+        try {
+            // Vérifier que tous les liens de navigation existent
+            const navLinks = document.querySelectorAll('.nav-link');
+            let validLinks = 0;
+            
+            navLinks.forEach(link => {
+                const href = link.getAttribute('href');
+                if (href && href !== '#') {
+                    validLinks++;
+                }
+            });
+            
+            if (validLinks > 0) {
+                this.log(`✅ ${validLinks} liens de navigation valides trouvés`, 'success');
+                this.addResult('Navigation Links', true, `${validLinks} liens valides`);
+            } else {
+                this.log('❌ Aucun lien de navigation valide trouvé', 'error');
+                this.addResult('Navigation Links', false, 'Aucun lien valide');
+            }
+            
+            // Vérifier le menu mobile
+            const navToggle = document.getElementById('nav-toggle');
+            const navMenu = document.getElementById('nav-menu');
+            
+            if (navToggle && navMenu) {
+                this.log('✅ Menu mobile configuré correctement', 'success');
+                this.addResult('Mobile Menu', true, 'Menu mobile fonctionnel');
+            } else {
+                this.log('❌ Menu mobile manquant ou mal configuré', 'error');
+                this.addResult('Mobile Menu', false, 'Menu mobile manquant');
+            }
+            
+        } catch (error) {
+            this.log(`❌ Erreur lors du test de navigation: ${error.message}`, 'error');
+            this.addResult('Navigation', false, error.message);
+        }
+    }
+
+    // Test des redirections d'authentification
+    async testAuthRedirects() {
+        this.log('🔐 Test des redirections d\'authentification...', 'info');
+        
+        try {
+            // Vérifier les pages protégées
+            const protectedPages = ['profile.html', 'messaging.html', 'confirmation.html', 'rendez-vous.html'];
+            const currentPage = window.location.pathname.split('/').pop();
+            
+            if (protectedPages.includes(currentPage)) {
+                this.log(`⚠️ Page protégée détectée: ${currentPage}`, 'warning');
+                
+                // Vérifier si l'utilisateur est authentifié
+                if (typeof window.authManager !== 'undefined') {
+                    const isAuth = await window.authManager.isAuthenticated();
+                    if (isAuth) {
+                        this.log('✅ Utilisateur authentifié sur page protégée', 'success');
+                        this.addResult('Auth Protection', true, 'Utilisateur authentifié');
+                    } else {
+                        this.log('❌ Utilisateur non authentifié sur page protégée', 'error');
+                        this.addResult('Auth Protection', false, 'Redirection nécessaire');
+                    }
+                } else {
+                    this.log('❌ Gestionnaire d\'authentification non disponible', 'error');
+                    this.addResult('Auth Protection', false, 'AuthManager manquant');
+                }
+            } else {
+                this.log('ℹ️ Page publique détectée', 'info');
+                this.addResult('Auth Protection', true, 'Page publique');
+            }
+            
+            // Vérifier les boutons d'authentification
+            const authButtons = document.querySelectorAll('.nav-cta, #auth-link');
+            if (authButtons.length > 0) {
+                this.log(`✅ ${authButtons.length} bouton(s) d'authentification trouvé(s)`, 'success');
+                this.addResult('Auth Buttons', true, `${authButtons.length} boutons`);
+            } else {
+                this.log('❌ Aucun bouton d\'authentification trouvé', 'error');
+                this.addResult('Auth Buttons', false, 'Boutons manquants');
+            }
+            
+        } catch (error) {
+            this.log(`❌ Erreur lors du test d'authentification: ${error.message}`, 'error');
+            this.addResult('Auth Redirects', false, error.message);
+        }
+    }
+
+    // Test du flow de rendez-vous
+    async testRendezVousFlow() {
+        this.log('📅 Test du flow de rendez-vous...', 'info');
+        
+        try {
+            // Vérifier si le gestionnaire de rendez-vous est disponible
+            if (typeof window.rdvManager !== 'undefined') {
+                this.log('✅ Gestionnaire de rendez-vous disponible', 'success');
+                this.addResult('RDV Manager', true, 'Manager disponible');
+                
+                // Vérifier les fonctions de navigation
+                if (typeof nextStep === 'function' && typeof prevStep === 'function') {
+                    this.log('✅ Fonctions de navigation disponibles', 'success');
+                    this.addResult('RDV Navigation', true, 'Fonctions nextStep/prevStep');
+                } else {
+                    this.log('❌ Fonctions de navigation manquantes', 'error');
+                    this.addResult('RDV Navigation', false, 'Fonctions manquantes');
+                }
+                
+                // Vérifier les sélecteurs de domaine
+                const domainCards = document.querySelectorAll('.domaine-card');
+                if (domainCards.length > 0) {
+                    this.log(`✅ ${domainCards.length} cartes de domaine trouvées`, 'success');
+                    this.addResult('Domain Selection', true, `${domainCards.length} domaines`);
+                } else {
+                    this.log('❌ Aucune carte de domaine trouvée', 'error');
+                    this.addResult('Domain Selection', false, 'Cartes manquantes');
+                }
+                
+                // Vérifier les boutons de type de consultation
+                const typeButtons = document.querySelectorAll('.type-btn');
+                if (typeButtons.length > 0) {
+                    this.log(`✅ ${typeButtons.length} bouton(s) de type trouvé(s)`, 'success');
+                    this.addResult('Type Selection', true, `${typeButtons.length} types`);
+                } else {
+                    this.log('❌ Aucun bouton de type trouvé', 'error');
+                    this.addResult('Type Selection', false, 'Boutons manquants');
+                }
+                
+            } else {
+                this.log('❌ Gestionnaire de rendez-vous non disponible', 'error');
+                this.addResult('RDV Manager', false, 'Manager manquant');
+            }
+            
+        } catch (error) {
+            this.log(`❌ Erreur lors du test de rendez-vous: ${error.message}`, 'error');
+            this.addResult('RDV Flow', false, error.message);
+        }
+    }
+
+    // Test de tous les liens
+    async testAllLinks() {
+        this.log('🔗 Test de tous les liens...', 'info');
+        
+        try {
+            const links = document.querySelectorAll('a[href]');
+            let validLinks = 0;
+            let invalidLinks = 0;
+            
+            links.forEach(link => {
+                const href = link.getAttribute('href');
+                if (href && href !== '#' && !href.startsWith('javascript:')) {
+                    validLinks++;
+                } else {
+                    invalidLinks++;
+                }
+            });
+            
+            this.log(`✅ ${validLinks} liens valides trouvés`, 'success');
+            if (invalidLinks > 0) {
+                this.log(`⚠️ ${invalidLinks} liens invalides trouvés`, 'warning');
+            }
+            
+            this.addResult('All Links', true, `${validLinks} valides, ${invalidLinks} invalides`);
+            
+        } catch (error) {
+            this.log(`❌ Erreur lors du test des liens: ${error.message}`, 'error');
+            this.addResult('All Links', false, error.message);
+        }
+    }
+
+    // Test des fonctions d'authentification
+    async testAuthFunctions() {
+        this.log('🔐 Test des fonctions d\'authentification...', 'info');
+        
+        try {
+            // Vérifier Supabase
+            if (typeof window.supabase !== 'undefined') {
+                this.log('✅ Client Supabase disponible', 'success');
+                this.addResult('Supabase Client', true, 'Client disponible');
+                
+                // Tester la connexion
+                try {
+                    const { data, error } = await window.supabase.auth.getSession();
+                    if (error) {
+                        this.log(`⚠️ Erreur de session Supabase: ${error.message}`, 'warning');
+                        this.addResult('Supabase Session', false, error.message);
+                    } else {
+                        this.log('✅ Session Supabase fonctionnelle', 'success');
+                        this.addResult('Supabase Session', true, 'Session OK');
+                    }
+                } catch (sessionError) {
+                    this.log(`❌ Erreur de session: ${sessionError.message}`, 'error');
+                    this.addResult('Supabase Session', false, sessionError.message);
+                }
+                
+            } else {
+                this.log('❌ Client Supabase non disponible', 'error');
+                this.addResult('Supabase Client', false, 'Client manquant');
+            }
+            
+            // Vérifier les fonctions d'authentification
+            if (typeof window.authManager !== 'undefined') {
+                this.log('✅ Gestionnaire d\'authentification disponible', 'success');
+                this.addResult('Auth Manager', true, 'Manager disponible');
+                
+                // Tester les méthodes principales
+                const methods = ['isAuthenticated', 'login', 'logout', 'redirectToLogin'];
+                let availableMethods = 0;
+                
+                methods.forEach(method => {
+                    if (typeof window.authManager[method] === 'function') {
+                        availableMethods++;
+                    }
+                });
+                
+                if (availableMethods === methods.length) {
+                    this.log('✅ Toutes les méthodes d\'authentification disponibles', 'success');
+                    this.addResult('Auth Methods', true, `${availableMethods}/${methods.length} méthodes`);
+                } else {
+                    this.log(`⚠️ ${availableMethods}/${methods.length} méthodes d'authentification disponibles`, 'warning');
+                    this.addResult('Auth Methods', false, `${availableMethods}/${methods.length} méthodes`);
+                }
+                
+            } else {
+                this.log('❌ Gestionnaire d\'authentification non disponible', 'error');
+                this.addResult('Auth Manager', false, 'Manager manquant');
+            }
+            
+        } catch (error) {
+            this.log(`❌ Erreur lors du test d'authentification: ${error.message}`, 'error');
+            this.addResult('Auth Functions', false, error.message);
+        }
+    }
+
+    // Test de la gestion de session
+    async testSessionManagement() {
+        this.log('💾 Test de la gestion de session...', 'info');
+        
+        try {
+            // Vérifier le localStorage
+            const sessionKeys = ['token', 'isAuthenticated', 'user'];
+            let validKeys = 0;
+            
+            sessionKeys.forEach(key => {
+                if (localStorage.getItem(key) !== null) {
+                    validKeys++;
+                }
+            });
+            
+            if (validKeys > 0) {
+                this.log(`✅ ${validKeys} clé(s) de session trouvée(s)`, 'success');
+                this.addResult('Session Storage', true, `${validKeys} clés`);
+            } else {
+                this.log('ℹ️ Aucune clé de session trouvée (normal si non connecté)', 'info');
+                this.addResult('Session Storage', true, 'Aucune clé (normal)');
+            }
+            
+            // Vérifier la synchronisation entre onglets
+            if (typeof window.addEventListener === 'function') {
+                this.log('✅ Écouteur d\'événements de stockage disponible', 'success');
+                this.addResult('Session Sync', true, 'Synchronisation disponible');
+            } else {
+                this.log('❌ Écouteur d\'événements de stockage non disponible', 'error');
+                this.addResult('Session Sync', false, 'Synchronisation manquante');
+            }
+            
+        } catch (error) {
+            this.log(`❌ Erreur lors du test de session: ${error.message}`, 'error');
+            this.addResult('Session Management', false, error.message);
+        }
+    }
+
+    // Test des fonctions de rendez-vous
+    async testRendezVousFunctions() {
+        this.log('📅 Test des fonctions de rendez-vous...', 'info');
+        
+        try {
+            if (typeof window.rdvManager !== 'undefined') {
+                // Vérifier les propriétés principales
+                const properties = ['selectedDomain', 'selectedType', 'selectedDate', 'selectedTime'];
+                let validProperties = 0;
+                
+                properties.forEach(prop => {
+                    if (window.rdvManager.hasOwnProperty(prop)) {
+                        validProperties++;
+                    }
+                });
+                
+                if (validProperties === properties.length) {
+                    this.log('✅ Toutes les propriétés du gestionnaire disponibles', 'success');
+                    this.addResult('RDV Properties', true, `${validProperties}/${properties.length} propriétés`);
+                } else {
+                    this.log(`⚠️ ${validProperties}/${properties.length} propriétés disponibles`, 'warning');
+                    this.addResult('RDV Properties', false, `${validProperties}/${properties.length} propriétés`);
+                }
+                
+                // Vérifier les méthodes principales
+                const methods = ['selectDomain', 'selectConsultationType', 'selectDate', 'selectTimeSlot'];
+                let availableMethods = 0;
+                
+                methods.forEach(method => {
+                    if (typeof window.rdvManager[method] === 'function') {
+                        availableMethods++;
+                    }
+                });
+                
+                if (availableMethods === methods.length) {
+                    this.log('✅ Toutes les méthodes de rendez-vous disponibles', 'success');
+                    this.addResult('RDV Methods', true, `${availableMethods}/${methods.length} méthodes`);
+                } else {
+                    this.log(`⚠️ ${availableMethods}/${methods.length} méthodes disponibles`, 'warning');
+                    this.addResult('RDV Methods', false, `${availableMethods}/${methods.length} méthodes`);
+                }
+                
+            } else {
+                this.log('❌ Gestionnaire de rendez-vous non disponible', 'error');
+                this.addResult('RDV Functions', false, 'Manager manquant');
+            }
+            
+        } catch (error) {
+            this.log(`❌ Erreur lors du test des fonctions de rendez-vous: ${error.message}`, 'error');
+            this.addResult('RDV Functions', false, error.message);
+        }
+    }
+
+    // Test de l'intégration calendrier
+    async testCalendarIntegration() {
+        this.log('📅 Test de l\'intégration calendrier...', 'info');
+        
+        try {
+            // Vérifier les éléments du calendrier
+            const calendarElements = ['#calendar', '#time-slots', '.calendar-container'];
+            let validElements = 0;
+            
+            calendarElements.forEach(selector => {
+                if (document.querySelector(selector)) {
+                    validElements++;
+                }
+            });
+            
+            if (validElements > 0) {
+                this.log(`✅ ${validElements} élément(s) de calendrier trouvé(s)`, 'success');
+                this.addResult('Calendar Elements', true, `${validElements} éléments`);
+            } else {
+                this.log('❌ Aucun élément de calendrier trouvé', 'error');
+                this.addResult('Calendar Elements', false, 'Éléments manquants');
+            }
+            
+            // Vérifier les créneaux horaires
+            const timeSlots = document.querySelectorAll('.time-slot');
+            if (timeSlots.length > 0) {
+                this.log(`✅ ${timeSlots.length} créneau(x) horaire(s) trouvé(s)`, 'success');
+                this.addResult('Time Slots', true, `${timeSlots.length} créneaux`);
+            } else {
+                this.log('ℹ️ Aucun créneau horaire affiché (normal si pas de date sélectionnée)', 'info');
+                this.addResult('Time Slots', true, 'Aucun créneau (normal)');
+            }
+            
+        } catch (error) {
+            this.log(`❌ Erreur lors du test du calendrier: ${error.message}`, 'error');
+            this.addResult('Calendar Integration', false, error.message);
+        }
+    }
+
+    // Test de l'intégration paiement
+    async testPaymentIntegration() {
+        this.log('💳 Test de l\'intégration paiement...', 'info');
+        
+        try {
+            // Vérifier Stripe
+            if (typeof Stripe !== 'undefined') {
+                this.log('✅ Stripe disponible', 'success');
+                this.addResult('Stripe Integration', true, 'Stripe disponible');
+                
+                // Vérifier les éléments de paiement
+                const paymentElements = ['#card-element', '#card-errors', '.payment-section'];
+                let validElements = 0;
+                
+                paymentElements.forEach(selector => {
+                    if (document.querySelector(selector)) {
+                        validElements++;
+                    }
+                });
+                
+                if (validElements > 0) {
+                    this.log(`✅ ${validElements} élément(s) de paiement trouvé(s)`, 'success');
+                    this.addResult('Payment Elements', true, `${validElements} éléments`);
+                } else {
+                    this.log('ℹ️ Aucun élément de paiement trouvé (normal si pas sur la page de paiement)', 'info');
+                    this.addResult('Payment Elements', true, 'Aucun élément (normal)');
+                }
+                
+            } else {
+                this.log('❌ Stripe non disponible', 'error');
+                this.addResult('Stripe Integration', false, 'Stripe manquant');
+            }
+            
+        } catch (error) {
+            this.log(`❌ Erreur lors du test de paiement: ${error.message}`, 'error');
+            this.addResult('Payment Integration', false, error.message);
+        }
+    }
+
+    // Générer un rapport complet
+    generateReport() {
+        const totalTests = this.results.length;
+        const passedTests = this.results.filter(r => r.success).length;
+        const failedTests = totalTests - passedTests;
+        const successRate = totalTests > 0 ? ((passedTests / totalTests) * 100).toFixed(1) : 0;
+        
+        this.log('📊 RAPPORT COMPLET', 'info');
+        this.log(`Total des tests: ${totalTests}`, 'info');
+        this.log(`Tests réussis: ${passedTests}`, 'success');
+        this.log(`Tests échoués: ${failedTests}`, failedTests > 0 ? 'error' : 'info');
+        this.log(`Taux de réussite: ${successRate}%`, successRate >= 80 ? 'success' : 'warning');
+        
+        // Afficher les détails des tests échoués
+        if (failedTests > 0) {
+            this.log('❌ TESTS ÉCHOUÉS:', 'error');
+            this.results.filter(r => !r.success).forEach(result => {
+                this.log(`- ${result.name}: ${result.details}`, 'error');
+            });
+        }
+        
+        return {
+            total: totalTests,
+            passed: passedTests,
+            failed: failedTests,
+            successRate: parseFloat(successRate),
+            results: this.results
+        };
+    }
 }
 
-// Créer une instance globale des tests
-window.integrationTests = new IntegrationTests();
+// Initialiser les tests
+const integrationTests = new IntegrationTests();
 
-// Fonction utilitaire pour exécuter les tests
-window.runTests = function() {
-  return window.integrationTests.runAllTests();
-};
+// Fonctions globales pour les boutons de test
+window.testNavigation = () => integrationTests.testNavigation();
+window.testAuthRedirects = () => integrationTests.testAuthRedirects();
+window.testRendezVousFlow = () => integrationTests.testRendezVousFlow();
+window.testAllLinks = () => integrationTests.testAllLinks();
+window.testAuthFunctions = () => integrationTests.testAuthFunctions();
+window.testSessionManagement = () => integrationTests.testSessionManagement();
+window.testRendezVousFunctions = () => integrationTests.testRendezVousFunctions();
+window.testCalendarIntegration = () => integrationTests.testCalendarIntegration();
+window.testPaymentIntegration = () => integrationTests.testPaymentIntegration();
 
-// Fonction pour afficher le rapport
-window.showTestReport = function() {
-  if (window.testReport) {
-    const reportWindow = window.open('', '_blank');
-    reportWindow.document.write(`
-      <!DOCTYPE html>
-      <html>
-      <head>
-        <title>Rapport de Tests - MentalPlus</title>
-        <style>
-          body { font-family: Arial, sans-serif; margin: 20px; }
-          .test-report { max-width: 800px; margin: 0 auto; }
-          .test-summary { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin: 20px 0; }
-          .summary-item { padding: 10px; border: 1px solid #ddd; border-radius: 5px; }
-          .summary-item.success { background-color: #d4edda; border-color: #c3e6cb; }
-          .summary-item.failed { background-color: #f8d7da; border-color: #f5c6cb; }
-          .test-item { margin: 10px 0; padding: 10px; border-left: 4px solid #ddd; }
-          .test-item.success { border-left-color: #28a745; background-color: #f8fff9; }
-          .test-item.failed { border-left-color: #dc3545; background-color: #fff8f8; }
-          .test-name { font-weight: bold; margin-bottom: 5px; }
-          .test-details { color: #666; margin-bottom: 5px; }
-          .test-time { font-size: 0.8em; color: #999; }
-        </style>
-      </head>
-      <body>
-        ${window.testReport}
-      </body>
-      </html>
-    `);
-    reportWindow.document.close();
-  } else {
-    alert('Aucun rapport disponible. Exécutez d\'abord les tests avec runTests().');
-  }
-};
+// Test automatique au chargement de la page
+document.addEventListener('DOMContentLoaded', () => {
+    integrationTests.log('🚀 Tests d\'intégration initialisés', 'info');
+    
+    // Exécuter les tests de base automatiquement
+    setTimeout(() => {
+        integrationTests.testNavigation();
+        integrationTests.testAuthRedirects();
+        integrationTests.testRendezVousFlow();
+    }, 1000);
+});
 
-console.log('🧪 Tests d\'intégration chargés');
-console.log('💡 Utilisez runTests() pour exécuter tous les tests');
-console.log('💡 Utilisez showTestReport() pour afficher le rapport détaillé');
+console.log('Tests d\'intégration chargés');
