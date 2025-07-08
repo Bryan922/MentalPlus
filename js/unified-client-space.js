@@ -126,7 +126,7 @@ class UnifiedClientSpace {
             });
         }
 
-        // Correction navigation espace client
+        // Correction navigation espace client renforcée
         const navButtons = document.querySelectorAll('.client-nav-btn');
         const sections = document.querySelectorAll('.client-section');
         navButtons.forEach((btn, idx) => {
@@ -137,7 +137,7 @@ class UnifiedClientSpace {
             sections[idx].classList.add('active');
           });
         });
-        // Correction suppression rendez-vous
+        // Correction suppression rendez-vous renforcée
         const deleteButtons = document.querySelectorAll('.delete-appointment-btn');
         deleteButtons.forEach(btn => {
           btn.addEventListener('click', async (e) => {

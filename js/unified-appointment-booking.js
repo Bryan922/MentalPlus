@@ -60,7 +60,8 @@ class UnifiedAppointmentBooking {
 
     setupEventListeners() {
         // Sélection du type de consultation
-        document.querySelectorAll('.type-btn').forEach(btn => {
+        const typeButtons = document.querySelectorAll('.type-btn');
+        typeButtons.forEach(btn => {
             btn.addEventListener('click', (e) => {
                 e.preventDefault();
                 this.selectConsultationType(e.currentTarget.dataset.type);
@@ -265,7 +266,7 @@ class UnifiedAppointmentBooking {
         return slots;
     }
 
-    // Correction : mise à jour dynamique du tarif
+    // Correction : mise à jour dynamique du tarif à chaque changement de type
     updatePrice() {
         if (!this.pricing) return;
         const priceInfo = this.pricing.find(p => p.type_consultation === this.selectedType);
