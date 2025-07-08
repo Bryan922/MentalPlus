@@ -333,6 +333,10 @@ document.addEventListener('DOMContentLoaded', function() {
         document.querySelector(`#step${currentStepNumber}`).classList.remove('active');
         document.querySelector(`#step${nextStepNumber}`).classList.add('active');
         updateStepIndicators(nextStepNumber);
+        // Correction : remonter le formulaire Stripe si on arrive à l'étape 3
+        if (nextStepNumber === 3 && document.getElementById('card-element')) {
+            setTimeout(() => { cardElement.mount('#card-element'); }, 100);
+        }
     }
 
     function prevStep() {
