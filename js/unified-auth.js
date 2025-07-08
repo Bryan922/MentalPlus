@@ -364,6 +364,13 @@ window.supabase = supabase
 window.unifiedAuth = unifiedAuth
 window.authManager = unifiedAuth
 
+// Correction : Initialisation globale de la session sur chaque page
+window.addEventListener('DOMContentLoaded', () => {
+  if (window.authManager && typeof window.authManager.checkExistingSession === 'function') {
+    window.authManager.checkExistingSession();
+  }
+});
+
 // Fonctions globales pour compatibilité
 window.checkAuth = () => unifiedAuth.isAuthenticated()
 window.handleLogout = (e) => {

@@ -125,6 +125,33 @@ class UnifiedClientSpace {
                 await this.logout();
             });
         }
+
+        // Correction navigation espace client
+        const navButtons = document.querySelectorAll('.client-nav-btn');
+        const sections = document.querySelectorAll('.client-section');
+        navButtons.forEach((btn, idx) => {
+          btn.addEventListener('click', () => {
+            navButtons.forEach(b => b.classList.remove('active'));
+            sections.forEach(s => s.classList.remove('active'));
+            btn.classList.add('active');
+            sections[idx].classList.add('active');
+          });
+        });
+        // Correction suppression rendez-vous
+        const deleteButtons = document.querySelectorAll('.delete-appointment-btn');
+        deleteButtons.forEach(btn => {
+          btn.addEventListener('click', async (e) => {
+            const appointmentId = btn.dataset.id;
+            if (confirm('Supprimer ce rendez-vous ?')) {
+              const { success } = await dbManager.deleteAppointment(appointmentId);
+              if (success) {
+                btn.closest('.appointment-item').remove();
+              } else {
+                alert('Erreur lors de la suppression du rendez-vous');
+              }
+            }
+          });
+        });
     }
 
     updateNavigation() {
