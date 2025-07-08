@@ -114,7 +114,7 @@ class UnifiedAppointmentBooking {
         document.querySelector(`[data-type="${type}"]`).classList.add('active');
         
         // Mettre à jour le prix dans le résumé
-        this.updatePriceDisplay();
+        this.updatePrice();
         
         // Recharger les créneaux disponibles
         if (this.selectedDate) {
@@ -264,6 +264,17 @@ class UnifiedAppointmentBooking {
         
         return slots;
     }
+
+    // Correction : mise à jour dynamique du tarif
+    updatePrice() {
+        if (!this.pricing) return;
+        const priceInfo = this.pricing.find(p => p.type_consultation === this.selectedType);
+        const priceElement = document.getElementById('summary-price');
+        if (priceInfo && priceElement) {
+            priceElement.textContent = priceInfo.montant + '€';
+        }
+    }
+    // Appeler updatePrice() à chaque changement de type de consultation
 
     displayTimeSlots(slots) {
         const slotsContainer = document.querySelector('.slots-grid');
