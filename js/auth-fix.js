@@ -175,6 +175,9 @@ class AuthenticationManager {
         if (this.isAuthenticated()) {
             this.addLogoutButton()
         }
+        } catch (error) {
+            console.error(error);
+        }
     }
 
     addLogoutButton() {
