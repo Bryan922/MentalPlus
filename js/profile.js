@@ -1,13 +1,26 @@
-document.addEventListener('DOMContentLoaded', () => {
-    if (!checkAuth()) return;
-    
+// Correction : attendre la vérification asynchrone de Supabase avant de rediriger
+
+document.addEventListener('DOMContentLoaded', async () => {
+    if (typeof window.checkAuth === 'function') {
+        const isAuth = await window.checkAuth();
+        if (!isAuth) {
+            window.location.href = 'auth.html';
+            return;
+        }
+    } else {
+        // Fallback localStorage (pour compatibilité)
+        const isAuthenticated = localStorage.getItem('isAuthenticated') === 'true';
+        if (!isAuthenticated) {
+            window.location.href = 'auth.html';
+            return;
+        }
+    }
     initializeNavigation();
     loadUserData();
     initializeImageUpload();
     initializeForms();
     loadAppointments();
     loadDocuments();
-
     // Initialisation des filtres de rendez-vous
     const filterButtons = document.querySelectorAll('.appointments-filter button');
     filterButtons.forEach(button => {
@@ -17,20 +30,11 @@ document.addEventListener('DOMContentLoaded', () => {
             loadAppointments(button.dataset.filter);
         });
     });
-
     // Chargement initial des rendez-vous
     loadAppointments('upcoming');
 });
 
-// Vérification de l'authentification
-function checkAuth() {
-    const isAuthenticated = localStorage.getItem('isAuthenticated') === 'true';
-    if (!isAuthenticated) {
-        window.location.href = 'auth.html';
-        return false;
-    }
-    return true;
-}
+// Supprimer la fonction checkAuth locale (utiliser window.checkAuth)
 
 // Correction navigation profil
 function initializeNavigation() {
